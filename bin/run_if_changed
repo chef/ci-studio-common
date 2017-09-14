@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Copyright:: Copyright 2017 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# If unspecified, set the workdir to the current working directoy
+WORKDIR=${WORKDIR:-"./"}
+
+# Get a list of all the files that changed from the most recent merge
+changed_files="$(git diff --name-only HEAD HEAD~1 ${WORKDIR})"
+
+did_travis_change="$(git diff --name-only HEAD HEAD~1 .travis.yml)"
+if [ ! -z "$did_travis_change" ] && [ "$TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED" == "true" ]; then
+  echo ".travis.yml was modified - forcing tests to run"
+  TRAVIS_SUGAR_FILTER_TESTS="false"
+fi
+
+# If there are no changed files for that work directory, simply exit 0. Otherwise, execute the command.
+#
+# TRAVIS_SUGAR_FILTER_TESTS can be set using the TRAVIS_PULL_REQUEST variable, which
+# is set either to the PR # or "false". Since "false" is a value we can count on in
+# our "recommended" setup. That is what we key off of.
+if [ -z "$changed_files" ] && [ "$TRAVIS_SUGAR_FILTER_TESTS" != "false" ]; then
+  echo "No files were modified in '${WORKDIR}': exiting."
+  exit 0
+else
+  cd $TRAVIS_BUILD_DIR/$WORKDIR || exit 1
+  eval "$@"
+fi

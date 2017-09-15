@@ -20,4 +20,50 @@
 [[ -z "${CI}" ]] && source /src/habitat/plan.sh
 [[ -z "${CI}" ]] && export TOML_FILE=/src/habitat/default.toml
 
-echo "studio-common helpers have been added to your studio"
+# The folder where all the documentation is stored
+[[ ! -d /tmp/docs ]] && /tmp/docs
+
+cat > /tmp/docs/empty.txt <<'DOC'
+  The following functions are available for your use via 'ci-studio-common'.
+
+    * generate_netrc_config
+
+  To learn more about a particular function, run 'describe <function>'.
+DOC
+
+cat > /tmp/docs/describe.txt <<DOC
+  Call this function from inside your studio to learn more about a given helper.
+
+  For example, passing the name of a function into describe will print out the
+  associated documentation.
+
+    describe generate_netrc_config
+DOC
+function describe() {
+  echo ""
+  cat /tmp/docs/"${1-empty}".txt
+  echo ""
+}
+
+cat > /tmp/docs/generate_netrc_config.txt <<DOC
+  Some projects require access to private GitHub repositories. The recommended
+  pattern is for projects to use the git+https protocol in conjuction with a
+  .netrc file.
+
+  To learn more about .netrc files, you can check out the following documentation:
+
+    https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html
+DOC
+function generate_netrc_config() {
+  if [[ -z $GITHUB_TOKEN ]]; then
+    echo -e "\nError: Unable to configure ~/.netrc in the studio."
+    echo "Missing the environment variable: GITHUB_TOKEN"
+    echo -e "\nVerify that you have a file called '.secrets' with the following export:"
+    echo "export GITHUB_TOKEN=[your-secret-token]"
+    exit 1
+  else
+    echo -e "machine github.com\n  login $GITHUB_TOKEN" >> ~/.netrc
+  fi
+}
+
+echo "Common helpers from ci-studio-common have been added. Run 'describe' for more information."

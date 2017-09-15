@@ -10,8 +10,8 @@ These are scripts that can be used inside your `.travis.yml` files.
 
 ```yaml
 before_install:
-  - curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash
-  - hab pkg install chef/ci-studio-common --binlink
+  - curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
+  - sudo hab pkg install chef/ci-studio-common --binlink
 ```
 
 ## Habitat Studio

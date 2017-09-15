@@ -5,6 +5,14 @@ habitat_packages:
   - ci-studio-common
 
 merge_actions:
+  - built_in:bump_version:
+      ignore_labels:
+        - "Version: Skip Bump"
+        - "Expeditor: Skip All"
+  - built_in:update_changelog:
+      ignore_labels:
+        - "Changelog: Skip Update"
+        - "Expeditor: Skip All"
   - built_in:trigger_habitat_package_build:
       ignore_labels:
         - "Habitat: Skip Build"

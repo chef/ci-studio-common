@@ -21,7 +21,7 @@
 [[ -z "${CI}" ]] && export TOML_FILE=/src/habitat/default.toml
 
 # The folder where all the documentation is stored
-[[ ! -d /tmp/docs ]] && /tmp/docs
+[[ ! -d /tmp/docs ]] && mkdir /tmp/docs
 
 cat > /tmp/docs/empty.txt <<'DOC'
   The following functions are available for your use via 'ci-studio-common'.

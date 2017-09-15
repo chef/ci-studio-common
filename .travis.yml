@@ -1,0 +1,33 @@
+# Use Travis's cointainer based infrastructure
+sudo: false
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+
+    # bin-lint
+    - env:
+        - NAME=bin-lint
+      install: true
+      script: shellcheck -s bash -e SC1091 bin/*
+
+    # bin-syntax
+    - env:
+        - NAME=bin-syntax
+      install: true
+      script: bash -n bin/*
+
+    # habitat-lint
+    - env:
+        - NAME=habitat-lint
+      install: true
+      script: find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash{} \;
+
+    # habitat-syntax
+    - env:
+        - NAME=habitat-syntax
+      install: true
+      script: find . -name 'plan.sh' -exec bash -n {} \;

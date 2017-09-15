@@ -1,0 +1,7 @@
+#!/bin/bash
+
+function install_locally() {
+  build .
+  source results/last_build.env
+  hab pkg install $pkg_ident --binlink
+}

@@ -19,3 +19,5 @@
 # Source the plan.sh and default.toml files (if they exist) unless we are in a CI environment
 [[ -z "${CI}" ]] && source /src/habitat/plan.sh
 [[ -z "${CI}" ]] && export TOML_FILE=/src/habitat/default.toml
+
+echo "studio-common helpers have been added to your studio"

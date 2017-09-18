@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC1091
 #
 # Copyright:: Copyright 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
@@ -17,7 +16,26 @@
 # limitations under the License.
 #
 
-for lib in $(hab pkg path "chef/ci-studio-common")/lib/*
-do
-  source "$lib"
-done
+case "$1" in
+  "in-studio")
+    origin=${HAB_ORIGIN:-chef}
+    export HAB_ORIGIN="$origin"
+
+    studio_cmd="-k $origin"
+
+    if [[ -z "$STUDIO_OPTS" ]]; then
+      studio_cmd="$studio_cmd $STUDIO_OPTS"
+    fi
+
+    hab-origin download-sig-key "$origin"
+    eval "hab studio $studio_cmd run $2"
+    ;;
+  "lint")
+    exec find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash {} \;
+    ;;
+  "syntax")
+    exec find . -name 'plan.sh' -exec bash -n {} \;
+    ;;
+  *)
+    echo "'$1' is not a supported command."
+esac

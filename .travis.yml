@@ -1,33 +1,34 @@
-# Use Travis's cointainer based infrastructure
-sudo: false
+sudo: required
 
 branches:
   only:
     - master
 
+before_install:
+  - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
+  - ln -sf "$TRAVIS_BUILD_DIR" "$HOME/ci-studio-common"
+
 matrix:
   include:
 
-    # bin-lint
+    # lint
     - env:
-        - NAME=bin-lint
-      install: true
-      script: shellcheck -s bash -e SC1091 bin/*
+        - NAME=lint
+      install: install-tool hab aws
+      script: hab-verify in-studio ci_lint
 
-    # bin-syntax
+    # syntax
     - env:
-        - NAME=bin-syntax
-      install: true
-      script: bash -n bin/*
+        - NAME=syntax
+      install: install-tool hab aws
+      script: hab-verify in-studio ci_syntax
 
     # habitat-lint
     - env:
         - NAME=habitat-lint
-      install: true
-      script: find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash{} \;
+      script: hab-verify lint
 
     # habitat-syntax
     - env:
         - NAME=habitat-syntax
-      install: true
-      script: find . -name 'plan.sh' -exec bash -n {} \;
+      script: hab-verify syntax

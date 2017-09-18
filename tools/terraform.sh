@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC1091
 #
 # Copyright:: Copyright 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
@@ -17,7 +16,17 @@
 # limitations under the License.
 #
 
-for lib in $(hab pkg path "chef/ci-studio-common")/lib/*
-do
-  source "$lib"
-done
+version="${1-'0.8.1'}"
+
+if [ ! -d "$HOME/tools/terraform-$version" ]; then
+  mkdir -p "$HOME/tools/terraform-$version"
+  pushd $HOME/tools
+    curl -sLo terraform.zip "https://releases.hashicorp.com/terraform/$version/terraform_${version}_linux_amd64.zip"
+    unzip terraform.zip
+    rm -f terraform.zip || true
+    ln -sf "$HOME/tools/bin/terraform" "$HOME/tools/terraform-$version/terraform"
+  popd
+fi
+
+echo "terraform --version"
+terraform --version

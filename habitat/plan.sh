@@ -6,10 +6,10 @@ pkg_license=('Apache-2.0')
 pkg_upstream_url=https://github.com/chef/ci-studio-common
 pkg_bin_dirs=(bin)
 pkg_deps=(
-  core/busybox
+  core/busybox-static
   core/curl
-  core/bash
   core/git
+  core/grep # We want to make sure to use this grep, not the one with busybox-static
 )
 
 pkg_version() {
@@ -26,5 +26,7 @@ do_build() {
 }
 
 do_install() {
-  cp -rf $SRC_PATH/bin/* "$pkg_prefix/bin"
+  cp -rf "$SRC_PATH"/bin/* "$pkg_prefix/bin"
+  cp -rf "$SRC_PATH/lib" "$pkg_prefix"
+  cp -rf "$SRC_PATH/tools" "$pkg_prefix"
 }

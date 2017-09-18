@@ -1,0 +1,137 @@
+#!/bin/bash
+# shellcheck disable=SC2154,SC1091
+#
+# Copyright:: Copyright 2017 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# The following is documentation of helper commands made available in the studio
+# via the Studio startup: https://github.com/habitat-sh/habitat/blob/master/components/studio/libexec/hab-studio-type-default.sh
+
+document "build" <<DOC
+  Wrapper around the 'hab pkg build' command.
+DOC
+
+document "sup-run" <<DOC
+  Launch the Habtiat Supervisor in the background (alias 'sr').
+DOC
+
+document "sup-term" <<DOC
+  Kill the Habitat Supervisor running in the background (alias 'st').
+DOC
+
+document "sup-log" <<DOC
+  Tail the Habtiat Supervisor's output (alias 'sl').
+DOC
+
+# The following are additional helpers commands we provide.
+
+document "enforce_hab_version" <<DOC
+  Ensure that the installed version of the hab toolchain is >= the given version.
+
+  @(arg:1) The required version of Habitat
+DOC
+function enforce_hab_version() {
+  installed_version=$(hab -V | awk '{print $NF}' | cut -f1 -d/)
+  required_version="$1"
+  MAJOR=$(echo "$installed_version"  | cut -f1 -d.)
+  MINOR=$(echo "$installed_version"  | cut -f2 -d.)
+  PATCH=$(echo "$installed_version"  | cut -f3 -d.)
+  R_MAJOR=$(echo "$required_version" | cut -f1 -d.)
+  R_MINOR=$(echo "$required_version" | cut -f2 -d.)
+  R_PATCH=$(echo "$required_version" | cut -f3 -d.)
+
+  [[ $MAJOR -lt $R_MAJOR ]] && print_version_error_message "$required_version" && return 1
+  [[ $MINOR -lt $R_MINOR ]] && print_version_error_message "$required_version" && return 1
+  [[ $PATCH -lt $R_PATCH ]] && print_version_error_message "$required_version" && return 1
+  return 0
+}
+
+function print_version_error_message() {
+  echo "ERROR: Habitat needs to be upgraded to a version >= '$1'"
+  echo "       Exit the studio and run the command:"
+  echo "       => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash"
+}
+
+document "install" <<DOC
+  Install the specified Habitat packages (defaults to $pkg_ident).
+
+  @(arg:*) The array of packages you wish to install (none will build $pkg_ident)
+
+  Example 1 :: Install the package described in plan.sh
+  ---------
+  install
+
+  Example 2 :: Install (and binlink) the listed packages from the 'stable' channel.
+  ---------
+  OPTS="--binlink" install core/curl core/git
+
+  Example 3 :: Install the listed packages from the 'unstable' channel.
+  ---------
+  dev_dependencies=(core/curl core/git)
+  OPTS="--channel unstable" install "${dev_dependencies[@]}""
+DOC
+function install() {
+  install_cmd="install"
+
+  if [[ "x$OPTS" != "x" ]]; then
+    install_cmd="$install_cmd $OPTS"
+  fi
+
+  if [[ "x$1" == "x" ]]; then
+    pushd /src >/dev/null
+      if [[ ! -f results/last_build.env ]]; then
+        build .
+        source results/last_build.env
+        eval "hab pkg $install_cmd $pkg_ident >/dev/null"
+      fi
+    popd
+  else
+    for pkg in "$@"
+    do
+      echo "Installing $pkg"
+      eval "hab pkg $install_cmd $pkg >/dev/null"
+    done
+  fi
+}
+
+document "export_docker_image" <<DOC
+  Export a Docker Image of this Habitat package.
+
+  This function uses the latest Habitat package available (as determined by the last_build.env file).
+  If no last_build.env file is present, it will perform a build automatically.
+DOC
+function export_docker_image() {
+  pushd /src >/dev/null
+    if [[ ! -f results/last_build.env ]]; then
+      echo "=> No Habitat build found - building now. [please wait]"
+      build >/dev/null
+    fi
+    source results/last_build.env
+    echo "=> Latest build: $pkg_ident"
+    echo "=> Exporting habitat package into a docker image. [please wait]"
+    if [[ $(hab pkg export docker "$pkg_ident" >/dev/null) -ne 0 ]]; then
+      echo -n "Make sure you have successfully built a habitat package within the studio."
+      echo "[Run 'build' to build one]"
+      popd >/dev/null
+      return
+    fi
+    export DOCKER_TAG="${pkg_version}-${pkg_release}"
+    export DOCKER_REPO="${pkg_origin}/${pkg_name}"
+    export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}"
+    echo "=> Docker image successfully built: $DOCKER_IMAGE"
+    echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
+  popd >/dev/null
+}

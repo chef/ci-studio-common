@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC1091
 #
 # Copyright:: Copyright 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
@@ -17,7 +16,26 @@
 # limitations under the License.
 #
 
-for lib in $(hab pkg path "chef/ci-studio-common")/lib/*
-do
-  source "$lib"
-done
+if [ -z "$STUDIO_TYPE" ]
+then
+
+  # Create the tools bin directory
+  if [ ! -d "$HOME/tools/bin" ]
+  then
+    mkdir -p "$HOME/tools/bin"
+  fi
+
+  for tool in "$@"
+  do
+    if [ ! -f "$HOME/ci-studio-common/tools/$tool.sh" ]
+    then
+      echo "The '$tool' tool definition does not exist."
+      exit 1
+    else
+       eval "bash $HOME/ci-studio-common/tools/$tool.sh"
+    fi
+  done
+else
+  echo "The 'install-tool' utility is intended to be used in Travis CI only."
+  exit 1
+fi

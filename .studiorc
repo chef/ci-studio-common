@@ -1,7 +1,34 @@
 #!/bin/bash
+# shellcheck disable=SC1090,SC2154
 
-function install_locally() {
-  build .
-  source results/last_build.env
-  hab pkg install $pkg_ident --binlink
+function install_from_source() {
+  pushd /src > /dev/null
+    build .
+    source results/last_build.env
+    hab pkg install "$pkg_ident"
+    source "$(hab pkg path $pkg_ident)/bin/studio-common"
+    OPTS="--binlink" install alasconnect/shellcheck
+  popd > /dev/null
+}
+
+function lint() {
+  pushd /src > /dev/null
+    shellcheck -s bash bin/* lib/*
+  popd > /dev/null
+}
+
+function syntax() {
+  pushd /src > /dev/null
+    bash -n bin/* lib/*
+  popd > /dev/null
+}
+
+function ci_lint() {
+  install_from_source > /dev/null
+  lint && echo "Lint Passed"
+}
+
+function ci_syntax() {
+  install_from_source > /dev/null
+  syntax && echo "Syntax Passed"
 }

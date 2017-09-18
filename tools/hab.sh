@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC1091
 #
 # Copyright:: Copyright 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
@@ -17,7 +16,4 @@
 # limitations under the License.
 #
 
-for lib in $(hab pkg path "chef/ci-studio-common")/lib/*
-do
-  source "$lib"
-done
+curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash

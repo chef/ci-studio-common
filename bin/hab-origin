@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Copyright:: Copyright 2017 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+case "$1" in
+  "download-sig-key")
+    # This function assumes that the credentials have been placed as required by the aws cli
+    bucket="${AWS_S3_BUCKET:-chef-ci-studio-common}"
+    origin="${2:-chef}"
+
+    # Create the keys directory if it is missing
+    [ ! -d "$HOME/.hab/cache/keys" ] && mkdir -p "$HOME/.hab/cache/keys"
+
+    # Make sure we have the public signing key
+    hab origin key download "$origin"
+
+    # Extract the name of the key+revision from the public key
+    key_with_revision=$(find "$HOME/.hab/cache/keys" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1)
+
+    if [ ! -f "$HOME/.hab/cache/keys/${key_with_revision}.sig.key" ]
+    then
+      # Download the key from the S3 bucket
+      aws s3 cp "s3://$bucket/${key_with_revision}.sig.key" "$HOME/.hab/cache/keys/${key_with_revision}.sig.key"
+    fi
+    ;;
+  *)
+    ;;
+esac

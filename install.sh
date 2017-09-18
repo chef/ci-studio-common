@@ -1,5 +1,4 @@
 #!/bin/bash
-# shellcheck disable=SC1090,SC1091
 #
 # Copyright:: Copyright 2017 Chef Software, Inc.
 # License:: Apache License, Version 2.0
@@ -17,7 +16,14 @@
 # limitations under the License.
 #
 
-for lib in $(hab pkg path "chef/ci-studio-common")/lib/*
-do
-  source "$lib"
-done
+if [ -d $HOME/ci-studio-common ]
+then
+  rm -rf $HOME/ci-studio-common
+fi
+
+pushd /tmp
+  curl -sLo ci-studio-common.zip https://github.com/chef/ci-studio-common/archive/master.zip
+  unzip ci-studio-common.zip
+  rm -f ci-studio-common.zip || true
+  mv ci-studio-common-master "$HOME/ci-studio-common"
+popd

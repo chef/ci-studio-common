@@ -20,9 +20,9 @@
 WORKDIR=${WORKDIR:-"./"}
 
 # Get a list of all the files that changed from the most recent merge
-changed_files="$("$(hab pkg path core/git)/bin/git" diff --name-only HEAD HEAD~1 "${WORKDIR}")"
+changed_files="$(git diff --name-only HEAD HEAD~1 "${WORKDIR}")"
 
-did_travis_change="$("$(hab pkg path core/git)/bin/git" diff --name-only HEAD HEAD~1 .travis.yml)"
+did_travis_change="$(git diff --name-only HEAD HEAD~1 .travis.yml)"
 if [ ! -z "$did_travis_change" ] && [ "$TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED" == "true" ]; then
   echo ".travis.yml was modified - forcing tests to run"
   TRAVIS_SUGAR_FILTER_TESTS="false"

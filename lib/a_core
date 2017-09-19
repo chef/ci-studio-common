@@ -38,7 +38,7 @@ function document() {
   name="${1}"
   content=$(cat /dev/stdin)
 
-  [ ! -z "$CI" ] && echo -e "$content" > "/tmp/docs/${name}"
+  [ -z "$CI" ] && echo -e "$content" > "/tmp/docs/${name}"
 }
 
 # This function allows the user to learn more about the studio.
@@ -66,7 +66,7 @@ function describe() {
 # This function allows the user to print a nice "welcome" or "getting started"
 # message when a new user enters the studio.
 function getting_started() {
-  [ ! -z "$CI" ] && cat /dev/stdin
+  [ -z "$CI" ] && cat /dev/stdin
 }
 
 # Source all the files available in the .studio directory of the SRC_PATH

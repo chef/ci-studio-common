@@ -88,8 +88,8 @@ If the .travis.yml file was modified, force all of the tests to run just to be s
 Please put the following at the **top** of your `.studiorc` file.
 
 ```bash
-hab pkg install --binlink chef/ci-studio-common
-source studio-common
+hab pkg install chef/ci-studio-common
+source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
 ```
 
 ### Helpers

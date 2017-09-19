@@ -16,17 +16,19 @@
 # limitations under the License.
 #
 
-version="${1-'0.8.1'}"
+version="${1:-0.8.1}"
 
 if [ ! -d "$HOME/tools/terraform-$version" ]; then
-  mkdir -p "$HOME/tools/terraform-$version"
-  pushd $HOME/tools
+  mkdir -p $HOME/tools/terraform-$version
+  pushd $HOME/tools > /dev/null
     curl -sLo terraform.zip "https://releases.hashicorp.com/terraform/$version/terraform_${version}_linux_amd64.zip"
     unzip terraform.zip
     rm -f terraform.zip || true
-    ln -sf "$HOME/tools/bin/terraform" "$HOME/tools/terraform-$version/terraform"
-  popd
+    mv terraform $HOME/tools/terraform-$version
+    ln -sf $HOME/tools/terraform-$version/terraform $HOME/tools/bin/terraform
+  popd > /dev/null
 fi
 
+echo ""
 echo "terraform --version"
-terraform --version
+$HOME/tools/bin/terraform --version

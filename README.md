@@ -22,6 +22,8 @@ Helpers that extend functionality of the `hab origin` namespace.
 
 Download the private signing key stored in `AWS_S3_BUCKET` (defaults to `ci-studio-common` for internal Chef Software usage). Requires a valid [aws cli configuration](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
 
+> For Chef Software projects, reach out to the #jex-team for getting setup to use the chef-ci credentials.
+
 #### `hab-verify`
 
 Helpers that perform common verification steps inside Habitat.
@@ -40,11 +42,7 @@ Perform some simple syntax checks against `plan.sh` files.
 
 #### `install-tool`
 
-This utility installs tooling in a very specific pattern specific to Travis CI. We support the following tools:
-
-* aws
-* hab
-* terraform
+This utility installs tooling in a very specific pattern specific to Travis CI. You can see all the tools we support in the [tools directory](https://github.com/chef/ci-studio-common/tree/master/tools).
 
 ```yaml
 install: install-tool aws
@@ -64,7 +62,7 @@ matrix:
   include:
     - env:
         - NAME=component_test
-      script: WORKDIR=component_dir run_if_changed make <test>
+      script: WORKDIR=component_dir run-if-changed make <test>
 ```
 
 ##### Tuning Options

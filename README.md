@@ -2,6 +2,39 @@
 
 This repository houses some scripts / files that are used across various Chef projects. These are designed and intended to be used by Chef Developers who are working on some specific projects. We are keeping it public as to simplify the download process for our developers.
 
+<!-- You don't need to modify this TOC. It will automatically update when a PR is merged using Expeditor. -->
+
+<!-- toc -->
+
+- [TravisCI](#travisci)
+  * [Installation](#installation)
+  * [Helpers](#helpers)
+    + [`hab-origin`](#hab-origin)
+      - [`hab-origin download-sig-key $ORIGIN`](#hab-origin-download-sig-key-origin)
+    + [`hab-verify`](#hab-verify)
+      - [`hab-verify in-studio $COMMAND`](#hab-verify-in-studio-command)
+      - [`hab-verify lint`](#hab-verify-lint)
+      - [`hab-verify syntax`](#hab-verify-syntax)
+    + [`install-tool`](#install-tool)
+    + [`run-if-changed`](#run-if-changed)
+      - [Tuning Options](#tuning-options)
+        * [`TRAVIS_SUGAR_FILTER_TESTS`](#travis_sugar_filter_tests)
+        * [`TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED`](#travis_sugar_force_if_travis_yaml_changed)
+- [Habitat Studio](#habitat-studio)
+  * [Installation](#installation-1)
+  * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
+  * [`.studiorc` Helpers](#studiorc-helpers)
+    + [`document`](#document)
+    + [`describe`](#describe)
+    + [`getting_started`](#getting_started)
+  * [The `.studio` directory](#the-studio-directory)
+  * [The `.secrets` file](#the-secrets-file)
+- [Setting Up Acceptance Tests](#setting-up-acceptance-tests)
+- [FAQ](#faq)
+  * [How do you determine a CI environment vs a non-CI environment?](#how-do-you-determine-a-ci-environment-vs-a-non-ci-environment)
+
+<!-- tocstop -->
+
 ## TravisCI
 
 ### Installation
@@ -50,7 +83,7 @@ install: install-tool aws
 
 #### `run-if-changed`
 
-If your project is comprised of many components (or lots of tests), you can use `run_if_changed` to only execute test suites if something changed in given `WORKDIR`.
+If your project is comprised of many components (or lots of tests), you can use `run-if-changed` to only execute test suites if something changed in given `WORKDIR`.
 
 ```yaml
 env:
@@ -69,9 +102,9 @@ matrix:
 
 ###### `TRAVIS_SUGAR_FILTER_TESTS`
 
-Tells `run_if_changed` to filter only when we're on a Pull Request. Will run the test, even if no files have changed, if set to false.
+Tells `run-if-changed` to filter only when we're on a Pull Request. Will run the test, even if no files have changed, if set to false.
 
-To keep things running fast, try to either a) cache as much as possible or b) put the setup behind the `run_if_changed` command as part of the Makefile.
+To keep things running fast, try to either a) cache as much as possible or b) put the setup behind the `run-if-changed` command as part of the Makefile.
 
 If you only want to filter the tests only on a PR you can use the following setting: `TRAVIS_SUGAR_FILTER_TESTS=$TRAVIS_PULL_REQUEST`
 
@@ -90,7 +123,13 @@ hab pkg install chef/ci-studio-common
 source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
 ```
 
-### Helpers
+### What happens when you source studio-common?
+
+1. Source all the Helper functions that come with `ci-studio-common`.
+2. Source any helpers defined in files in your `.studio` directory.
+2. Source your `/src/.secrets` file (if it exists).
+
+### `.studiorc` Helpers
 
 #### `document`
 
@@ -160,7 +199,7 @@ getting_started <<GETTING_STARTED
   From the studio run:
 
   # build
-  # start
+  # start_service
 
   Then on your host, you can hit converge service:
 
@@ -168,9 +207,66 @@ getting_started <<GETTING_STARTED
 GETTING_STARTED
 ```
 
-#### `source_studio_helpers`
+### The `.studio` directory
 
-Studios may have many, many helpers and the `.studiorc` file can get out of hand pretty quickly. The `source_studio_helpers` command is a quick way to quickly source additional files stored in the `.studio` folder of your `/src` directory.
+If you have a lot of helpers, putting them all in your `.studiorc` file can quickly result in a large, difficult to comprehend file. `ci-studio-common` allows you to split up those helpers into logical files and store them in a `.studio` directory (much like the `dot-studio` folder of this repository).  
+
+When you `source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"`, all the files in your `.studio` directory will automatically be sourced. Any `document` tags you specify will also automatically be made available under `describe`.
+
+### The `.secrets` file
+
+It is currently difficult/impossible to inject secrets into your Hab Studio. To get around this, `ci-studio-common` will automatically source the `/src/.secrets` file (if it exists). The current recommended practice is to export environment variables containing your secrets.
+
+```bash
+export GITHUB_TOKEN="<your personal access token>"
+```
+
+> Make sure the `.secret` file is added to your `.gitignore`!
+
+## Running Integration Tests
+
+One of the functions of the `ci-studio-common` library is to allow you to quickly and easily spin up an Integration environment and run InSpec tests against it. This can be done by using a simple command like this:
+
+```
+hab studio run integration_tests
+```
+
+It can also be done from inside the studio by executing the `integration_tests` function.
+
+```
+[1][default:/src:0]# integration_tests
+```
+
+### Getting Started
+
+To get started, the first thing you'll want to do is add the `enforce_integration_testing` command towards the top of your `.studiorc` file, after you source `ci-studio-common`. There are a number of functions that you will need to overwrite in your own `.studiorc` file or `.studio` directory, and `enforce_integration_testing` ensures that those functions exist.
+
+```bash
+hab pkg install chef/ci-studio-common
+source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
+
+enforce_integration_testing
+```
+
+The list of necessary functions are:
+
+* `start_service`
+* `start_dependencies`
+* `stop_dependencies`
+* `stop_service`
+
+### Overwriting Integration Testing Functions
+
+We recommend that you create an `integration_testing` file in your `.studio` directory, and put all your function definitions in that file. The recommended function definition would look something like this:
+
+```bash
+document "start_service" <<DOC
+  A quick description of what this process does. Be specific! This is your user-facing documentation.
+DOC
+function start_service() {
+  # All the things you need to do to start your service
+}
+```
 
 ## FAQ
 

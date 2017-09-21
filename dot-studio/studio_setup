@@ -28,7 +28,7 @@ document "generate_netrc_config" <<DOC
     https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html
 DOC
 function generate_netrc_config() {
-  if [[ -z $GITHUB_TOKEN ]]; then
+  if [[ -z "$GITHUB_TOKEN" ]]; then
     echo -e "\nError: Unable to configure ~/.netrc in the studio."
     echo "Missing the environment variable: GITHUB_TOKEN"
     echo -e "\nVerify that you have a file called '.secrets' with the following export:"
@@ -36,19 +36,5 @@ function generate_netrc_config() {
     exit 1
   else
     echo -e "machine github.com\n  login $GITHUB_TOKEN" >> ~/.netrc
-  fi
-}
-
-document "print_getting_started" <<DOC
-  Print out useful instructions on how to get started using this studio.
-
-  If a '.studio/.getting_started' file is present in the root of your project, this
-  function will print it out (unless we are running in TravisCI or other CI environment).
-DOC
-function print_getting_started() {
-  if [[ -z "${CI}" && -f /src/.studio/.getting_started ]]; then
-    echo ""
-    cat /src/.studio/.getting_started
-    echo ""
   fi
 }

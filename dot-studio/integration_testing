@@ -16,10 +16,10 @@
 # limitations under the License.
 #
 
-document "enforce_integration_helpers" <<DOC
+document "enforce_integration_testing" <<DOC
   Print an error message if any of the required Integration Testing functions are missing.
 DOC
-function enforce_integration_helpers() {
+function enforce_integration_testing() {
   local commands=(start_service stop_service inspec_exec start_dependencies stop_dependencies)
 
   for command in "${commands[@]}"
@@ -27,18 +27,18 @@ function enforce_integration_helpers() {
     if ! type "$command" > /dev/null 2>&1
     then
       echo ""
-      echo "  ERROR: Your .studiorc must declare the '$command' function."
-      echo "         Please see https://github.com/chef/ci-studio-common#required-functions for more information"
+      echo "  ERROR: Your .studiorc file, or a file in the .studio direcotry, must declare the '$command' function."
+      echo "         Please see https://github.com/chef/ci-studio-common#running-integration-tests for more information."
       echo ""
       return 1
     fi
   done
 }
 
-document "test_acceptance" <<DOC
-  Bring up and test your full Acceptance environment.
+document "integration_tests" <<DOC
+  Provision, Verify, and Destroy your full Integration Testing environment.
 DOC
-function test_acceptance() {
+function integration_tests() {
   start_dependencies
   start_service
   inspec_exec

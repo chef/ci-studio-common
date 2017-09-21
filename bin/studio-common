@@ -17,7 +17,96 @@
 # limitations under the License.
 #
 
-for lib in $(hab pkg path "chef/ci-studio-common")/lib/*
+# Source the plan.sh and default.toml files (if they exist)
+source /src/habitat/plan.sh
+export TOML_FILE=/src/habitat/default.toml
+
+# The folder where all the documentation is stored
+[[ ! -d /tmp/docs ]] && mkdir /tmp/docs
+
+# This is a helper function that allows use to document functions inline with the
+# code, but also make that documentation available to end user in the studio.
+#
+# The first line of the document will show up when the user runs 'describe'.
+# The full content will appear when the user runs 'describe <function>'
+#
+# When running in a CI environment, these documents are not created.
+function document() {
+  name="${1}"
+  content=$(cat /dev/stdin)
+
+  [ ! -z "$CI" ] && echo -e "$content" > "/tmp/docs/${name}"
+}
+
+# This function allows the user to learn more about the studio.
+#
+#   1. Passing no argument will print out a list of all documented functions
+#   2. Passing the name of a function will print out that functions documentation
+function describe() {
+  if [ ! -z "$CI" ]
+  then
+    echo ""
+    if [[ -z "${1}" ]]; then
+      echo "The following functions are available for your use in this studio:"
+      echo ""
+      for file in /tmp/docs/*
+      do
+        echo "  $(basename "$file")"
+        echo "  $(head -n 1 "$file")"
+      done
+      echo ""
+      echo "To learn more about a particular function, run 'describe <function>'."
+    else
+      cat "/tmp/docs/$1"
+    fi
+    echo ""
+  fi
+}
+
+# This function allows the user to print a nice "welcome" or "getting started"
+# message when a new user enters the studio.
+function getting_started() {
+  [ ! -z "$CI" ] && cat /dev/stdin
+}
+
+for file in $(hab pkg path "chef/ci-studio-common")/dot-studio/*
 do
-  source "$lib"
+  source "$file"
 done
+
+# Install and binlink the pkg_deps for ci-studio-common
+#
+# => Right now there is a bug with `binlink` where it will attempt to binlink build
+#    dependencies (which, for many reasons, does not work). The code we _want_ is
+#    commented out, with a temporary workaround below that
+ci_studio_common_helpers=($(cat "$(hab pkg path "chef/ci-studio-common")/DEPS"))
+
+# Normally we'd want to binlink all our "runtime" deps, but because of the bug
+# mentioned above we cant.
+#
+# OPTS="--binlink" install "${ci_studio_common_helpers[@]}"
+install "${ci_studio_common_helpers[@]}"
+
+# => Binlink the specified dependencies we need.
+hab pkg binlink core/busybox
+hab pkg binlink core/curl
+hab pkg binlink core/git
+hab pkg binlink core/grep grep
+hab pkg binlink chef/inspec inspec
+
+# Source all the files available in the .studio directory of the /src directory
+if [ -d /src/.studio ]
+then
+  for file in /src/.studio/*
+  do
+    source "$file"
+  done
+fi
+
+# Source the .secrets file (if it exists)
+if [ -f /src/.secrets ]
+then
+  source /src/.secrets
+fi
+
+echo "Helpers from ci-studio-common and your local .studio folder have been added. Run 'describe' for more information."

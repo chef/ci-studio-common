@@ -10,6 +10,7 @@ pkg_deps=(
   core/curl
   core/git
   core/grep # We want to make sure to use this grep, not the one with busybox-static
+  chef/inspec
 )
 
 pkg_version() {
@@ -27,6 +28,6 @@ do_build() {
 
 do_install() {
   cp -rf "$SRC_PATH"/bin/* "$pkg_prefix/bin"
-  cp -rf "$SRC_PATH/lib" "$pkg_prefix"
+  cp -rf "$SRC_PATH/dot-studio" "$pkg_prefix"
   cp -rf "$SRC_PATH/tools" "$pkg_prefix"
 }

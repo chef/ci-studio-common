@@ -37,7 +37,6 @@ document "sup-log" <<DOC
 DOC
 
 # The following are additional helpers commands we provide.
-
 document "enforce_hab_version" <<DOC
   Ensure that the installed version of the hab toolchain is >= the given version.
 
@@ -66,20 +65,20 @@ function print_version_error_message() {
 }
 
 document "install" <<DOC
-  Install the specified Habitat packages (defaults to $pkg_ident).
+  Install the specified Habitat packages (defaults to $HAB_ORIGIN/$pkg_name).
 
-  @(arg:*) The array of packages you wish to install (none will build $pkg_ident)
+  @(arg:*) The array of packages you wish to install (none will build $HAB_ORIGIN/$pkg_name)
 
   Example 1 :: Install the package described in plan.sh
-  ---------
+  -----------------------------------------------------
   install
 
   Example 2 :: Install (and binlink) the listed packages from the 'stable' channel.
-  ---------
+  ---------------------------------------------------------------------------------
   OPTS="--binlink" install core/curl core/git
 
   Example 3 :: Install the listed packages from the 'unstable' channel.
-  ---------
+  ---------------------------------------------------------------------
   dev_dependencies=(core/curl core/git)
   OPTS="--channel unstable" install "${dev_dependencies[@]}""
 DOC
@@ -121,9 +120,9 @@ function export_docker_image() {
     fi
     source results/last_build.env
     echo "=> Latest build: $pkg_ident"
-    echo "=> Exporting habitat package into a docker image. [please wait]"
+    echo "=> Exporting Habitat package into a Docker image. [please wait]"
     if [[ $(hab pkg export docker "$pkg_ident" >/dev/null) -ne 0 ]]; then
-      echo -n "Make sure you have successfully built a habitat package within the studio."
+      echo -n "Make sure you have successfully built a Habitat package within the studio."
       echo "[Run 'build' to build one]"
       popd >/dev/null
       return

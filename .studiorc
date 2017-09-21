@@ -1,6 +1,12 @@
 #!/bin/bash
 # shellcheck disable=SC1090,SC2154
 
+#
+# Want to add a function that can be shared amongst all the .studiorcs? Add it
+# to a file in the `dot-studio` directory. This file is for ci-studio-common's
+# studio only.
+#
+
 function install_from_source() {
   pushd /src > /dev/null
     build .

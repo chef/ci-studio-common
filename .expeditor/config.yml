@@ -9,7 +9,6 @@ merge_actions:
       ignore_labels:
         - "Version: Skip Bump"
         - "Expeditor: Skip All"
-  - bash:.expeditor/update_toc.sh
   - built_in:update_changelog:
       ignore_labels:
         - "Changelog: Skip Update"

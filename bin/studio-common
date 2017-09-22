@@ -35,7 +35,7 @@ function document() {
   name="${1}"
   content=$(cat /dev/stdin)
 
-  [ ! -z "$CI" ] && echo -e "$content" > "/tmp/docs/${name}"
+  [ -z "$CI" ] && echo -e "$content" > "/tmp/docs/${name}"
 }
 
 # This function allows the user to learn more about the studio.
@@ -43,7 +43,7 @@ function document() {
 #   1. Passing no argument will print out a list of all documented functions
 #   2. Passing the name of a function will print out that functions documentation
 function describe() {
-  if [ ! -z "$CI" ]
+  if [ -z "$CI" ]
   then
     echo ""
     if [[ -z "${1}" ]]; then
@@ -66,7 +66,7 @@ function describe() {
 # This function allows the user to print a nice "welcome" or "getting started"
 # message when a new user enters the studio.
 function getting_started() {
-  [ ! -z "$CI" ] && cat /dev/stdin
+  [ -z "$CI" ] && cat /dev/stdin
 }
 
 for file in $(hab pkg path "chef/ci-studio-common")/dot-studio/*

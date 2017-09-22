@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.3 -->
+<!-- latest_release 0.1.4 -->
+## [0.1.4](https://github.com/chef/ci-studio-common/tree/0.1.4) (2017-09-22)
+
+#### Merged Pull Requests
+- Skip markdown-toc for the time being [#12](https://github.com/chef/ci-studio-common/pull/12) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.3](https://github.com/chef/ci-studio-common/tree/0.1.3) (2017-09-19)
 
 #### Merged Pull Requests
 - Fix loading of helpers in non-CI environments [#8](https://github.com/chef/ci-studio-common/pull/8) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.2](https://github.com/chef/ci-studio-common/tree/0.1.2) (2017-09-19)
 

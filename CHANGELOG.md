@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.4 -->
+<!-- latest_release 0.1.5 -->
+## [0.1.5](https://github.com/chef/ci-studio-common/tree/0.1.5) (2017-09-26)
+
+#### Merged Pull Requests
+- Lazy-load dependencies rather than loading them at boot [#13](https://github.com/chef/ci-studio-common/pull/13) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.4](https://github.com/chef/ci-studio-common/tree/0.1.4) (2017-09-22)
 
 #### Merged Pull Requests
 - Skip markdown-toc for the time being [#12](https://github.com/chef/ci-studio-common/pull/12) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.3](https://github.com/chef/ci-studio-common/tree/0.1.3) (2017-09-19)
 

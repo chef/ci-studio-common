@@ -29,7 +29,9 @@ This repository houses some scripts / files that are used across various Chef pr
     + [`getting_started`](#getting_started)
   * [The `.studio` directory](#the-studio-directory)
   * [The `.secrets` file](#the-secrets-file)
-- [Setting Up Acceptance Tests](#setting-up-acceptance-tests)
+- [Running Integration Tests](#running-integration-tests)
+  * [Getting Started](#getting-started)
+  * [Overwriting Integration Testing Functions](#overwriting-integration-testing-functions)
 - [FAQ](#faq)
   * [How do you determine a CI environment vs a non-CI environment?](#how-do-you-determine-a-ci-environment-vs-a-non-ci-environment)
 

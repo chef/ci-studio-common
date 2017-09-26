@@ -134,3 +134,23 @@ function export_docker_image() {
     echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
   popd >/dev/null
 }
+
+document "install_if_missing" <<DOC
+  Install the package and binlink the binary only if it is missing.
+
+  @(arg:1) The name of the package that contains the binary
+  @(arg:2) The name of the binary to binlink
+DOC
+function install_if_missing() {
+  # Install the package if it is not installed
+  if [[ ! -d "/hab/pkgs/$1" ]];
+  then
+    install "$1" > /dev/null
+  fi
+
+  # binlink the binary if it is not already binlinked
+  if [[ ! -L "/hab/bin/$2" ]];
+  then
+    hab pkg binlink "$1" "$2" > /dev/null
+  fi
+}

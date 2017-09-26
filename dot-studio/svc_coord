@@ -57,6 +57,8 @@ document "wait_for_port_to_listen" <<DOC
   @(arg:2) Wheter or not this process runs silently
 DOC
 function wait_for_port_to_listen() {
+  install_if_missing core/busybox-static netstat
+  
   while : ; do
     if netstat -an | grep "$1" | grep LISTEN >/dev/null 2>/dev/null
     then

@@ -69,30 +69,16 @@ function getting_started() {
   [ -z "$CI" ] && cat /dev/stdin
 }
 
+# Source the .secrets file (if it exists)
+if [ -f /src/.secrets ]
+then
+  source /src/.secrets
+fi
+
 for file in $(hab pkg path "chef/ci-studio-common")/dot-studio/*
 do
   source "$file"
 done
-
-# Install and binlink the pkg_deps for ci-studio-common
-#
-# => Right now there is a bug with `binlink` where it will attempt to binlink build
-#    dependencies (which, for many reasons, does not work). The code we _want_ is
-#    commented out, with a temporary workaround below that
-ci_studio_common_helpers=($(cat "$(hab pkg path "chef/ci-studio-common")/DEPS"))
-
-# Normally we'd want to binlink all our "runtime" deps, but because of the bug
-# mentioned above we cant.
-#
-# OPTS="--binlink" install "${ci_studio_common_helpers[@]}"
-install "${ci_studio_common_helpers[@]}"
-
-# => Binlink the specified dependencies we need.
-hab pkg binlink core/busybox
-hab pkg binlink core/curl
-hab pkg binlink core/git
-hab pkg binlink core/grep grep
-hab pkg binlink chef/inspec inspec
 
 # Source all the files available in the .studio directory of the /src directory
 if [ -d /src/.studio ]
@@ -101,12 +87,6 @@ then
   do
     source "$file"
   done
-fi
-
-# Source the .secrets file (if it exists)
-if [ -f /src/.secrets ]
-then
-  source /src/.secrets
 fi
 
 echo "Helpers from ci-studio-common and your local .studio folder have been added. Run 'describe' for more information."

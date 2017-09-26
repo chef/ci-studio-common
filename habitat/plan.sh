@@ -5,13 +5,6 @@ pkg_description="Shared helpers for use inside CIs (like Travis) and a Habitat S
 pkg_license=('Apache-2.0')
 pkg_upstream_url=https://github.com/chef/ci-studio-common
 pkg_bin_dirs=(bin)
-pkg_deps=(
-  core/busybox-static
-  core/curl
-  core/git
-  core/grep # We want to make sure to use this grep, not the one with busybox-static
-  chef/inspec
-)
 
 pkg_version() {
   cat "$SRC_PATH/VERSION"

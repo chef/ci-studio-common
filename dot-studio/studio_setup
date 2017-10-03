@@ -38,3 +38,62 @@ function generate_netrc_config() {
     echo -e "machine github.com\n  login $GITHUB_TOKEN" >> ~/.netrc
   fi
 }
+
+
+document "clone_function" <<DOC
+  Create a copy of the ci-studio-common function in your .studio/ directory.
+
+  If there is a function, provided by ci-studio-common, that isn't working exactly
+  as required, you can use this function to create a copy of that function in your
+  local .studio/ directory. You can then modify or manipulate that function declaration
+  as necessary to meet your needs.
+
+  From that point forward, anytime you open your studio, your copy of that function will
+  be used, rather than the version that comes with ci-studio-common.
+
+  If you need to use it immediately, you can source that file.
+
+  . /src/.studio/override-common
+
+  We encourage you to, if appropriate, contribute your changes back to ci-studio-common.
+DOC
+function clone_function() {
+  local function="$1"
+
+  # Return an error if that is not a defined function
+  if [[ ! -f /tmp/docs/$function ]]
+  then
+    echo "ERROR: ci-studio-common does not provide a '$function' function."
+    return
+  fi
+
+  # Create the .studio directory if it's missing
+  mkdir -p /src/.studio > /dev/null
+
+  # Create the override-common file if it's Missing
+  if [[ ! -f /src/.studio/override-common ]]
+  then
+    cat << EOF > /src/.studio/override-common
+#!/bin/bash
+# In this file, you can override functions included with ci-studio-common to meet your needs.
+# Please consider contributing any enhancements or improvements to chef/ci-studio-common
+EOF
+  fi
+
+  # Add the contents of the function to the override file unless it has already
+  # been overridden.
+  if ! grep -w "$function\(\)" /src/.studio/override-common > /dev/null
+  then
+    cat << EOF >> /src/.studio/override-common
+
+document "$function" <<DOC
+$(cat /tmp/docs/$function)
+DOC
+function `declare -f $function`
+EOF
+    echo "A copy of the '$function' function has been added to /src/.studio/override-common."
+  else
+    echo "You have already cloned that function."
+  fi
+
+}

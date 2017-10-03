@@ -75,6 +75,8 @@ then
   source /src/.secrets
 fi
 
+source_msg="Helpers from ci-studio-common"
+
 for file in $(hab pkg path "chef/ci-studio-common")/dot-studio/*
 do
   source "$file"
@@ -87,6 +89,7 @@ then
   do
     source "$file"
   done
+  source_msg="$source_msg and your local .studio folder"
 fi
 
-echo "Helpers from ci-studio-common and your local .studio folder have been added. Run 'describe' for more information."
+echo "$source_msg have been added. Run 'describe' for more information."

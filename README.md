@@ -27,6 +27,7 @@ This repository houses some scripts / files that are used across various Chef pr
     + [`document`](#document)
     + [`describe`](#describe)
     + [`getting_started`](#getting_started)
+    + [`clone_function`](#clone_function)
   * [The `.studio` directory](#the-studio-directory)
   * [The `.secrets` file](#the-secrets-file)
 - [Running Integration Tests](#running-integration-tests)

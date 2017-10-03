@@ -209,11 +209,70 @@ getting_started <<GETTING_STARTED
 GETTING_STARTED
 ```
 
+#### `clone_function`
+
+Despite our best efforts, sometimes a helper function that we provide to you may not suit your needs exactly. In that scenario, you can use the `clone_function` helper to clone an existing function into your local `.studio/` directory under the file `override-common`. There, you can modify the function to meet your needs. From that point on, anytime you open up a new Habitat Studio _your_ version of the helper will load, rather than the version that comes with `ci-studio-common`. If, at any time you wish to go back to the original function, you can simply remove the function declaration from your source code.
+
 ### The `.studio` directory
 
 If you have a lot of helpers, putting them all in your `.studiorc` file can quickly result in a large, difficult to comprehend file. `ci-studio-common` allows you to split up those helpers into logical files and store them in a `.studio` directory (much like the `dot-studio` folder of this repository).  
 
 When you `source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"`, all the files in your `.studio` directory will automatically be sourced. Any `document` tags you specify will also automatically be made available under `describe`.
+
+```bash
+[01][default:/src:0]# ls -alh .studio
+ls: cannot access '.studio': No such file or directory
+[02][default:/src:2]# clone_function install
+[47][default:/src:0]# ls -alh .studio
+total 4.0K
+drwxr-xr-x  3 root root  102 Oct  3 18:09 .
+drwxr-xr-x 21 root root  714 Oct  3 18:09 ..
+-rw-r--r--  1 root root 1.5K Oct  3 18:09 override-common
+[03][default:/src:0]# cat .studio/override-common
+#!/bin/bash
+# In this file, you can override functions included with ci-studio-common to meet your needs.
+
+document "install" <<DOC
+  Install the specified Habitat packages (defaults to chef/ci-studio-common).
+
+  @(arg:*) The array of packages you wish to install (none will build chef/ci-studio-common)
+
+  Example 1 :: Install the package described in plan.sh
+  -----------------------------------------------------
+  install
+
+  Example 2 :: Install (and binlink) the listed packages from the 'stable' channel.
+  ---------------------------------------------------------------------------------
+  OPTS="--binlink" install core/curl core/git
+
+  Example 3 :: Install the listed packages from the 'unstable' channel.
+  ---------------------------------------------------------------------
+  dev_dependencies=(core/curl core/git)
+  OPTS="--channel unstable" install """
+DOC
+function install ()
+{
+    install_cmd="install";
+    if [[ "x$OPTS" != "x" ]]; then
+        install_cmd="$install_cmd $OPTS";
+    fi;
+    if [[ "x$1" == "x" ]]; then
+        pushd /src > /dev/null;
+        if [[ ! -f results/last_build.env ]]; then
+            build .;
+            source results/last_build.env;
+            eval "hab pkg $install_cmd $pkg_ident >/dev/null";
+        fi;
+        popd;
+    else
+        for pkg in "$@";
+        do
+            echo "Installing $pkg";
+            eval "hab pkg $install_cmd $pkg >/dev/null";
+        done;
+    fi
+}
+```
 
 ### The `.secrets` file
 

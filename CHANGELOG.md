@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.6 -->
+<!-- latest_release 0.1.7 -->
+## [0.1.7](https://github.com/chef/ci-studio-common/tree/0.1.7) (2017-10-05)
+
+#### Merged Pull Requests
+- Fix placement of clone-function README example [#15](https://github.com/chef/ci-studio-common/pull/15) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.6](https://github.com/chef/ci-studio-common/tree/0.1.6) (2017-10-03)
 
 #### Merged Pull Requests
 - Add the &#39;clone_function&#39; helper [#14](https://github.com/chef/ci-studio-common/pull/14) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.5](https://github.com/chef/ci-studio-common/tree/0.1.5) (2017-09-26)
 

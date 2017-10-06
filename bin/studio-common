@@ -18,8 +18,8 @@
 #
 
 # Source the plan.sh and default.toml files (if they exist)
-source /src/habitat/plan.sh
-export TOML_FILE=/src/habitat/default.toml
+[[ -f /src/habitat/plan.sh ]] && source /src/habitat/plan.sh
+[[ -f /src/habitat/default.toml ]] && export TOML_FILE=/src/habitat/default.toml
 
 # The folder where all the documentation is stored
 [[ ! -d /tmp/docs ]] && mkdir /tmp/docs

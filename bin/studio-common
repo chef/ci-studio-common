@@ -18,8 +18,11 @@
 #
 
 # Source the plan.sh and default.toml files (if they exist)
-source /src/habitat/plan.sh
-export TOML_FILE=/src/habitat/default.toml
+# Avoid loading these files when running in a CI environment.
+if [[ -z "$CI" ]]; then
+  source /src/habitat/plan.sh
+  export TOML_FILE=/src/habitat/default.toml
+fi
 
 # The folder where all the documentation is stored
 [[ ! -d /tmp/docs ]] && mkdir /tmp/docs

@@ -11,7 +11,7 @@ function install_from_source() {
   pushd /src > /dev/null
     build .
     source results/last_build.env
-    hab pkg install "$pkg_ident"
+    hab pkg install "results/$pkg_artifact"
     source "$(hab pkg path $pkg_ident)/bin/studio-common"
     OPTS="--binlink" install alasconnect/shellcheck
   popd > /dev/null

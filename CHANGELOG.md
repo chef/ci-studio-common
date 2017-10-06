@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.7 -->
+<!-- latest_release 0.1.8 -->
+## [0.1.8](https://github.com/chef/ci-studio-common/tree/0.1.8) (2017-10-06)
+
+#### Merged Pull Requests
+- Update install syntax to install hart file [#16](https://github.com/chef/ci-studio-common/pull/16) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.7](https://github.com/chef/ci-studio-common/tree/0.1.7) (2017-10-05)
 
 #### Merged Pull Requests
 - Fix placement of clone-function README example [#15](https://github.com/chef/ci-studio-common/pull/15) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.6](https://github.com/chef/ci-studio-common/tree/0.1.6) (2017-10-03)
 

@@ -1,0 +1,3 @@
+# Disable auto-builds
+[ci-studio-common]
+paths = []

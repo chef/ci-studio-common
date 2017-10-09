@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.11 -->
+<!-- latest_release 0.1.12 -->
+## [0.1.12](https://github.com/chef/ci-studio-common/tree/0.1.12) (2017-10-09)
+
+#### Merged Pull Requests
+- Improve hab-origin command [#22](https://github.com/chef/ci-studio-common/pull/22) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.11](https://github.com/chef/ci-studio-common/tree/0.1.11) (2017-10-09)
 
 #### Merged Pull Requests
 - Delay installation of binaries at the last minute [#19](https://github.com/chef/ci-studio-common/pull/19) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.10](https://github.com/chef/ci-studio-common/tree/0.1.10) (2017-10-09)
 

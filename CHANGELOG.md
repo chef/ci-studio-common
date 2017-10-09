@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.8 -->
+<!-- latest_release 0.1.9 -->
+## [0.1.9](https://github.com/chef/ci-studio-common/tree/0.1.9) (2017-10-09)
+
+#### Merged Pull Requests
+- Only source the plan.sh and default.toml if they exist [#18](https://github.com/chef/ci-studio-common/pull/18) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.8](https://github.com/chef/ci-studio-common/tree/0.1.8) (2017-10-06)
 
 #### Merged Pull Requests
 - Update install syntax to install hart file [#16](https://github.com/chef/ci-studio-common/pull/16) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.7](https://github.com/chef/ci-studio-common/tree/0.1.7) (2017-10-05)
 

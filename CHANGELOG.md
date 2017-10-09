@@ -1,11 +1,26 @@
 # Changelog
 
-<!-- latest_release 0.1.10 -->
+<!-- latest_release 0.1.13 -->
+## [0.1.13](https://github.com/chef/ci-studio-common/tree/0.1.13) (2017-10-09)
+
+#### Merged Pull Requests
+- Fix export_docker_image to fail if error found [#24](https://github.com/chef/ci-studio-common/pull/24) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
+## [0.1.12](https://github.com/chef/ci-studio-common/tree/0.1.12) (2017-10-09)
+
+#### Merged Pull Requests
+- Improve hab-origin command [#22](https://github.com/chef/ci-studio-common/pull/22) ([afiune](https://github.com/afiune))
+
+## [0.1.11](https://github.com/chef/ci-studio-common/tree/0.1.11) (2017-10-09)
+
+#### Merged Pull Requests
+- Delay installation of binaries at the last minute [#19](https://github.com/chef/ci-studio-common/pull/19) ([afiune](https://github.com/afiune))
+
 ## [0.1.10](https://github.com/chef/ci-studio-common/tree/0.1.10) (2017-10-09)
 
 #### Merged Pull Requests
 - Improve hab-verify binary [#21](https://github.com/chef/ci-studio-common/pull/21) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.9](https://github.com/chef/ci-studio-common/tree/0.1.9) (2017-10-09)
 

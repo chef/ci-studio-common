@@ -121,25 +121,28 @@ document "export_docker_image" <<DOC
   If no last_build.env file is present, it will perform a build automatically.
 DOC
 function export_docker_image() {
-  pushd /src >/dev/null
+  pushd /src >/dev/null;
     if [[ ! -f results/last_build.env ]]; then
-      echo "=> No Habitat build found - building now. [please wait]"
-      build >/dev/null
-    fi
-    source results/last_build.env
-    echo "=> Latest build: $pkg_ident"
-    echo "=> Exporting Habitat package into a Docker image. [please wait]"
-    if [[ $(hab pkg export docker "$pkg_ident" >/dev/null) -ne 0 ]]; then
-      echo -n "Make sure you have successfully built a Habitat package within the studio."
-      echo "[Run 'build' to build one]"
-      popd >/dev/null
-      return
-    fi
-    export DOCKER_TAG="${pkg_version}-${pkg_release}"
-    export DOCKER_REPO="${pkg_origin}/${pkg_name}"
-    export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}"
-    echo "=> Docker image successfully built: $DOCKER_IMAGE"
-    echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
+        echo "=> No Habitat build found - building now. [please wait]";
+        build >/dev/null;
+        [[ $? -ne 0 ]] && return 1;
+    fi;
+    source results/last_build.env;
+    echo "=> Latest build: $pkg_artifact";
+    echo "=> Exporting Habitat package into a Docker image. [please wait]";
+    hab pkg export docker "results/${pkg_artifact}" >/dev/null
+    if [[ $? -ne 0 ]]; then
+        # If something went wrong here is because the pkg export cmd failed
+        echo "Unable to export package as a Docker Image.";
+        echo "Run 'hab pkg export docker "$pkg_artifact"' and diagnose.";
+        popd > /dev/null;
+        return 1;
+    fi;
+    export DOCKER_TAG="${pkg_version}-${pkg_release}";
+    export DOCKER_REPO="${pkg_origin}/${pkg_name}";
+    export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}";
+    echo "=> Docker image successfully built: $DOCKER_IMAGE";
+    echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'";
   popd >/dev/null
 }
 

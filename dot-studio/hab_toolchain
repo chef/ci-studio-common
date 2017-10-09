@@ -43,19 +43,27 @@ document "enforce_hab_version" <<DOC
   @(arg:1) The required version of Habitat
 DOC
 function enforce_hab_version() {
-  installed_version=$(hab -V | awk '{print $NF}' | cut -f1 -d/)
-  required_version="$1"
-  MAJOR=$(echo "$installed_version"  | cut -f1 -d.)
-  MINOR=$(echo "$installed_version"  | cut -f2 -d.)
-  PATCH=$(echo "$installed_version"  | cut -f3 -d.)
-  R_MAJOR=$(echo "$required_version" | cut -f1 -d.)
-  R_MINOR=$(echo "$required_version" | cut -f2 -d.)
-  R_PATCH=$(echo "$required_version" | cut -f3 -d.)
+  installed_version=$(hab -V | awk '{print $NF}' | cut -f1 -d/);
+  required_version="$1";
+  MAJOR=$(echo "$installed_version"  | cut -f1 -d.);
+  MINOR=$(echo "$installed_version"  | cut -f2 -d.);
+  PATCH=$(echo "$installed_version"  | cut -f3 -d.);
+  R_MAJOR=$(echo "$required_version" | cut -f1 -d.);
+  R_MINOR=$(echo "$required_version" | cut -f2 -d.);
+  R_PATCH=$(echo "$required_version" | cut -f3 -d.);
+  need_upgrade=false;
+  [[ $PATCH -lt $R_PATCH ]] && need_upgrade=true;
+  if [[ $MINOR -ne $R_MINOR ]]; then
+    [[ $MINOR -lt $R_MINOR ]] && need_upgrade=true || need_upgrade=false;
+  fi;
+  if [[ $MAJOR -ne $R_MAJOR ]]; then
+    [[ $MAJOR -lt $R_MAJOR ]] && need_upgrade=true || need_upgrade=false;
+  fi;
 
-  [[ $MAJOR -lt $R_MAJOR ]] && print_version_error_message "$required_version" && return 1
-  [[ $MINOR -lt $R_MINOR ]] && print_version_error_message "$required_version" && return 1
-  [[ $PATCH -lt $R_PATCH ]] && print_version_error_message "$required_version" && return 1
-  return 0
+  if $need_upgrade; then
+    print_version_error_message $required_version && return 1;
+  fi;
+  return 0;
 }
 
 function print_version_error_message() {

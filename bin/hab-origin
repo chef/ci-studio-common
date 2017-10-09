@@ -16,8 +16,34 @@
 # limitations under the License.
 #
 
+function usage() {
+  cat /dev/stdin <<DOC
+Usage: ${0##*/} [SUBCOMMAND]
+
+Helpers that extend functionality of the hab origin namespace.
+
+SUBCOMMANDS:
+    download-sig-key <ORIGIN>  Download the private signing key stored in AWS_S3_BUCKET. (Requires aws cli)
+
+ENVIRONMENT VARIABLES:
+    AWS_S3_BUCKET              Optional options to pass to the hab-studio. (default: chef-ci-studio-common)
+DOC
+}
+
+# Place any requirement we need for hab-origin to work
+function enforce_requirements() {
+  which aws >/dev/null 2>1
+  if [[ $? -ne 0 ]]; then
+    echo "${0##*/}: Unable to find 'aws' executable."
+    echo "Make sure you have the aws cli installed. Try 'install-tool aws'."
+    exit 2
+  fi
+}
+
 case "$1" in
   "download-sig-key")
+    enforce_requirements
+
     # This function assumes that the credentials have been placed as required by the aws cli
     bucket="${AWS_S3_BUCKET:-chef-ci-studio-common}"
     origin="${2:-chef}"
@@ -37,6 +63,11 @@ case "$1" in
       aws s3 cp "s3://$bucket/${key_with_revision}.sig.key" "$HOME/.hab/cache/keys/${key_with_revision}.sig.key"
     fi
     ;;
-  *)
+  "-h"|"--help"|"")
+    usage
     ;;
+  *)
+    echo "${0##*/}: invalid option '$1'"
+    echo "Try '${0##*/} --help' for more information."
+    exit 2
 esac

@@ -39,6 +39,8 @@ need_upgrade=false;
 is_newer=false;
 
 [[ $PATCH -lt $R_PATCH ]] && need_upgrade=true;
+[[ $PATCH -gt $R_PATCH ]] && is_newer=true;
+
 if [[ $MINOR -ne $R_MINOR ]]; then
   [[ $MINOR -lt $R_MINOR ]] && need_upgrade=true || need_upgrade=false;
   [[ $MINOR -gt $R_MINOR ]] && is_newer=true || is_newer=false;

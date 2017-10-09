@@ -13,6 +13,9 @@ merge_actions:
       ignore_labels:
         - "Changelog: Skip Update"
         - "Expeditor: Skip All"
+  - bash:.expeditor/update_hab_version.sh:
+      ignore_labels:
+        - "Expeditor: Skip All"
   - bash:.expeditor/update_toc.sh:
       ignore_labels:
         - "Expeditor: Skip All"

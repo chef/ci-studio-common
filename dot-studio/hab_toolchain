@@ -36,42 +36,6 @@ document "sup-log" <<DOC
   Tail the Habtiat Supervisor's output (alias 'sl').
 DOC
 
-# The following are additional helpers commands we provide.
-document "enforce_hab_version" <<DOC
-  Ensure that the installed version of the hab toolchain is >= the given version.
-
-  @(arg:1) The required version of Habitat
-DOC
-function enforce_hab_version() {
-  installed_version=$(hab -V | awk '{print $NF}' | cut -f1 -d/);
-  required_version="$1";
-  MAJOR=$(echo "$installed_version"  | cut -f1 -d.);
-  MINOR=$(echo "$installed_version"  | cut -f2 -d.);
-  PATCH=$(echo "$installed_version"  | cut -f3 -d.);
-  R_MAJOR=$(echo "$required_version" | cut -f1 -d.);
-  R_MINOR=$(echo "$required_version" | cut -f2 -d.);
-  R_PATCH=$(echo "$required_version" | cut -f3 -d.);
-  need_upgrade=false;
-  [[ $PATCH -lt $R_PATCH ]] && need_upgrade=true;
-  if [[ $MINOR -ne $R_MINOR ]]; then
-    [[ $MINOR -lt $R_MINOR ]] && need_upgrade=true || need_upgrade=false;
-  fi;
-  if [[ $MAJOR -ne $R_MAJOR ]]; then
-    [[ $MAJOR -lt $R_MAJOR ]] && need_upgrade=true || need_upgrade=false;
-  fi;
-
-  if $need_upgrade; then
-    print_version_error_message $required_version && return 1;
-  fi;
-  return 0;
-}
-
-function print_version_error_message() {
-  echo "ERROR: Habitat needs to be upgraded to a version >= '$1'"
-  echo "       Exit the studio and run the command:"
-  echo "       => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash"
-}
-
 document "install" <<DOC
   Install the specified Habitat packages (defaults to $HAB_ORIGIN/$pkg_name).
 
@@ -134,7 +98,7 @@ function export_docker_image() {
     if [[ $? -ne 0 ]]; then
         # If something went wrong here is because the pkg export cmd failed
         echo "Unable to export package as a Docker Image.";
-        echo "Run 'hab pkg export docker "$pkg_artifact"' and diagnose.";
+        echo "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose.";
         popd > /dev/null;
         return 1;
     fi;

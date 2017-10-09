@@ -31,8 +31,8 @@ function ipaddress() {
 document "configure_host" <<DOC
   Configure a host (in /etc/hosts) inside the studio.
 
-  This function will modify the /etc/hosts with $1 as the hostname and it will
-  use $2 to find the ipaddress that the port is bound to.
+  This function will modify the /etc/hosts with @(arg:1) as the hostname and it will
+  use @(arg:2) to find the ipaddress that the port is bound to.
 
   Only if the provided host is NOT an ipaddress
 
@@ -41,19 +41,19 @@ document "configure_host" <<DOC
 DOC
 function configure_host() {
   # Return if the hostname to configure ($1) is an ipaddress
-  [[ "$1" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] && return 0
+  [[ "$1" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] && return 1;
   # Verify if we have already added the host to /etc/hosts
-  grep -w "$1" /etc/hosts >/dev/null && return
+  grep -w "$1" /etc/hosts >/dev/null && return 0;
   # Find the ipaddress that the port is bound to
   install_if_missing core/busybox-static netstat
-  BIND_ADDRESS=$(netstat -an | grep "$2" | grep LISTEN | awk '{ print $4 }')
+  BIND_ADDRESS=$(netstat -an | grep "$2" | grep LISTEN | awk '{ print $4 }');
   if [[ "$BIND_ADDRESS" == "" ]]; then
-    LOCALHOST=$(head -1 /etc/hosts)
-    LOCALHOST="$LOCALHOST $HOST"
-    ETC=$(awk 'NR==1 {$0="'"$LOCALHOST"'"} 1' /etc/hosts)
-    echo "$ETC" > /etc/hosts
+    LOCALHOST=$(head -1 /etc/hosts);
+    LOCALHOST="$LOCALHOST $HOST";
+    ETC=$(awk 'NR==1 {$0="'"$LOCALHOST"'"} 1' /etc/hosts);
+    echo "$ETC" > /etc/hosts;
   else
-    echo "$(echo "$BIND_ADDRESS" | cut -f1 -d:) $1" >> /etc/hosts
-  fi
-  echo "hosts: files dns" > /etc/nsswitch.conf
+    echo -e "\n$(echo "$BIND_ADDRESS" | cut -f1 -d:) $1" >> /etc/hosts;
+  fi;
+  echo "hosts: files dns" > /etc/nsswitch.conf;
 }

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.10 -->
+<!-- latest_release 0.1.11 -->
+## [0.1.11](https://github.com/chef/ci-studio-common/tree/0.1.11) (2017-10-09)
+
+#### Merged Pull Requests
+- Delay installation of binaries at the last minute [#19](https://github.com/chef/ci-studio-common/pull/19) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.10](https://github.com/chef/ci-studio-common/tree/0.1.10) (2017-10-09)
 
 #### Merged Pull Requests
 - Improve hab-verify binary [#21](https://github.com/chef/ci-studio-common/pull/21) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.9](https://github.com/chef/ci-studio-common/tree/0.1.9) (2017-10-09)
 

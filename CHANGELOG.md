@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.15 -->
+<!-- latest_release 0.1.16 -->
+## [0.1.16](https://github.com/chef/ci-studio-common/tree/0.1.16) (2017-10-09)
+
+#### Merged Pull Requests
+- Make sure that we fail if something fails [#26](https://github.com/chef/ci-studio-common/pull/26) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.15](https://github.com/chef/ci-studio-common/tree/0.1.15) (2017-10-09)
 
 #### Merged Pull Requests
 - FIX: configure_host adds extra line to /etc/hosts [#25](https://github.com/chef/ci-studio-common/pull/25) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.14](https://github.com/chef/ci-studio-common/tree/0.1.14) (2017-10-09)
 

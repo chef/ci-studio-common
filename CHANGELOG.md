@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.13 -->
+<!-- latest_release 0.1.14 -->
+## [0.1.14](https://github.com/chef/ci-studio-common/tree/0.1.14) (2017-10-09)
+
+#### Merged Pull Requests
+- Fix enforce_hab_version to verify version correctly [#23](https://github.com/chef/ci-studio-common/pull/23) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.13](https://github.com/chef/ci-studio-common/tree/0.1.13) (2017-10-09)
 
 #### Merged Pull Requests
 - Fix export_docker_image to fail if error found [#24](https://github.com/chef/ci-studio-common/pull/24) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.12](https://github.com/chef/ci-studio-common/tree/0.1.12) (2017-10-09)
 

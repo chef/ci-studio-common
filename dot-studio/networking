@@ -20,9 +20,8 @@ document "ipaddress" <<DOC
   Returns the IPv4 address of the studio.
 DOC
 function ipaddress() {
-  install_if_missing core/busybox-static ifconfig
-  
   if [[ "${IPADDRESS}" == "" ]]; then
+    install_if_missing core/busybox-static ifconfig
     ip_address=$(ifconfig eth0 | grep inet | awk '{print $2}' | cut -f2 -d:)
     export IPADDRESS="$ip_address"
   fi
@@ -41,13 +40,12 @@ document "configure_host" <<DOC
   @(arg:2) The port used to identify which IP Address to associate with the hostname
 DOC
 function configure_host() {
-  install_if_missing core/busybox-static netstat
-
   # Return if the hostname to configure ($1) is an ipaddress
   [[ "$1" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] && return 0
   # Verify if we have already added the host to /etc/hosts
   grep -w "$1" /etc/hosts >/dev/null && return
   # Find the ipaddress that the port is bound to
+  install_if_missing core/busybox-static netstat
   BIND_ADDRESS=$(netstat -an | grep "$2" | grep LISTEN | awk '{ print $4 }')
   if [[ "$BIND_ADDRESS" == "" ]]; then
     LOCALHOST=$(head -1 /etc/hosts)

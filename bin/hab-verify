@@ -16,19 +16,30 @@
 # limitations under the License.
 #
 
+function usage() {
+  cat /dev/stdin <<DOC
+Usage: ${0##*/} [SUBCOMMAND]
+
+Helpers that perform common verification steps inside Habitat.
+
+SUBCOMMANDS:
+    lint              Perform some simple linting against plan.sh files.
+    syntax            Perform some simple syntax checks against plan.sh files.
+    in-studio <CMD>   Run <CMD> in the contexts of a hab-studio started in the root of the project repository.
+
+ENVIRONMENT VARIABLES:
+    STUDIO_OPTS       Optional options to pass to the hab-studio.
+DOC
+}
+
 case "$1" in
   "in-studio")
-    origin=${HAB_ORIGIN:-chef}
-    export HAB_ORIGIN="$origin"
+    origin=${HAB_ORIGIN:-chef};
+    export HAB_ORIGIN="$origin";
 
-    studio_cmd="-k $origin"
+    hab-origin download-sig-key "$HAB_ORIGIN"
 
-    if [[ -z "$STUDIO_OPTS" ]]; then
-      studio_cmd="$studio_cmd $STUDIO_OPTS"
-    fi
-
-    hab-origin download-sig-key "$origin"
-    eval "hab studio $studio_cmd run $2"
+    eval "hab studio $STUDIO_OPTS run \"$2\""
     ;;
   "lint")
     exec find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash {} \;
@@ -36,6 +47,11 @@ case "$1" in
   "syntax")
     exec find . -name 'plan.sh' -exec bash -n {} \;
     ;;
+  "-h"|"--help"|"")
+    usage
+    ;;
   *)
-    echo "'$1' is not a supported command."
+    echo "${0##*/}: invalid option '$1'"
+    echo "Try '${0##*/} --help' for more information."
+    exit 2
 esac

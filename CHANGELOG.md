@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.17 -->
+<!-- latest_release 0.1.18 -->
+## [0.1.18](https://github.com/chef/ci-studio-common/tree/0.1.18) (2017-10-10)
+
+#### Merged Pull Requests
+- Add &#39;add_alias&#39; function for using/documenting aliases [#28](https://github.com/chef/ci-studio-common/pull/28) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.17](https://github.com/chef/ci-studio-common/tree/0.1.17) (2017-10-10)
 
 #### Merged Pull Requests
 - Enforce specific version of Habitat [#27](https://github.com/chef/ci-studio-common/pull/27) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.16](https://github.com/chef/ci-studio-common/tree/0.1.16) (2017-10-09)
 

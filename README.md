@@ -25,6 +25,7 @@ This repository houses some scripts / files that are used across various Chef pr
   * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
   * [`.studiorc` Helpers](#studiorc-helpers)
     + [`document`](#document)
+    + [`add_alias`](#add_alias)
     + [`describe`](#describe)
     + [`getting_started`](#getting_started)
     + [`clone_function`](#clone_function)

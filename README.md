@@ -140,6 +140,36 @@ The `document` function gives developers a quick and easy way to document the va
 
 The documentation provided via this function is collected and exposed via the `describe` command detailed below.
 
+#### `add_alias`
+
+The `add_alias` function performs double duty. It will a) add the alias you specify, and b) automatically document that the alias exists.
+
+By specifying `add_alias` in conjunction with a function and a `document` block, the `describe` block will not only show you the functions but the aliases as well.
+
+For example, let's look at the imaginary function `foobear`. We want to alias `foobear` to `fb`. The resulting code block should look like this.
+
+```bash
+document "foobear" <<DOC
+  Foobear is not a bear.
+DOC
+add_alias "foobear" "fb"
+function foobear() {
+  echo "Foo"
+}
+```
+
+Now, when we run `describe`, we'll see `foobear` documented like so:
+
+```
+foobear [alias: fb]
+  Foobear is not a bear.
+
+...
+
+ALIASES:
+  fb   Alias for: foobear
+```
+
 #### `describe`
 
 The `describe` command allows a Studio users in non-CI environments to quickly view the helper functions that have been made available to them by `chef/ci-studio-common` as well as functions available in their own `.studiorc` and `.studio` environments.
@@ -152,23 +182,52 @@ $ describe
 The following functions are available for your use in this studio:
 
   build
-    Native studio command to build the Habitat Package (see https://www.habitat.sh/docs/reference/habitat-cli/#hab-pkg-build)
-  enforce_hab_version
-    Ensure that the installed version of the hab toolchain is >= the given version.
+    Wrapper around the 'hab pkg build' command.
+  clone_function
+    Create a copy of the ci-studio-common function in your .studio/ directory.
+  configure_host
+    Configure a host (in /etc/hosts) inside the studio.
+  enforce_integration_testing
+    Print an error message if any of the required Integration Testing functions are missing.
   export_docker_image
-    Exports a docker image from the latest habitat build (requires that you have a habitat package already built).
+    Export a Docker Image of this Habitat package.
   generate_netrc_config
     Create a .netrc file that can be used to authenticate against GitHub.
-  install_hab_packages
-    Installs the array of Habitat Packages passed in to the function.
-  print_getting_started
-    Print out useful instructions on how to get started using this studio.
+  inspec_exec
+    (MISSING) You must provide a custom inspec_exec() function.
+  install
+    Install the specified Habitat packages (defaults to chef/ci-studio-common).
+  install_if_missing
+    Install the package and binlink the binary only if it is missing.
+  integration_tests
+    Provision, Verify, and Destroy your full Integration Testing environment.
+  ipaddress
+    Returns the IPv4 address of the studio.
+  start_dependencies
+    (MISSING) You must provide a custom start_dependencies() function.
+  start_service
+    (MISSING) You must provide a custom start_service() function.
+  stop_dependencies
+    (MISSING) You must provide a custom stop_dependencies() function.
+  stop_service
+    (MISSING) You must provide a custom stop_service() function.
+  sup-log [alias: sl]
+    Tail the Habtiat Supervisor's output.
+  sup-run [alias: sr]
+    Launch the Habtiat Supervisor in the background.
+  sup-term [alias: st]
+    Kill the Habitat Supervisor running in the background.
   wait_for_port_to_listen
-    Helper function to wait for a port to be listening
-  wait_for_service
-    Helper function to wait for services to come online
+    Wait for a port to be listening.
+  wait_for_success
+    Wait for the given command to succeed.
   wait_for_svc_to_load
-    Helper function to wait for a service (svc) to be loaded by the Habitat Supervisor.
+    Helper function to wait for a Habitat service (hab svc) to be loaded by the Habitat Supervisor.
+
+ALIASES:
+  sl     Alias for: sup-log
+  sr     Alias for: sup-run
+  st     Alias for: sup-term
 
 To learn more about a particular function, run 'describe <function>'.
 ```

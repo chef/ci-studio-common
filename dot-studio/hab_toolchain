@@ -25,16 +25,19 @@ document "build" <<DOC
 DOC
 
 document "sup-run" <<DOC
-  Launch the Habtiat Supervisor in the background (alias 'sr').
+  Launch the Habtiat Supervisor in the background.
 DOC
+add_alias "sup-run" "sr"
 
 document "sup-term" <<DOC
-  Kill the Habitat Supervisor running in the background (alias 'st').
+  Kill the Habitat Supervisor running in the background.
 DOC
+add_alias "sup-term" "st"
 
 document "sup-log" <<DOC
-  Tail the Habtiat Supervisor's output (alias 'sl').
+  Tail the Habtiat Supervisor's output.
 DOC
+add_alias "sup-log" "sl"
 
 function enforce_hab_version() {
   echo "DEPRECATED: (enforce_hab_version) This functionality is now automatically executed when the studio starts."

@@ -66,6 +66,7 @@ fi;
 # Assuming we have the correct version of Habitat installed, we can proceed.
 
 # Source the plan.sh and default.toml files (if they exist)
+export PLAN_CONTEXT=${PLAN_CONTEXT:-/src/habitat}
 [[ -f /src/habitat/plan.sh ]] && source /src/habitat/plan.sh
 [[ -f /src/habitat/default.toml ]] && export TOML_FILE=/src/habitat/default.toml
 

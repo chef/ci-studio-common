@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.23 -->
+<!-- latest_release 0.1.24 -->
+## [0.1.24](https://github.com/chef/ci-studio-common/tree/0.1.24) (2017-10-11)
+
+#### Merged Pull Requests
+- Fix and Update hab_toolchain install command [#35](https://github.com/chef/ci-studio-common/pull/35) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.23](https://github.com/chef/ci-studio-common/tree/0.1.23) (2017-10-11)
 
 #### Merged Pull Requests
 - Add wait_for_ok_response [#36](https://github.com/chef/ci-studio-common/pull/36) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.22](https://github.com/chef/ci-studio-common/tree/0.1.22) (2017-10-11)
 

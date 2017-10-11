@@ -48,7 +48,7 @@ document "install" <<DOC
   Install the specified Habitat packages (defaults to $HAB_ORIGIN/$pkg_name).
 
   @(arg:*) The array of packages you wish to install.
-  
+
   If none specified it will use the last package built.
   If there are no packages available, it will build one and install it.
 
@@ -73,13 +73,13 @@ function install() {
   fi
 
   if [[ "x$1" == "x" ]]; then
+    # Trying to use the last package built
     pushd /src >/dev/null
-      if [[ ! -f results/last_build.env ]]; then
-        build .
-        source results/last_build.env
-        eval "hab pkg $install_cmd $pkg_ident >/dev/null"
-      fi
-    popd
+      # If there are no packages available, build one for me
+      [[ ! -f results/last_build.env ]] && build .;
+      source results/last_build.env;
+      eval "hab pkg $install_cmd results/${pkg_artifact} >/dev/null";
+    popd >/dev/null;
   else
     for pkg in "$@"
     do

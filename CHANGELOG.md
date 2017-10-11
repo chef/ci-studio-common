@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.19 -->
+<!-- latest_release 0.1.20 -->
+## [0.1.20](https://github.com/chef/ci-studio-common/tree/0.1.20) (2017-10-11)
+
+#### Merged Pull Requests
+- Empty change to test Expeditor [#32](https://github.com/chef/ci-studio-common/pull/32) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.19](https://github.com/chef/ci-studio-common/tree/0.1.19) (2017-10-10)
 
 #### Merged Pull Requests
 - Fix version check warning to show actual installed version [#30](https://github.com/chef/ci-studio-common/pull/30) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.18](https://github.com/chef/ci-studio-common/tree/0.1.18) (2017-10-10)
 

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.22 -->
+<!-- latest_release 0.1.23 -->
+## [0.1.23](https://github.com/chef/ci-studio-common/tree/0.1.23) (2017-10-11)
+
+#### Merged Pull Requests
+- Add wait_for_ok_response [#36](https://github.com/chef/ci-studio-common/pull/36) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.22](https://github.com/chef/ci-studio-common/tree/0.1.22) (2017-10-11)
 
 #### Merged Pull Requests
 - Update documentation about the install function [#31](https://github.com/chef/ci-studio-common/pull/31) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.21](https://github.com/chef/ci-studio-common/tree/0.1.21) (2017-10-11)
 

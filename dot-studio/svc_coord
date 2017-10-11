@@ -69,3 +69,24 @@ function wait_for_port_to_listen() {
     [[ "$2" != "silent" ]] && echo " => Waiting for port $1 to be listening"
   done
 }
+
+document "wait_for_ok_response" <<DOC
+  Wait for the provided URL to response with status code (200)
+
+  @(arg:1) URL to curl
+
+  Example: Wait for www.google.com to return Ok
+  ---------------------------------------------
+  wait_for_ok_response www.google.com
+DOC
+function wait_for_ok_response() {
+  [[ "$1" == "" ]] && echo "Missing url argument; try 'describe wait_for_ok_response'" && return 1;
+  # Customize code?
+  code=200;
+  install_if_missing core/curl curl
+  while : ; do
+    response=$(curl --write-out %{http_code} --silent --output /dev/null $1)
+    [[ $response -eq $code ]] && break || sleep 1
+    echo " => Waiting for '$1' to response OK ($code). [Got:$response]"
+  done
+}

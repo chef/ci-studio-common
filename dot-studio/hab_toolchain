@@ -60,7 +60,7 @@ document "install" <<DOC
   Example 3 :: Install the listed packages from the 'unstable' channel.
   ---------------------------------------------------------------------
   dev_dependencies=(core/curl core/git)
-  OPTS="--channel unstable" install "${dev_dependencies[@]}""
+  OPTS="--channel unstable" install \${dev_dependencies[@]}
 DOC
 function install() {
   install_cmd="install"

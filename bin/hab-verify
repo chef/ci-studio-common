@@ -39,7 +39,10 @@ case "$1" in
 
     hab-origin download-sig-key "$HAB_ORIGIN"
 
-    eval "hab studio $STUDIO_OPTS run \"$2\""
+    # New version of Habitat doesn't source the .studiorc
+    cmd="source .studiorc;$2"
+
+    eval "hab studio $STUDIO_OPTS run \"$cmd\""
     ;;
   "lint")
     exec find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash {} \;

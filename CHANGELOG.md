@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.21 -->
+<!-- latest_release 0.1.22 -->
+## [0.1.22](https://github.com/chef/ci-studio-common/tree/0.1.22) (2017-10-11)
+
+#### Merged Pull Requests
+- Update documentation about the install function [#31](https://github.com/chef/ci-studio-common/pull/31) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.21](https://github.com/chef/ci-studio-common/tree/0.1.21) (2017-10-11)
 
 #### Merged Pull Requests
 - Set the PLAN_CONTEXT if it doesn&#39;t exist [#34](https://github.com/chef/ci-studio-common/pull/34) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 
 

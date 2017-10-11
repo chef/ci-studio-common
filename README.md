@@ -9,6 +9,8 @@ This repository houses some scripts / files that are used across various Chef pr
 - [TravisCI](#travisci)
   * [Installation](#installation)
   * [Helpers](#helpers)
+    + [`aws-configure`](#aws-configure)
+    + [`citadel`](#citadel)
     + [`hab-origin`](#hab-origin)
       - [`hab-origin download-sig-key $ORIGIN`](#hab-origin-download-sig-key-origin)
     + [`hab-verify`](#hab-verify)

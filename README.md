@@ -51,15 +51,21 @@ before_install:
 
 ### Helpers
 
+#### `aws-configure`
+
+A non-interactive version of `aws configure`. Will configure the AWS CLI you have installed in Travis with a specific profile. 
+
+#### `citadel`
+
+Copy the contents of a file from a Citadel S3 bucket to STDOUT. Requires that the `CITADEL_PROFILE` be configured using `aws-configure`.
+
 #### `hab-origin`
 
 Helpers that extend functionality of the `hab origin` namespace.
 
 ##### `hab-origin download-sig-key $ORIGIN`
 
-Download the private signing key stored in `AWS_S3_BUCKET` (defaults to `ci-studio-common` for internal Chef Software usage). Requires a valid [aws cli configuration](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html).
-
-> For Chef Software projects, reach out to the #jex-team for getting setup to use the chef-ci credentials.
+Download the private signing key stored in [citadel](#citadel).
 
 #### `hab-verify`
 

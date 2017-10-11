@@ -1,0 +1,104 @@
+#!/bin/bash
+#
+# Copyright:: Copyright 2017 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+function usage() {
+  cat /dev/stdin <<DOC
+Usage: ${0##*/} [PROFILE]
+
+A non-interactive version of 'aws configure' that allows you to configure  AWS CLI profiles.
+
+To add a new profile, you MUST specify following environment variables:
+
+  * <PROFILE>_AWS_ACCESS_KEY_ID
+  * <PROFILE>_AWS_SECRET_ACCESS_KEY
+
+You can optionally specify '<PROFILE>_AWS_DEFAULT_REGION' to determine the default region for this profile.
+
+If no PROFILE is specified, ${0##*/} will defer to the value specified in AWS_PROFILE.
+DOC
+}
+
+function enforce_requirements() {
+  # Make sure the AWS CLI is installed
+  which aws >/dev/null &2>1
+  if [[ $? -ne 0 ]]; then
+    echo "${0##*/}: Unable to find 'aws' executable."
+    echo "Make sure you have the aws cli installed. Try 'install-tool aws'."
+    exit 2
+  fi
+}
+
+function setup_profile() {
+  profile="$1"
+  profile_env="$(echo "${profile^^}" | tr '-' '_')"
+
+  enforce_requirements
+
+  if [[ -z "$profile" ]];
+  then
+    echo "${0##*/}: No profile specified."
+    echo "You must specify an AWS profile to configure."
+    echo ""
+    usage
+    exit 2
+  fi
+
+  [[ ! -d $HOME/.aws ]] && mkdir -p $HOME/.aws > /dev/null
+
+  access_key_id="${profile_env}_AWS_ACCESS_KEY_ID"
+  secret_access_key="${profile_env}_AWS_SECRET_ACCESS_KEY"
+  region="${profile_env}_AWS_DEFAULT_REGION"
+
+  if [[ -z "${!access_key_id}" || -z "${!secret_access_key}" ]];
+  then
+    echo "${0##*/}: Unable to find the required environment variables: $access_key_id and $secret_access_key."
+    echo "Make sure that both are specified."
+    exit 2
+  fi
+
+  if ! grep -w "\[$profile\]" $HOME/.aws/credentials > /dev/null || ! test -f $HOME/.aws/credentials > /dev/null
+  then
+    cat << EOF >> $HOME/.aws/credentials
+[$profile]
+aws_access_key_id=${!access_key_id}
+aws_secret_access_key=${!secret_access_key}
+EOF
+  fi
+
+  if ! grep -w "\[profile $profile\]" $HOME/.aws/config > /dev/null || ! test -f $HOME/.aws/config > /dev/null
+  then
+    cat << EOF >> $HOME/.aws/config
+[profile $profile]
+region=${!region:-us-east-1}
+EOF
+  fi
+}
+
+if [ -z "$1" ];
+then
+  setup_profile "$AWS_PROFILE"
+else
+  case "$1" in
+    "-h"|"--help"|"")
+      usage
+      ;;
+    *)
+      setup_profile "$1"
+      ;;
+  esac
+fi

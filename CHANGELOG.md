@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.25 -->
+<!-- latest_release 0.1.26 -->
+## [0.1.26](https://github.com/chef/ci-studio-common/tree/0.1.26) (2017-10-12)
+
+#### Merged Pull Requests
+- Golang studio helpers [#38](https://github.com/chef/ci-studio-common/pull/38) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.25](https://github.com/chef/ci-studio-common/tree/0.1.25) (2017-10-11)
 
 #### Merged Pull Requests
 - Add &#39;aws-configure&#39; and &#39;citadel&#39; utilities [#37](https://github.com/chef/ci-studio-common/pull/37) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.24](https://github.com/chef/ci-studio-common/tree/0.1.24) (2017-10-11)
 

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.30 -->
+<!-- latest_release 0.1.31 -->
+## [0.1.31](https://github.com/chef/ci-studio-common/tree/0.1.31) (2017-10-13)
+
+#### Merged Pull Requests
+- Fix typo in studio-common [#43](https://github.com/chef/ci-studio-common/pull/43) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.30](https://github.com/chef/ci-studio-common/tree/0.1.30) (2017-10-13)
 
 #### Merged Pull Requests
 - Fix incorrect regex preventing hab version from being updated [#42](https://github.com/chef/ci-studio-common/pull/42) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.29](https://github.com/chef/ci-studio-common/tree/0.1.29) (2017-10-13)
 

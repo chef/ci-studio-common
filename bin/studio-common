@@ -156,7 +156,7 @@ done
 
 # Source all the files available in the .studio directory of the /src directory
 # Only if the '.studio/' directory exists and it is not empty
-if [ "$(ls -A /src/.studioo 2>/dev/null)" ]
+if [ "$(ls -A /src/.studio 2>/dev/null)" ]
 then
   for file in /src/.studio/*
   do

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.27 -->
+<!-- latest_release 0.1.28 -->
+## [0.1.28](https://github.com/chef/ci-studio-common/tree/0.1.28) (2017-10-13)
+
+#### Merged Pull Requests
+- Update .hab-version [#40](https://github.com/chef/ci-studio-common/pull/40) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.27](https://github.com/chef/ci-studio-common/tree/0.1.27) (2017-10-12)
 
 #### Merged Pull Requests
 - New compile_go_protobuf studio helper [#39](https://github.com/chef/ci-studio-common/pull/39) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.26](https://github.com/chef/ci-studio-common/tree/0.1.26) (2017-10-12)
 

@@ -18,7 +18,7 @@
 #
 
 # This value is automatically updated by Expeditor to reflect .hab-version
-export SUPPORTED_HAB_VERSION="0.34.1"
+export SUPPORTED_HAB_VERSION="0.36.0"
 
 # Ensure that the installed version of the hab toolchain is >= to the required version.
 #

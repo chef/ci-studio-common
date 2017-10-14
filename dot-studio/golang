@@ -1,0 +1,169 @@
+#!/bin/bash
+# shellcheck disable=SC2154,SC1091
+#
+# Copyright:: Copyright 2017 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+document "setup_go_workspace" <<DOC
+  Setup the Go Workspace. (requires \$pkg_scaffolding to be set)
+
+  This function will leverage the scaffolding-go configured at \$pkg_scaffolding.
+  It will install it and use the go_before callback to setup the Go Workspace.
+  If there are no libraries/callbacks, it will still configure it by linking the /src
+  directory into the Go Workspace.
+DOC
+function setup_go_workspace() {
+  # Verify that we are using the Go Scaffolding
+  if [[ ! "$pkg_scaffolding" =~ "scaffolding-go" ]]; then
+    echo "ERROR: Unable to setup Go Workspace."
+    echo "${FUNCNAME[0]}: requires the 'pkg_scaffolding' variable to exist in your plan.sh"
+    return 2;
+  fi;
+
+  # Verify if the Go Workspace has been already configured
+  [[ $scaffolding_go_workspace_src  ]] && return 0;
+
+  # Currently the scaffolding-go has all the logic to setup the
+  # Go Workspace, lets leverage all its functionality
+  echo "=> Configuring Go Workspace. [please wait]"
+  export scaffolding_go_gopath=${scaffolding_go_gopath:-/hab/cache/src/go};
+  install $pkg_scaffolding >/dev/null;
+  source "$(hab pkg path $pkg_scaffolding)/lib/"*
+  export PATH="$PATH:${scaffolding_go_gopath}/bin"
+
+  # Verify if we have the go_before callback
+  # If not lets setup the workspace ourself
+  go_before_callback=scaffolding_go_before
+  if [ -n "$(type -t $go_before_callback)" ] && [ "$(type -t $go_before_callback)" = function ]
+  then
+    eval "$go_before_callback";
+  else
+    mkdir -p "${scaffolding_go_workspace_src}/${scaffolding_go_base_path}";
+    if [[ ! -e "$scaffolding_go_pkg_path" ]]; then
+      ln -s /src "$scaffolding_go_pkg_path";
+    fi;
+  fi;
+
+  echo "=> Available scaffolding variables:";
+  echo "\$scaffolding_go_gopath        - $scaffolding_go_gopath";
+  echo "\$scaffolding_go_workspace_src - $scaffolding_go_workspace_src";
+  echo "\$scaffolding_go_pkg_path      - $scaffolding_go_pkg_path";
+  return 0;
+}
+
+document "install_go_tool" <<DOC
+  Install the specified go tool(s).
+
+  @(arg:*) The array of packages you wish to install.
+
+  The default behavior is to install go tools with 'go get -u' but you can override
+  this by specifying the \$GO_TOOL_METHOD="install" so that it uses 'go install -v'
+  instead, be aware that you have to have a vendor/ directory with the tools.
+
+  Example 1 :: Install the listed go tool generating a static linked binary
+  ---------------------------------------------------------------------------------
+  GO_STATIC_BIN=true install_go_tool github.com/golang/dep/cmd/dep
+
+  Example 2 :: Install a go tool that you in your local vendor/ directory
+  --------------------------------------------------------------------------
+  local proto_go_tools=(
+    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+    github.com/golang/protobuf/protoc-gen-go
+  )
+  GO_TOOL_METHOD="install" install_go_tool \${proto_go_tools[@]}
+DOC
+function install_go_tool() {
+  setup_go_workspace
+  local go_cmd="go get -u";
+  [[ "$GO_TOOL_METHOD" == "install" ]] && go_cmd="go install -v";
+
+  if [[ $GO_STATIC_BIN == true ]]; then
+    install core/musl >/dev/null;
+    install_if_missing core/gcc gcc >/dev/null;
+    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
+    export GO_LDFLAGS="-linkmode external -extldflags '-static'";
+    go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
+  fi;
+
+  install_if_missing core/go go >/dev/null;
+  install_if_missing core/git git >/dev/null;
+
+  pushd $GOPATH >/dev/null;
+  for i in "$@"; do
+    go_tool=$(basename $i);
+    if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
+        echo "=> Installing Go Tool '${go_tool}'";
+      if [[ "$GO_TOOL_METHOD" == "install" ]]; then
+        eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i";
+      else
+        eval "$go_cmd $i";
+      fi;
+    fi;
+  done;
+  popd >/dev/null;
+}
+
+document "go_build" <<DOC
+  Builds the $pkg_name binary. (a.k.a. go build)
+
+  @(arg:1) The path to the go main package (default: cmd/${pkg_name}/${pkg_name}.go"
+
+  This helper will enfore the Go Workspace configureation.
+
+  Example 1 :: Build a static linked binary.
+  ------------------------------------------
+  GO_STATIC_BIN=true go_build main.go
+
+  Available extra steps before building the binary:
+
+  1) To run 'go generate' set:
+  => export RUN_GO_GENERATE=true
+
+  2) To run 'dep ensure' set:
+  => export RUN_GO_DEP=true
+
+  Example 2 :: Build the default binary without deps and/or 'go generate'.
+  ------------------------------------------------------------------------
+  GO_FAST=true go_build
+DOC
+function go_build() {
+  [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
+
+  # Installing go tools automatically installs go & git
+  install_go_tool github.com/golang/dep/cmd/dep
+
+  local go_cmd="go build"
+  if [[ $GO_STATIC_BIN == true ]]; then
+    go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\""
+  fi
+
+  pushd $scaffolding_go_pkg_path >/dev/null
+    if [[ $GO_FAST != true ]]; then
+      echo "(help) You can always run 'GO_FAST=true ${FUNCNAME[0]}' to go faster!"
+      [[ $RUN_GO_GENERATE == true ]] && echo "=> Executing Go generate" && go generate
+      [[ $RUN_GO_DEP == true ]] && echo "=> Executing Go dependency solver" && dep ensure
+    fi;
+    echo "=> Executing Go build"
+    eval "$go_cmd $go_main"
+    # Save the exit code to return it latter
+    # this will make the function to exit with
+    # a non-zero code and don't procees from there
+    EXIT_CODE=$?
+  popd >/dev/null
+  return $EXIT_CODE
+}
+add_alias "go_build" "gb"

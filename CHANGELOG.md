@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.31 -->
+<!-- latest_release 0.1.32 -->
+## [0.1.32](https://github.com/chef/ci-studio-common/tree/0.1.32) (2017-10-17)
+
+#### Merged Pull Requests
+- Golang improvements [#45](https://github.com/chef/ci-studio-common/pull/45) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.31](https://github.com/chef/ci-studio-common/tree/0.1.31) (2017-10-13)
 
 #### Merged Pull Requests
 - Fix typo in studio-common [#43](https://github.com/chef/ci-studio-common/pull/43) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.30](https://github.com/chef/ci-studio-common/tree/0.1.30) (2017-10-13)
 

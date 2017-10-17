@@ -57,6 +57,10 @@ function setup_go_workspace() {
     fi;
   fi;
 
+  # Install go & git
+  install_if_missing core/go go;
+  install_if_missing core/git git;
+
   echo "=> Available scaffolding variables:";
   echo "\$scaffolding_go_gopath        - $scaffolding_go_gopath";
   echo "\$scaffolding_go_workspace_src - $scaffolding_go_workspace_src";
@@ -99,9 +103,6 @@ function install_go_tool() {
     go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
   fi;
 
-  install_if_missing core/go go >/dev/null;
-  install_if_missing core/git git >/dev/null;
-
   pushd $GOPATH >/dev/null;
   for i in "$@"; do
     go_tool=$(basename $i);
@@ -143,8 +144,8 @@ DOC
 function go_build() {
   [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
 
-  # Installing go tools automatically installs go & git
-  install_go_tool github.com/golang/dep/cmd/dep
+  # Setup the go workspace
+  setup_go_workspace
 
   local go_cmd="go build"
   if [[ $GO_STATIC_BIN == true ]]; then

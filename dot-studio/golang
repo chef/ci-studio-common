@@ -57,12 +57,27 @@ function setup_go_workspace() {
     fi;
   fi;
 
+  # Install go & git
+  install_if_missing core/go go;
+  install_if_missing core/git git;
+
   echo "=> Available scaffolding variables:";
   echo "\$scaffolding_go_gopath        - $scaffolding_go_gopath";
   echo "\$scaffolding_go_workspace_src - $scaffolding_go_workspace_src";
   echo "\$scaffolding_go_pkg_path      - $scaffolding_go_pkg_path";
   return 0;
 }
+
+document "enter_go_workspace" <<DOC
+  Change dir to the $pkg_name Go Workspace.
+
+  It will automatically setup the Go Workspace if missing
+DOC
+function enter_go_workspace() {
+  setup_go_workspace
+  cd $scaffolding_go_pkg_path
+}
+add_alias "enter_go_workspace" "egw"
 
 document "install_go_tool" <<DOC
   Install the specified go tool(s).
@@ -98,9 +113,6 @@ function install_go_tool() {
     export GO_LDFLAGS="-linkmode external -extldflags '-static'";
     go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
   fi;
-
-  install_if_missing core/go go >/dev/null;
-  install_if_missing core/git git >/dev/null;
 
   pushd $GOPATH >/dev/null;
   for i in "$@"; do
@@ -143,8 +155,8 @@ DOC
 function go_build() {
   [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
 
-  # Installing go tools automatically installs go & git
-  install_go_tool github.com/golang/dep/cmd/dep
+  # Setup the go workspace
+  setup_go_workspace
 
   local go_cmd="go build"
   if [[ $GO_STATIC_BIN == true ]]; then
@@ -153,9 +165,8 @@ function go_build() {
 
   pushd $scaffolding_go_pkg_path >/dev/null
     if [[ $GO_FAST != true ]]; then
-      echo "(help) You can always run 'GO_FAST=true ${FUNCNAME[0]}' to go faster!"
       [[ $RUN_GO_GENERATE == true ]] && echo "=> Executing Go generate" && go generate
-      [[ $RUN_GO_DEP == true ]] && echo "=> Executing Go dependency solver" && dep ensure
+      [[ $RUN_GO_DEP == true ]] && dep_ensure
     fi;
     echo "=> Executing Go build"
     eval "$go_cmd $go_main"
@@ -167,3 +178,27 @@ function go_build() {
   return $EXIT_CODE
 }
 add_alias "go_build" "gb"
+
+document "dep_ensure" <<DOC
+  Runs the go dependency solver. (a.k.a. dep ensure)
+
+  This helper will ensure your Go workspace is configured and that
+  you have the dep tool installed.
+
+  Set 'GO_FAST=true' env variable to skip this task only for faster
+  development cycles.
+DOC
+function dep_ensure() {
+  local go_cmd="dep ensure";
+  if [[ $GO_FAST != true ]]; then
+    echo "(help) You can always set 'GO_FAST=true' to go faster!";
+    install_go_tool github.com/golang/dep/cmd/dep;
+    echo "=> Executing Go dependency solver ($go_cmd)";
+    pushd $scaffolding_go_pkg_path >/dev/null;
+      eval $go_cmd;
+      local EXIT_CODE=$?;
+    popd >/dev/null;
+  fi;
+  return $EXIT_CODE;
+}
+add_alias "dep_ensure" "de"

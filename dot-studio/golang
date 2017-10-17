@@ -68,6 +68,17 @@ function setup_go_workspace() {
   return 0;
 }
 
+document "enter_go_workspace" <<DOC
+  Change dir to the $pkg_name Go Workspace.
+
+  It will automatically setup the Go Workspace if missing
+DOC
+function enter_go_workspace() {
+  setup_go_workspace
+  cd $scaffolding_go_pkg_path
+}
+add_alias "enter_go_workspace" "ew"
+
 document "install_go_tool" <<DOC
   Install the specified go tool(s).
 

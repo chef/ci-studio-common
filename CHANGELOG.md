@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.32 -->
+<!-- latest_release 0.1.33 -->
+## [0.1.33](https://github.com/chef/ci-studio-common/tree/0.1.33) (2017-10-18)
+
+#### Merged Pull Requests
+- Update Hab version to 0.37.0 [#46](https://github.com/chef/ci-studio-common/pull/46) ([schisamo](https://github.com/schisamo))
+<!-- latest_release -->
+
 ## [0.1.32](https://github.com/chef/ci-studio-common/tree/0.1.32) (2017-10-17)
 
 #### Merged Pull Requests
 - Golang improvements [#45](https://github.com/chef/ci-studio-common/pull/45) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.31](https://github.com/chef/ci-studio-common/tree/0.1.31) (2017-10-13)
 

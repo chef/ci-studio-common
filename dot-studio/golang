@@ -107,8 +107,8 @@ function install_go_tool() {
   [[ "$GO_TOOL_METHOD" == "install" ]] && go_cmd="go install -v";
 
   if [[ $GO_STATIC_BIN == true ]]; then
-    install core/musl >/dev/null;
-    install_if_missing core/gcc gcc >/dev/null;
+    install_if_missing core/musl musl-gcc;
+    install_if_missing core/gcc gcc;
     export CC=$(hab pkg path core/musl)/bin/musl-gcc;
     export GO_LDFLAGS="-linkmode external -extldflags '-static'";
     go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
@@ -160,8 +160,12 @@ function go_build() {
 
   local go_cmd="go build"
   if [[ $GO_STATIC_BIN == true ]]; then
-    go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\""
-  fi
+    install_if_missing core/musl musl-gcc;
+    install_if_missing core/gcc gcc;
+    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
+    export GO_LDFLAGS="-linkmode external -extldflags '-static'";
+    go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
+  fi;
 
   pushd $scaffolding_go_pkg_path >/dev/null
     if [[ $GO_FAST != true ]]; then

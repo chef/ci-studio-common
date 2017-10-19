@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.33 -->
+<!-- latest_release 0.1.34 -->
+## [0.1.34](https://github.com/chef/ci-studio-common/tree/0.1.34) (2017-10-19)
+
+#### Merged Pull Requests
+- Fix go_build to setup GO_LDFLAGS [#47](https://github.com/chef/ci-studio-common/pull/47) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.33](https://github.com/chef/ci-studio-common/tree/0.1.33) (2017-10-18)
 
 #### Merged Pull Requests
 - Update Hab version to 0.37.0 [#46](https://github.com/chef/ci-studio-common/pull/46) ([schisamo](https://github.com/schisamo))
-<!-- latest_release -->
 
 ## [0.1.32](https://github.com/chef/ci-studio-common/tree/0.1.32) (2017-10-17)
 

@@ -15,6 +15,15 @@ install:
 matrix:
   include:
 
+    # tool-test
+    - env: NAME=tool-test
+      install:
+        - install-tool aws
+        - install-tool docker-compose
+        - install-tool hab
+        - install-tool terraform
+      script: bats tests/tool-test.bats
+
     # lint
     - env: NAME=lint
       script: hab-verify in-studio ci_lint

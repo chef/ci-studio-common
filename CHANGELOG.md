@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.35 -->
+<!-- latest_release unreleased -->
+## Unreleased
+
+#### Merged Pull Requests
+- Add documentation about expected environment variables [#50](https://github.com/chef/ci-studio-common/pull/50) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.35](https://github.com/chef/ci-studio-common/tree/0.1.35) (2017-10-23)
 
 #### Merged Pull Requests
 - Add docker-compose tool (and tests) [#49](https://github.com/chef/ci-studio-common/pull/49) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.34](https://github.com/chef/ci-studio-common/tree/0.1.34) (2017-10-19)
 

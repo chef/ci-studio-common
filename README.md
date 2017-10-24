@@ -8,6 +8,7 @@ This repository houses some scripts / files that are used across various Chef pr
 
 - [TravisCI](#travisci)
   * [Installation](#installation)
+  * [Environment Variables](#environment-variables)
   * [Helpers](#helpers)
     + [`aws-configure`](#aws-configure)
     + [`citadel`](#citadel)

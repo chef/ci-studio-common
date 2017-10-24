@@ -51,6 +51,22 @@ before_install:
   - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
 ```
 
+### Environment Variables
+
+Various helpers and other operations assume the presence of certain environment variables. Here are the list of environment variables that should be present:
+
+* `<AWS_PROFILE>_AWS_ACCESS_KEY_ID`
+* `<AWS_PROFILE>_AWS_SECRET_ACCESS_KEY`
+* `<AWS_PROFILE>_AWS_DEFAULT_REGION`
+* `<GITHUB_USER>_GITHUB_TOKEN`
+
+where:
+
+* `<AWS_PROFILE>` is the profile you specify in `aws-configure` (e.g. `CHEF_CD`)
+* `<GITHUB_USER>` is the GitHub user associated with the token (e.g. `CHEF_CI`)
+
+> For Chef Software, these values are automatically applied to Travis Projects by Engineering Services.
+
 ### Helpers
 
 #### `aws-configure`

@@ -58,7 +58,8 @@ document "wait_for_port_to_listen" <<DOC
 DOC
 function wait_for_port_to_listen() {
   install_if_missing core/busybox-static netstat
-  
+  echo " => deprecated use wait_or_fail_for_port_to_listen"
+
   while : ; do
     if netstat -an | grep "$1" | grep LISTEN >/dev/null 2>/dev/null
     then
@@ -70,23 +71,77 @@ function wait_for_port_to_listen() {
   done
 }
 
+document "wait_or_fail_for_port_to_listen" <<DOC
+  Wait for a port to be listening. If the port is not found in the set amount of time the function exits with 1
+  
+  @(arg:1) Port to wait for to be listening
+  @(arg:2) Number of seconds to wait to exit with 1. Default 60 seconds.
+  @(arg:3) Wheter or not this process runs silently
+
+  Example: Wait for a service to start listening on port 1234 for 1 minute
+  ---------------------------------------------
+  wait_or_fail_for_port_to_listen 1234 60
+
+  Example: Wait for a service to start listening on port 1234 for 10 seconds
+  ---------------------------------------------
+  wait_or_fail_for_port_to_listen 1234 10
+DOC
+function wait_or_fail_for_port_to_listen() {
+  install_if_missing core/busybox-static netstat
+  local SECONDS_WAITING=${2:-60}
+  
+  local COUNTER=0
+  while : ; do
+    if netstat -an | grep "$1" | grep LISTEN >/dev/null 2>/dev/null
+    then
+      break
+    else
+      sleep 1
+    fi
+
+    if [ $COUNTER -ge $SECONDS_WAITING ]
+    then
+      echo " => Failed listening for port $1"
+      exit 1
+    fi
+    let COUNTER=COUNTER+1
+    [[ "$3" != "silent" ]] && echo " => Waiting for port $1 to be listening ($COUNTER of $SECONDS_WAITING)"
+  done
+}
+
 document "wait_for_ok_response" <<DOC
-  Wait for the provided URL to response with status code (200)
+  Wait a set amount of time for the provided URL to response with status code (200). 
+  If the time expires then exit with 1
 
   @(arg:1) URL to curl
+  @(arg:2) Number of seconds to wait to exit with 1. Default 60 seconds
 
-  Example: Wait for www.google.com to return Ok
+  Example: Wait for www.google.com to return Ok for 1 minute
   ---------------------------------------------
-  wait_for_ok_response www.google.com
+  wait_or_fail_for_ok_response www.google.com 60
+
+  Example: Wait for www.google.com to return Ok for 10 seconds
+  ---------------------------------------------
+  wait_or_fail_for_ok_response www.google.com 10
 DOC
 function wait_for_ok_response() {
   [[ "$1" == "" ]] && echo "Missing url argument; try 'describe wait_for_ok_response'" && return 1;
-  # Customize code?
+
+  local SECONDS_WAITING=${2:-60}
+
   code=200;
   install_if_missing core/curl curl
+  local COUNTER=0
   while : ; do
-    response=$(curl --write-out %{http_code} --silent --output /dev/null $1)
+    if [ $COUNTER -ge $SECONDS_WAITING ]
+    then
+      echo " => Failed listening for port $1"
+      exit 1
+    fi
+    let COUNTER=COUNTER+1
+
+    local response=$(curl --write-out %{http_code} --silent --output /dev/null $1)
     [[ $response -eq $code ]] && break || sleep 1
-    echo " => Waiting for '$1' to response OK ($code). [Got:$response]"
+    echo " => Waiting for '$1' to response OK ($code). [Got:$response] ($COUNTER of $SECONDS_WAITING)"
   done
 }

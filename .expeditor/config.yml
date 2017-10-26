@@ -18,11 +18,12 @@ merge_actions:
         - "Expeditor: Skip All"
       only_if_modified:
         - .hab-version
-  - bash:.expeditor/update_toc.sh:
+  - bash:.expeditor/update_readme.sh:
       ignore_labels:
         - "Expeditor: Skip All"
       only_if_modified:
         - README.md
+        - bin/*
   - built_in:trigger_habitat_package_build:
       ignore_labels:
         - "Habitat: Skip Build"

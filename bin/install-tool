@@ -16,26 +16,64 @@
 # limitations under the License.
 #
 
-if [ -z "$STUDIO_TYPE" ]
-then
+INSTALL_TOOL_DIR="${INSTALL_TOOL_DIR:-$HOME/ci-studio-common/tools}"
 
-  # Create the tools bin directory
-  if [ ! -d "$HOME/tools/bin" ]
+function usage() {
+  cat /dev/stdin <<DOC
+Usage: ${0##*/} TOOL [VERSION]
+
+Install one of the pre-configured TOOLs (listed below) at the specified VERSION (if specified).
+
+AVAILABLE TOOLS:
+    aws
+    chefdk [CHANNEL]
+    docker-compose [VERSION]
+    hab
+    terraform [VERSION]
+DOC
+}
+
+function install_tool() {
+  if [[ -z "$STUDIO_TYPE" ]];
   then
-    mkdir -p "$HOME/tools/bin"
-  fi
-
-  for tool in "$@"
-  do
-    if [ ! -f "$HOME/ci-studio-common/tools/$tool.sh" ]
+    # Create the tools bin directory
+    if [[ ! -d "$HOME/tools/bin" ]];
     then
-      echo "The '$tool' tool definition does not exist."
+      mkdir -p "$HOME/tools/bin"
+    fi
+
+    # Install the TOOL
+    tool="$1"
+    version="$2"
+    tool_file="$INSTALL_TOOL_DIR/$tool.sh"
+
+    if [[ ! -f "$tool_file" ]];
+    then
+      usage
       exit 1
     else
-       eval "bash $HOME/ci-studio-common/tools/$tool.sh"
+      if [[ -z "$version" ]];
+      then
+        eval "bash $tool_file"
+      else
+        eval "bash $tool_file $version"
+      fi
     fi
-  done
-else
-  echo "The 'install-tool' utility is intended to be used in Travis CI only."
-  exit 1
-fi
+  else
+    echo "The 'install-tool' utility is intended to be used in Travis CI only."
+    exit 1
+  fi
+}
+
+case "$1" in
+  "-h"|"--help")
+    usage
+    ;;
+  "")
+    usage
+    exit 1
+    ;;
+  *)
+    install_tool "$@"
+    ;;
+esac

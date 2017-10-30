@@ -106,19 +106,14 @@ function install_go_tool() {
   local go_cmd="go get -u";
   [[ "$GO_TOOL_METHOD" == "install" ]] && go_cmd="go install -v";
 
-  if [[ $GO_STATIC_BIN == true ]]; then
-    install_if_missing core/musl musl-gcc;
-    install_if_missing core/gcc gcc;
-    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
-    export GO_LDFLAGS="-linkmode external -extldflags '-static'";
-    go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
-  fi;
+  # Add static linked flags if needed
+  go_cmd="$go_cmd $(go_static_linked_flags)";
 
   pushd $GOPATH >/dev/null;
   for i in "$@"; do
     go_tool=$(basename $i);
     if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
-        echo "=> Installing Go Tool '${go_tool}'";
+      echo "=> Installing Go Tool '${go_tool}'";
       if [[ "$GO_TOOL_METHOD" == "install" ]]; then
         eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i";
       else
@@ -132,7 +127,7 @@ function install_go_tool() {
 document "go_build" <<DOC
   Builds the $pkg_name binary. (a.k.a. go build)
 
-  @(arg:1) The path to the go main package (default: cmd/${pkg_name}/${pkg_name}.go"
+  @(arg:1) The path to the go main package (default: cmd/${pkg_name}/${pkg_name}.go)
 
   This helper will enfore the Go Workspace configureation.
 
@@ -159,13 +154,9 @@ function go_build() {
   setup_go_workspace
 
   local go_cmd="go build"
-  if [[ $GO_STATIC_BIN == true ]]; then
-    install_if_missing core/musl musl-gcc;
-    install_if_missing core/gcc gcc;
-    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
-    export GO_LDFLAGS="-linkmode external -extldflags '-static'";
-    go_cmd="$go_cmd --ldflags \"$GO_LDFLAGS\"";
-  fi;
+
+  # Add static linked flags if needed
+  go_cmd="$go_cmd $(go_static_linked_flags)";
 
   pushd $scaffolding_go_pkg_path >/dev/null
     if [[ $GO_FAST != true ]]; then
@@ -206,3 +197,153 @@ function dep_ensure() {
   return $EXIT_CODE;
 }
 add_alias "dep_ensure" "de"
+
+# This function will be your first place for debugging your Go service,
+# once you are inside the debug console you can set breakpoints and more.
+#
+#   Docs => https://github.com/derekparker/delve/tree/master/Documentation/cli
+#
+# The helper expects you to implement two methods:
+# => start_dependencies - That will start the service dependencies
+# => service_parameters - That should provide the service parameters to start the service with
+document "go_debug_mode" <<DOC
+  Runs the $pkg_name in debug mode inside the studio.
+
+  @(arg:1) The path to the go main package (default: cmd/${pkg_name}/${pkg_name}.go)
+
+  Example 1 :: Passing a custom go main package
+  ---------------------------------------------------------
+  go_debug_mode app/main.go
+
+  Example 2 :: Add extra options to the 'dlv debug' command
+  ---------------------------------------------------------
+  GO_DEBUG_OPTS="--init string" go_debug_mode
+
+  This helper expects you to implement two methods:
+    => start_dependencies - That will start the service dependencies
+    => service_parameters - That should provide the service parameters to start the service with
+
+  Example of the 'service_parameters' function to define
+  ---------------------------------------------------------
+  function service_parameters() {
+    echo "start --host \$HOST --port \$PORT --elasticsearch-url \$ELASTICSEARCH_URL"
+  }
+DOC
+function go_debug_mode() {
+  [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
+
+  local go_cmd="dlv debug"
+  local pid=$(grep_service_pid)
+  if [[ ! -z ${pid} ]]; then
+    echo "There is a $pkg_name running. (${pid})"
+    echo "Stop the service with 'stop_service' then re-run '${FUNCNAME[0]}'"
+    return 1
+  fi
+
+  # Install the debugging tooli
+  install_go_tool github.com/derekparker/delve/cmd/dlv;
+
+  # Start the service dependencies if defined
+  if [[ "$(type -t start_dependencies)" == "function" ]]; then
+    start_dependencies
+  fi;
+
+  # Add the main go package to debug
+  go_cmd="$go_cmd $go_main";
+
+  # Add static linked flags if needed
+  local flags=$(go_static_linked_flags)
+  [ "x${flags}" != "x" ] && go_cmd="$go_cmd --build-flags \"$flags\"";
+
+  # Add extra debug options, helpful to stand up a Delve Server
+  [ "x${GO_DEBUG_OPTS}" != "x" ] && go_cmd="$go_cmd $GO_DEBUG_OPTS";
+
+  # If 'service_parameters' function exists, pass it to the debugger
+  if [[ "$(type -t service_parameters)" == "function" ]]; then
+    go_cmd="$go_cmd -- $(service_parameters)"
+  fi;
+
+  pushd $scaffolding_go_pkg_path >/dev/null;
+    [[ $go_cmd != *"headless"* ]] && echo "=> Starting debug console:"
+    eval $go_cmd
+  popd >/dev/null
+}
+add_alias "go_debug_mode" "gdm"
+
+# Starts a headless Delve Server so that engineers that use IDE's like VS Code
+# can connect to the remote service running in our habitat studio
+#
+# Default headless Delve Server port ':2345'
+document "go_debug_server" <<DOC
+  Starts a headless Delve Server to remotely debug the $pkg_name
+
+  @(arg:1) The port to start the Delve Server (default: 2345)"
+
+  NOTE: You have to set the 'HAB_DOCKER_OPTS' environment variable before entering
+  the Studio so that Docker exposes the provided port. Ex. 'HAB_DOCKER_OPTS="-p 2345:2345"'
+DOC
+function go_debug_server() {
+  local port=2345
+  [[ "x$1" != "x" ]] && port=$1;
+  echo "=> Starting headless Delve Server in port '*:$port'"
+  GO_DEBUG_OPTS="--headless --listen=:$port --log" go_debug_mode
+}
+add_alias "go_debug_server" "gds"
+
+# You wanna debug your running process? Well use this function to do so.
+document "go_debug_attach_running_service" <<DOC
+  Attach to a running $pkg_name and begin debugging inside the studio.
+DOC
+function go_debug_attach_running_service() {
+  local pid=$(grep_service_pid)
+  if [[ -z ${pid} ]]; then
+    echo "There is no $pkg_name running."
+    return 1
+  fi
+  go_debug_attach_to_pid $pid
+}
+add_alias "go_debug_attach_running_service " "gdas"
+
+
+# Connect to the provided PID process (Must be a Go Applicaiton)
+document "go_debug_attach_to_pid" <<DOC
+  Attach to the provided PID and begin debugging inside the studio.
+
+  @(arg:1) The PID to attach to (must be a Go application)
+DOC
+function go_debug_attach_to_pid() {
+  if [[ -z $1 ]]; then
+    echo "You have to provide a PID to attach to"
+    echo "Run 'describe ${FUNCNAME[0]}' for more information"
+    return 1
+  fi
+
+  local go_cmd="dlv attach $1 $pkg_name"
+  # Add static linked flags if needed
+  local flags=$(go_static_linked_flags)
+  [ "x${flags}" != "x" ] && go_cmd="$go_cmd --build-flags \"$flags\"";
+
+  install_go_tool github.com/derekparker/delve/cmd/dlv;
+  pushd $scaffolding_go_pkg_path >/dev/null;
+    echo "=> Connection to PID '${1}':"
+    eval $go_cmd
+  popd >/dev/null
+}
+add_alias "go_debug_attach_to_pid " "gdatt"
+
+# Helper function to search for the PID of the service
+function grep_service_pid() {
+  install_if_missing core/busybox-static pgrep;
+  pgrep $pkg_name
+}
+
+# Helper function that you can call to detect if the user builds statically linked Go binaries
+function go_static_linked_flags() {
+  if [[ $GO_STATIC_BIN == true ]]; then
+    install_if_missing core/musl musl-gcc;
+    install_if_missing core/gcc gcc;
+    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
+    export GO_LDFLAGS="-linkmode external -extldflags '-static'";
+    echo "--ldflags '$GO_LDFLAGS'";
+  fi;
+}

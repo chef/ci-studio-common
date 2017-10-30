@@ -1,9 +1,10 @@
 # Changelog
 
-<!-- latest_release unreleased -->
-## Unreleased
+<!-- latest_release 0.1.36 -->
+## [0.1.36](https://github.com/chef/ci-studio-common/tree/0.1.36) (2017-10-30)
 
 #### Merged Pull Requests
+- Avoid using &#39;exit&#39; in studio helpers; use &#39;return&#39; [#52](https://github.com/chef/ci-studio-common/pull/52) ([afiune](https://github.com/afiune))
 - Add documentation about expected environment variables [#50](https://github.com/chef/ci-studio-common/pull/50) ([tduffield](https://github.com/tduffield))
 <!-- latest_release -->
 

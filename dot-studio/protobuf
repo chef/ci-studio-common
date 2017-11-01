@@ -26,6 +26,7 @@ document "compile_go_protobuf" <<DOC
   ------------------------------------------------------------------
   #!/bin/bash
   set -x
+  GOPATH=$(go env GOPATH)
 
   protoc -I. \\
     -I$GOPATH/src \\
@@ -41,6 +42,7 @@ function compile_go_protobuf() {
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
     github.com/golang/protobuf/protoc-gen-go
+    github.com/ckaznocha/protoc-gen-lint
   )
 
   # Verify that the script exist ans it is an executable
@@ -52,7 +54,7 @@ function compile_go_protobuf() {
     install_if_missing core/protobuf-cpp protoc
     eval "$proto_script";
   else
-    echo "ERROR: '$proto_script' doesn't exist or is not exacutable."
+    echo "ERROR: '$proto_script' doesn't exist or is not executable."
     echo "Try 'describe ${FUNCNAME[0]}'."
     return 1;
   fi;

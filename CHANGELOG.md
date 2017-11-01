@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.37 -->
+<!-- latest_release 0.1.38 -->
+## [0.1.38](https://github.com/chef/ci-studio-common/tree/0.1.38) (2017-11-01)
+
+#### Merged Pull Requests
+- protobuf: add linter [#51](https://github.com/chef/ci-studio-common/pull/51) ([srenatus](https://github.com/srenatus))
+<!-- latest_release -->
+
 ## [0.1.37](https://github.com/chef/ci-studio-common/tree/0.1.37) (2017-10-31)
 
 #### Merged Pull Requests
 - Adds debugging tools for Go Applications [#53](https://github.com/chef/ci-studio-common/pull/53) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.36](https://github.com/chef/ci-studio-common/tree/0.1.36) (2017-10-30)
 

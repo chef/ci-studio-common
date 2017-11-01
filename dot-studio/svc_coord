@@ -53,22 +53,13 @@ function wait_for_svc_to_load() {
 document "wait_for_port_to_listen" <<DOC
   Wait for a port to be listening.
 
+  DEPRECATED: Use 'wait_or_fail_for_port_to_listen' instead
+
   @(arg:1) Port to wait for to be listening
   @(arg:2) Wheter or not this process runs silently
 DOC
 function wait_for_port_to_listen() {
-  install_if_missing core/busybox-static netstat
   echo " => DEPRECATED: Use 'wait_or_fail_for_port_to_listen' instead"
-
-  while : ; do
-    if netstat -an | grep "$1" | grep LISTEN >/dev/null 2>/dev/null
-    then
-      break
-    else
-      sleep 1
-    fi
-    [[ "$2" != "silent" ]] && echo " => Waiting for port $1 to be listening"
-  done
 }
 
 document "wait_or_fail_for_port_to_listen" <<DOC

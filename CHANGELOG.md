@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.38 -->
+<!-- latest_release 0.1.39 -->
+## [0.1.39](https://github.com/chef/ci-studio-common/tree/0.1.39) (2017-11-01)
+
+#### Merged Pull Requests
+- Deprecating wait_for_port_to_listen Function [#55](https://github.com/chef/ci-studio-common/pull/55) ([lancewf](https://github.com/lancewf))
+<!-- latest_release -->
+
 ## [0.1.38](https://github.com/chef/ci-studio-common/tree/0.1.38) (2017-11-01)
 
 #### Merged Pull Requests
 - protobuf: add linter [#51](https://github.com/chef/ci-studio-common/pull/51) ([srenatus](https://github.com/srenatus))
-<!-- latest_release -->
 
 ## [0.1.37](https://github.com/chef/ci-studio-common/tree/0.1.37) (2017-10-31)
 

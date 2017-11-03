@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.39 -->
+<!-- latest_release 0.1.40 -->
+## [0.1.40](https://github.com/chef/ci-studio-common/tree/0.1.40) (2017-11-03)
+
+#### Merged Pull Requests
+- Improve how we handle our binaries [#57](https://github.com/chef/ci-studio-common/pull/57) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.39](https://github.com/chef/ci-studio-common/tree/0.1.39) (2017-11-01)
 
 #### Merged Pull Requests
 - Deprecating wait_for_port_to_listen Function [#55](https://github.com/chef/ci-studio-common/pull/55) ([lancewf](https://github.com/lancewf))
-<!-- latest_release -->
 
 ## [0.1.38](https://github.com/chef/ci-studio-common/tree/0.1.38) (2017-11-01)
 

@@ -149,6 +149,7 @@ SUBCOMMANDS:
 
 ENVIRONMENT VARIABLES:
     STUDIO_OPTS       Optional options to pass to the hab-studio.
+    HAB_ORIGIN        The Habitat origin associated with the hab-studio.
 ```
 <!-- stdout -->
 

@@ -13,16 +13,10 @@ This repository houses some scripts / files that are used across various Chef pr
     + [`aws-configure`](#aws-configure)
     + [`citadel`](#citadel)
     + [`hab-origin`](#hab-origin)
-      - [`hab-origin download-sig-key $ORIGIN`](#hab-origin-download-sig-key-origin)
+    + [`hab-studio`](#hab-studio)
     + [`hab-verify`](#hab-verify)
-      - [`hab-verify in-studio $COMMAND`](#hab-verify-in-studio-command)
-      - [`hab-verify lint`](#hab-verify-lint)
-      - [`hab-verify syntax`](#hab-verify-syntax)
     + [`install-tool`](#install-tool)
     + [`run-if-changed`](#run-if-changed)
-      - [Tuning Options](#tuning-options)
-        * [`TRAVIS_SUGAR_FILTER_TESTS`](#travis_sugar_filter_tests)
-        * [`TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED`](#travis_sugar_force_if_travis_yaml_changed)
 - [Habitat Studio](#habitat-studio)
   * [Installation](#installation-1)
   * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
@@ -69,77 +63,139 @@ where:
 > For Chef Software, these values are automatically applied to Travis Projects by Engineering Services.
 
 ### Helpers
+<!--
+  Many of the Helpers are self-documenting. If you see the stdout comment tags, that means that documentation block
+  is automatically updated everytime a PR is merged by executing the .expeditor/update_readme.sh script. The implication
+  there is that you do not need to manually update those docs.
+-->
 
 #### `aws-configure`
 
-A non-interactive version of `aws configure`. Will configure the AWS CLI you have installed in Travis with a specific profile. 
+<!-- stdout "./bin/aws-configure --help" -->
+```
+Usage: aws-configure [PROFILE]
+
+A non-interactive version of 'aws configure' that allows you to configure AWS CLI profiles.
+
+To add a new profile, you MUST specify following environment variables:
+
+    * <PROFILE>_AWS_ACCESS_KEY_ID
+    * <PROFILE>_AWS_SECRET_ACCESS_KEY
+
+You can optionally specify '<PROFILE>_AWS_DEFAULT_REGION' to determine the default region for this profile.
+
+If no PROFILE is specified, aws-configure will defer to the value specified in AWS_PROFILE.
+
+SUBCOMMANDS:
+    is-configured PROFILE     Returns '0' if the profile is configured. Otherwise, it returns '1'.
+```
+<!-- stdout -->
 
 #### `citadel`
 
-Copy the contents of a file from a Citadel S3 bucket to STDOUT. Requires that the `CITADEL_PROFILE` be configured using `aws-configure`.
+<!-- stdout "./bin/citadel --help" -->
+```
+Usage: citadel FILE
+
+A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
+
+Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.
+
+ENVIRONMENT VARIABLES:
+    CITADEL_BUCKET        The name of the S3 bucket where citadel files are kept. (default: $AWS_PROFILE-citadel)
+    CITADEL_PROFILE       The name of the AWS CLI profile with access to citadel. (default: $AWS_PROFILE)
+```
+<!-- stdout -->
 
 #### `hab-origin`
 
-Helpers that extend functionality of the `hab origin` namespace.
+<!-- stdout "./bin/hab-origin --help" -->
+```
+Usage: hab-origin [SUBCOMMAND]
 
-##### `hab-origin download-sig-key $ORIGIN`
+Helpers that extend functionality of the hab origin namespace.
 
-Download the private signing key stored in [citadel](#citadel).
+SUBCOMMANDS:
+    download-sig-key ORIGIN     Download the private signing key for ORIGIN stored in the citadel S3 bucket.
+```
+<!-- stdout -->
+
+#### `hab-studio`
+
+<!-- stdout "./bin/hab-studio --help" -->
+```
+Usage: hab-studio [SUBCOMMAND]
+
+Utility to configure aspects of your Habitat Studio prior to launch.
+
+SUBCOMMANDS:
+    cleanup                               Remove any state created by any of the hab-studio commands.
+    configure-github-account ACCOUNT      Configure studios with GitHub credentials for ACCOUNT.
+```
+<!-- stdout -->
 
 #### `hab-verify`
 
+<!-- stdout "./bin/hab-verify --help" -->
+```
+Usage: hab-verify [SUBCOMMAND]
+
 Helpers that perform common verification steps inside Habitat.
 
-##### `hab-verify in-studio $COMMAND`
+SUBCOMMANDS:
+    lint              Perform some simple linting against plan.sh files.
+    syntax            Perform some simple syntax checks against plan.sh files.
+    in-studio CMD     Run CMD in the contexts of a hab-studio started in the root of the project repository.
 
-Run `$COMMAND` in the contexts of a `hab studio` started in the root of the project repository.
-
-##### `hab-verify lint`
-
-Perform some simple linting against `plan.sh` files.
-
-##### `hab-verify syntax`
-
-Perform some simple syntax checks against `plan.sh` files.
+ENVIRONMENT VARIABLES:
+    STUDIO_OPTS       Optional options to pass to the hab-studio.
+```
+<!-- stdout -->
 
 #### `install-tool`
 
-This utility installs tooling in a very specific pattern specific to Travis CI. You can see all the tools we support in the [tools directory](https://github.com/chef/ci-studio-common/tree/master/tools).
-
-```yaml
-install: install-tool aws
+<!-- stdout "./bin/install-tool --help" -->
 ```
+Usage: install-tool TOOL [VERSION]
+
+Install one of the pre-configured TOOLs (listed below) at the specified VERSION (if specified).
+
+AVAILABLE TOOLS:
+    aws
+    chefdk [CHANNEL]
+    docker-compose [VERSION]
+    hab
+    terraform [VERSION]
+```
+<!-- stdout -->
 
 #### `run-if-changed`
 
-If your project is comprised of many components (or lots of tests), you can use `run-if-changed` to only execute test suites if something changed in given `WORKDIR`.
-
-```yaml
-env:
-  global:
-    - TRAVIS_SUGAR_FILTER_TESTS=true
-    - TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED=true
-
-matrix:
-  include:
-    - env:
-        - NAME=component_test
-      script: WORKDIR=component_dir run-if-changed make <test>
+<!-- stdout "./bin/run-if-changed --help" -->
 ```
+Usage: WORKDIR=<WORKDIR> run-if-changed CMD
 
-##### Tuning Options
+Only execute CMD from WORKDIR if there are changed files in WORKDIR.
 
-###### `TRAVIS_SUGAR_FILTER_TESTS`
+ENVIRONMENT VARIABLES:
+    TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED   Force all tests to run if the '.travis.yml' file was modified. 
+    TRAVIS_SUGAR_FILTER_TESTS                   Set to 'false' to force all tests to run. To filter tests only on a PR, use 'TRAVIS_SUGAR_FILTER_TESTS='
+    WORKDIR                                     The directory where, if there are changed, CMD should be executed.
 
-Tells `run-if-changed` to filter only when we're on a Pull Request. Will run the test, even if no files have changed, if set to false.
+Example 1 :: Running Travis tests only if they have changed
+-----------------------------------------------------------
+  ---
+  env:
+    global:
+      - TRAVIS_SUGAR_FILTER_TESTS=
+      - TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED=true
 
-To keep things running fast, try to either a) cache as much as possible or b) put the setup behind the `run-if-changed` command as part of the Makefile.
-
-If you only want to filter the tests only on a PR you can use the following setting: `TRAVIS_SUGAR_FILTER_TESTS=$TRAVIS_PULL_REQUEST`
-
-###### `TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED`
-
-If the .travis.yml file was modified, force all of the tests to run just to be safe. We want to make sure that the changes wouldn't otherwise cause the tests to fail.
+  matrix:
+    include:
+      - env: NAME=component_test
+        script: WORKDIR=component_dir run-if-changed make test
+```
+<!-- stdout -->
 
 ## Habitat Studio
 

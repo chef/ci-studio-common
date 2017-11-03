@@ -17,6 +17,18 @@
 # limitations under the License.
 #
 
+# Error out if someone tries to execute this script, rather than sourcing it.
+if [[ "$BASH_SOURCE" == "$0" ]];
+then
+  cat /dev/stdin <<'DOC'
+ERROR: studio-common is designed to be sourced, not executed. Please source this file as exemplified below:
+
+  source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
+
+DOC
+  exit 1
+fi;
+
 # This value is automatically updated by Expeditor to reflect .hab-version
 export SUPPORTED_HAB_VERSION="0.37.0";
 
@@ -66,7 +78,7 @@ fi;
 # Assuming we have the correct version of Habitat installed, we can proceed.
 
 # Source the plan.sh and default.toml files (if they exist)
-export PLAN_CONTEXT=${PLAN_CONTEXT:-/src/habitat}
+export PLAN_CONTEXT="${PLAN_CONTEXT:-/src/habitat}"
 [[ -f /src/habitat/plan.sh ]] && source /src/habitat/plan.sh
 [[ -f /src/habitat/default.toml ]] && export TOML_FILE=/src/habitat/default.toml
 

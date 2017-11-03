@@ -16,27 +16,78 @@
 # limitations under the License.
 #
 
-# If unspecified, set the workdir to the current working directoy
-WORKDIR=${WORKDIR:-"./"}
+function usage() {
+  cat /dev/stdin <<DOC
+Usage: WORKDIR=<WORKDIR> ${0##*/} CMD
 
-# Get a list of all the files that changed from the most recent merge
-changed_files="$(git diff --name-only HEAD HEAD~1 "${WORKDIR}")"
+Only execute CMD from WORKDIR if there are changed files in WORKDIR.
 
-did_travis_change="$(git diff --name-only HEAD HEAD~1 .travis.yml)"
-if [ ! -z "$did_travis_change" ] && [ "$TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED" == "true" ]; then
-  echo ".travis.yml was modified - forcing tests to run"
-  TRAVIS_SUGAR_FILTER_TESTS="false"
-fi
+ENVIRONMENT VARIABLES:
+    TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED   Force all tests to run if the '.travis.yml' file was modified. 
+    TRAVIS_SUGAR_FILTER_TESTS                   Set to 'false' to force all tests to run. To filter tests only on a PR, use 'TRAVIS_SUGAR_FILTER_TESTS=$TRAVIS_PULL_REQUEST'
+    WORKDIR                                     The directory where, if there are changed, CMD should be executed.
 
-# If there are no changed files for that work directory, simply exit 0. Otherwise, execute the command.
-#
-# TRAVIS_SUGAR_FILTER_TESTS can be set using the TRAVIS_PULL_REQUEST variable, which
-# is set either to the PR # or "false". Since "false" is a value we can count on in
-# our "recommended" setup. That is what we key off of.
-if [ -z "$changed_files" ] && [ "$TRAVIS_SUGAR_FILTER_TESTS" != "false" ]; then
-  echo "No files were modified in '${WORKDIR}': exiting."
-  exit 0
-else
-  cd "$TRAVIS_BUILD_DIR/$WORKDIR" || exit 1
-  eval "$@"
-fi
+Example 1 :: Running Travis tests only if they have changed
+-----------------------------------------------------------
+  ---
+  env:
+    global:
+      - TRAVIS_SUGAR_FILTER_TESTS=$TRAVIS_PULL_REQUEST
+      - TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED=true
+
+  matrix:
+    include:
+      - env: NAME=component_test
+        script: WORKDIR=component_dir run-if-changed make test
+DOC
+}
+
+function enforce_requirements() {
+  # Make sure git is installed
+  which git &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "${0##*/}: Unable to find 'git' executable."
+    echo "Make sure you have git installed."
+    exit 2
+  fi
+}
+
+function run_if_changed() {
+  # If unspecified, set the workdir to the current working directoy
+  WORKDIR=${WORKDIR:-"./"}
+
+  # Get a list of all the files that changed from the most recent merge
+  changed_files="$(git diff --name-only HEAD HEAD~1 "${WORKDIR}")"
+
+  did_travis_change="$(git diff --name-only HEAD HEAD~1 .travis.yml)"
+  if [ ! -z "$did_travis_change" ] && [ "$TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED" == "true" ]; then
+    echo ".travis.yml was modified - forcing tests to run"
+    TRAVIS_SUGAR_FILTER_TESTS="false"
+  fi
+
+  # If there are no changed files for that work directory, simply exit 0. Otherwise, execute the command.
+  #
+  # TRAVIS_SUGAR_FILTER_TESTS can be set using the TRAVIS_PULL_REQUEST variable, which
+  # is set either to the PR # or "false". Since "false" is a value we can count on in
+  # our "recommended" setup. That is what we key off of.
+  if [ -z "$changed_files" ] && [ "$TRAVIS_SUGAR_FILTER_TESTS" != "false" ]; then
+    echo "No files were modified in '${WORKDIR}': exiting."
+    exit 0
+  else
+    cd "$TRAVIS_BUILD_DIR/$WORKDIR" || exit 1
+    eval "$@"
+  fi
+}
+
+case "$1" in
+  "-h"|"--help")
+    usage
+    ;;
+  "")
+    usage
+    exit 1
+    ;;
+  *)
+    run_if_changed $@
+    ;;
+esac

@@ -18,3 +18,12 @@
 
 pip install --user awscli
 ln -sf $HOME/.local/bin/aws $HOME/tools/bin/aws
+
+# There is a weird bug in aws where if you specify an AWS_PROFILE that is not 
+# configured, any 'aws' command (even 'aws --version') will fail. This is an
+# issue in CI systems where AWS_PROFILE has already been specified but hasn't
+# had time to be configured by the time we install awscli. So rather than 
+# running 'aws --version', we grab the version from pip.
+echo ""
+echo "aws --version"
+pip show awscli | grep Version

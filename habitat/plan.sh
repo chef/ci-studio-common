@@ -22,5 +22,4 @@ do_build() {
 do_install() {
   cp -rf "$SRC_PATH"/bin/* "$pkg_prefix/bin"
   cp -rf "$SRC_PATH/dot-studio" "$pkg_prefix"
-  cp -rf "$SRC_PATH/tools" "$pkg_prefix"
 }

@@ -8,34 +8,22 @@ before_install:
   - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
   - ln -sf "$TRAVIS_BUILD_DIR" "$HOME/ci-studio-common"
 
-install:
-  - install-tool hab aws
-  - aws-configure chef-cd
-
 matrix:
   include:
 
-    # tool-test
-    - env: NAME=tool-test
+    - env: NAME=bats
+      script: bats tests
+
+    - env: NAME=in-studio
       install:
-        - install-tool aws
-        - install-tool docker-compose
         - install-tool hab
-        - install-tool terraform
-      script: bats tests/tool-test.bats
+        - install-tool aws
+        - aws-configure chef-cd
+      script:
+        - hab-verify in-studio ci_lint
+        - hab-verify in-studio ci_syntax
 
-    # lint
-    - env: NAME=lint
-      script: hab-verify in-studio ci_lint
-
-    # syntax
-    - env: NAME=syntax
-      script: hab-verify in-studio ci_syntax
-
-    # habitat-lint
-    - env: NAME=habitat-lint
-      script: hab-verify lint
-
-    # habitat-syntax
-    - env: NAME=habitat-syntax
-      script: hab-verify syntax
+    - env: NAME=habitat
+      script:
+        - hab-verify lint
+        - hab-verify syntax

@@ -16,9 +16,6 @@
 # limitations under the License.
 #
 
-# Make sure that we fail if something fails
-set -e
-
 function usage() {
   cat /dev/stdin <<DOC
 Usage: ${0##*/} [SUBCOMMAND]
@@ -28,33 +25,50 @@ Helpers that perform common verification steps inside Habitat.
 SUBCOMMANDS:
     lint              Perform some simple linting against plan.sh files.
     syntax            Perform some simple syntax checks against plan.sh files.
-    in-studio <CMD>   Run <CMD> in the contexts of a hab-studio started in the root of the project repository.
+    in-studio CMD     Run CMD in the contexts of a hab-studio started in the root of the project repository.
 
 ENVIRONMENT VARIABLES:
     STUDIO_OPTS       Optional options to pass to the hab-studio.
+    HAB_ORIGIN        The Habitat origin associated with the hab-studio.
 DOC
+}
+
+function in_studio() {
+  origin="${HAB_ORIGIN:-chef}"
+  export HAB_ORIGIN="$origin"
+
+  hab-origin download-sig-key "$origin"
+
+  # New version of Habitat doesn't source the .studiorc
+  cmd="source .studiorc;$2"
+
+  eval "hab studio $STUDIO_OPTS run \"$cmd\""
+}
+
+function lint() {
+  exec find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash {} \;
+}
+
+function syntax() {
+  exec find . -name 'plan.sh' -exec bash -n {} \;
 }
 
 case "$1" in
   "in-studio")
-    origin=${HAB_ORIGIN:-chef};
-    export HAB_ORIGIN="$origin";
-
-    hab-origin download-sig-key "$HAB_ORIGIN"
-
-    # New version of Habitat doesn't source the .studiorc
-    cmd="source .studiorc;$2"
-
-    eval "hab studio $STUDIO_OPTS run \"$cmd\""
+    in_studio $2
     ;;
   "lint")
-    exec find . -name 'plan.sh' -exec shellcheck -e SC2034,SC2154 -s bash {} \;
+    lint
     ;;
   "syntax")
-    exec find . -name 'plan.sh' -exec bash -n {} \;
+    syntax
     ;;
-  "-h"|"--help"|"")
+  "-h"|"--help")
     usage
+    ;;
+  "")
+    usage
+    exit 1
     ;;
   *)
     echo "${0##*/}: invalid option '$1'"

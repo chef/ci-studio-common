@@ -16,8 +16,10 @@
 # limitations under the License.
 #
 
-curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v 0.37.0
+channel="${1:-stable}"
+
+curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -c $channel -P chefdk
 
 echo ""
-echo "hab --version"
-hab --version
+echo "chef --version"
+chef --version

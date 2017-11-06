@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.40 -->
+<!-- latest_release 0.1.41 -->
+## [0.1.41](https://github.com/chef/ci-studio-common/tree/0.1.41) (2017-11-06)
+
+#### Merged Pull Requests
+- [BUG-FIX] Correct arguments for in_studio func [#58](https://github.com/chef/ci-studio-common/pull/58) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.40](https://github.com/chef/ci-studio-common/tree/0.1.40) (2017-11-03)
 
 #### Merged Pull Requests
 - Improve how we handle our binaries [#57](https://github.com/chef/ci-studio-common/pull/57) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.39](https://github.com/chef/ci-studio-common/tree/0.1.39) (2017-11-01)
 

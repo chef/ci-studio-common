@@ -42,7 +42,6 @@ function compile_go_protobuf() {
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
     github.com/golang/protobuf/protoc-gen-go
-    github.com/ckaznocha/protoc-gen-lint
   )
 
   # Verify that the script exist ans it is an executable
@@ -52,6 +51,16 @@ function compile_go_protobuf() {
     install_go_tool github.com/golang/glog
     GO_TOOL_METHOD="install" install_go_tool ${proto_go_tools[@]}
     install_if_missing core/protobuf-cpp protoc
+
+    # Install protoc-gen-lint from the internet instead of
+    # installing it from our vendor/ directory. (why? because if
+    # not we will need to add it to all our Gopkg.toml files)
+    #
+    # only_if the script has an entry like: '--lint_out'
+    if [[ "$(grep -w "\-\-lint_out" $proto_script)" != "" ]]; then
+      install_go_tool github.com/ckaznocha/protoc-gen-lint
+    fi;
+
     eval "$proto_script";
   else
     echo "ERROR: '$proto_script' doesn't exist or is not executable."

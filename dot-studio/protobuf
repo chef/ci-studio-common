@@ -30,27 +30,32 @@ document "compile_go_protobuf" <<DOC
 
   protoc -I. \\
     -I$GOPATH/src \\
-    -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \\
     --go_out=plugins=grpc:. \\
-    inspec/*.proto
+    proto/*.proto
   ------------------------------------------------------------------
 
 DOC
 function compile_go_protobuf() {
   proto_script="${1:-scripts/grpc.sh}"
-  local proto_go_tools=(
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
-    github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
-    github.com/golang/protobuf/protoc-gen-go
-  )
 
   # Verify that the script exist ans it is an executable
   if [[ -x $proto_script ]]; then
-    # BUG: protoc-gen-grpc-gateway depends on github.com/golang/glog
-    #      so we have to install it first via 'go get'
-    install_go_tool github.com/golang/glog
-    GO_TOOL_METHOD="install" install_go_tool ${proto_go_tools[@]}
-    install_if_missing core/protobuf-cpp protoc
+    install_if_missing core/protobuf-cpp protoc;
+    GO_TOOL_METHOD="install" install_go_tool github.com/golang/protobuf/protoc-gen-go;
+
+    # Install grpc-gateway
+    # only_if the script has an entry like: '--grpc-gateway_out'
+    if [[ "$(grep -w "\-\-grpc-gateway_out" $proto_script)" != "" ]]; then
+      local grpc_gateway_proto_tools=(
+        github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+        github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
+      )
+
+      # BUG: protoc-gen-grpc-gateway depends on github.com/golang/glog
+      #      so we have to install it first via 'go get'
+      install_go_tool github.com/golang/glog >/dev/null;
+      GO_TOOL_METHOD="install" install_go_tool ${grpc_gateway_proto_tools[@]};
+    fi;
 
     # Install protoc-gen-lint from the internet instead of
     # installing it from our vendor/ directory. (why? because if

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.43 -->
+<!-- latest_release 0.1.44 -->
+## [0.1.44](https://github.com/chef/ci-studio-common/tree/0.1.44) (2017-11-16)
+
+#### Merged Pull Requests
+- Avoid running go env $GOPATH from docs [#61](https://github.com/chef/ci-studio-common/pull/61) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.43](https://github.com/chef/ci-studio-common/tree/0.1.43) (2017-11-15)
 
 #### Merged Pull Requests
 - Install protobuf plugins only if needed [#60](https://github.com/chef/ci-studio-common/pull/60) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.42](https://github.com/chef/ci-studio-common/tree/0.1.42) (2017-11-08)
 

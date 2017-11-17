@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.44 -->
+<!-- latest_release 0.1.45 -->
+## [0.1.45](https://github.com/chef/ci-studio-common/tree/0.1.45) (2017-11-17)
+
+#### Merged Pull Requests
+- Static Linking Warning Fix [#62](https://github.com/chef/ci-studio-common/pull/62) ([lancewf](https://github.com/lancewf))
+<!-- latest_release -->
+
 ## [0.1.44](https://github.com/chef/ci-studio-common/tree/0.1.44) (2017-11-16)
 
 #### Merged Pull Requests
 - Avoid running go env $GOPATH from docs [#61](https://github.com/chef/ci-studio-common/pull/61) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.43](https://github.com/chef/ci-studio-common/tree/0.1.43) (2017-11-15)
 

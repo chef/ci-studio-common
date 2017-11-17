@@ -158,6 +158,11 @@ function go_build() {
   # Add static linked flags if needed
   go_cmd="$go_cmd $(go_static_linked_flags)";
 
+  if [[ $GO_STATIC_BIN == true ]]; then
+    install_if_missing core/musl musl-gcc;
+    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
+  fi
+
   pushd $scaffolding_go_pkg_path >/dev/null
     if [[ $GO_FAST != true ]]; then
       [[ $RUN_GO_GENERATE == true ]] && echo "=> Executing Go generate" && go generate

@@ -107,7 +107,10 @@ function install_go_tool() {
   [[ "$GO_TOOL_METHOD" == "install" ]] && go_cmd="go install -v";
 
   # Add static linked flags if needed
-  go_cmd="$go_cmd $(go_static_linked_flags)";
+  if [[ $GO_STATIC_BIN == true ]]; then
+    go_static_linked_envs;
+    go_cmd="$go_cmd $GO_ARGS";
+  fi;
 
   pushd $GOPATH >/dev/null;
   for i in "$@"; do
@@ -156,7 +159,10 @@ function go_build() {
   local go_cmd="go build"
 
   # Add static linked flags if needed
-  go_cmd="$go_cmd $(go_static_linked_flags)";
+  if [[ $GO_STATIC_BIN == true ]]; then
+    go_static_linked_envs;
+    go_cmd="$go_cmd $GO_ARGS";
+  fi;
 
   if [[ $GO_STATIC_BIN == true ]]; then
     install_if_missing core/musl musl-gcc;
@@ -257,8 +263,10 @@ function go_debug_mode() {
   go_cmd="$go_cmd $go_main";
 
   # Add static linked flags if needed
-  local flags=$(go_static_linked_flags)
-  [ "x${flags}" != "x" ] && go_cmd="$go_cmd --build-flags \"$flags\"";
+  if [[ $GO_STATIC_BIN == true ]]; then
+    go_static_linked_envs;
+    go_cmd="$go_cmd --build-flags \"$GO_ARGS\"";
+  fi;
 
   # Add extra debug options, helpful to stand up a Delve Server
   [ "x${GO_DEBUG_OPTS}" != "x" ] && go_cmd="$go_cmd $GO_DEBUG_OPTS";
@@ -325,8 +333,10 @@ function go_debug_attach_to_pid() {
 
   local go_cmd="dlv attach $1 $pkg_name"
   # Add static linked flags if needed
-  local flags=$(go_static_linked_flags)
-  [ "x${flags}" != "x" ] && go_cmd="$go_cmd --build-flags \"$flags\"";
+  if [[ $GO_STATIC_BIN == true ]]; then
+    go_static_linked_envs;
+    go_cmd="$go_cmd --build-flags \"$GO_ARGS\"";
+  fi;
 
   install_go_tool github.com/derekparker/delve/cmd/dlv;
   pushd $scaffolding_go_pkg_path >/dev/null;
@@ -342,13 +352,22 @@ function grep_service_pid() {
   pgrep $pkg_name
 }
 
-# Helper function that you can call to detect if the user builds statically linked Go binaries
-function go_static_linked_flags() {
-  if [[ $GO_STATIC_BIN == true ]]; then
-    install_if_missing core/musl musl-gcc;
-    install_if_missing core/gcc gcc;
-    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
-    export GO_LDFLAGS="-linkmode external -extldflags '-static'";
-    echo "--ldflags '$GO_LDFLAGS'";
-  fi;
+# Helper function that you can call to prepare the studio to link static binaries
+# it will export the necessary environment variables that then, you can use on
+# your own helper methods
+#
+# Example: Add static linked flags if needed
+#
+#   local go_cmd="go build"
+#   if [[ $GO_STATIC_BIN == true ]]; then
+#     go_static_linked_envs;
+#     go_cmd="$go_cmd $GO_ARGS";
+#   fi;
+#
+function go_static_linked_envs() {
+  install_if_missing core/musl musl-gcc;
+  install_if_missing core/gcc gcc;
+  export CC=$(hab pkg path core/musl)/bin/musl-gcc;
+  export GO_LDFLAGS="-linkmode external -extldflags '-static'";
+  export GO_ARGS="--ldflags '$GO_LDFLAGS'";
 }

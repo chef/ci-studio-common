@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.47 -->
+<!-- latest_release 0.1.48 -->
+## [0.1.48](https://github.com/chef/ci-studio-common/tree/0.1.48) (2017-11-30)
+
+#### Merged Pull Requests
+- Pass the second command as a single parameter [#65](https://github.com/chef/ci-studio-common/pull/65) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.47](https://github.com/chef/ci-studio-common/tree/0.1.47) (2017-11-30)
 
 #### Merged Pull Requests
 - Add separate glob pattern to run-if-changed [#64](https://github.com/chef/ci-studio-common/pull/64) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.46](https://github.com/chef/ci-studio-common/tree/0.1.46) (2017-11-20)
 

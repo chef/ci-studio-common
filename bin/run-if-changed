@@ -18,14 +18,15 @@
 
 function usage() {
   cat /dev/stdin <<DOC
-Usage: WORKDIR=<WORKDIR> ${0##*/} CMD
+Usage: GLOBS=<GLOBS> WORKDIR=<WORKDIR> ${0##*/} CMD
 
-Only execute CMD from WORKDIR if there are changed files in WORKDIR.
+Only execute CMD from WORKDIR if there are changed files that match GLOBS.
 
 ENVIRONMENT VARIABLES:
     TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED   Force all tests to run if the '.travis.yml' file was modified. 
     TRAVIS_SUGAR_FILTER_TESTS                   Set to 'false' to force all tests to run. To filter tests only on a PR, use 'TRAVIS_SUGAR_FILTER_TESTS=$TRAVIS_PULL_REQUEST'
-    WORKDIR                                     The directory where, if there are changed, CMD should be executed.
+    WORKDIR                                     The directory where, if there are changes, CMD should be executed.
+    GLOBS                                       A list of glob patterns to inspect to determine if there are changes. Defaults to "<WORKDIR>/*"
 
 Example 1 :: Running Travis tests only if they have changed
 -----------------------------------------------------------
@@ -55,9 +56,10 @@ function enforce_requirements() {
 function run_if_changed() {
   # If unspecified, set the workdir to the current working directoy
   WORKDIR=${WORKDIR:-"./"}
+  GLOBS=${GLOBS:-"$WORKDIR/*"}
 
   # Get a list of all the files that changed from the most recent merge
-  changed_files="$(git diff --name-only HEAD HEAD~1 "${WORKDIR}")"
+  changed_files="$(git diff --name-only HEAD HEAD~1 ${GLOBS//,/ })"
 
   did_travis_change="$(git diff --name-only HEAD HEAD~1 .travis.yml)"
   if [ ! -z "$did_travis_change" ] && [ "$TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED" == "true" ]; then

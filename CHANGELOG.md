@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.46 -->
+<!-- latest_release 0.1.47 -->
+## [0.1.47](https://github.com/chef/ci-studio-common/tree/0.1.47) (2017-11-30)
+
+#### Merged Pull Requests
+- Add separate glob pattern to run-if-changed [#64](https://github.com/chef/ci-studio-common/pull/64) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.46](https://github.com/chef/ci-studio-common/tree/0.1.46) (2017-11-20)
 
 #### Bug Fixes
 - Fix all static linking warnings [#63](https://github.com/chef/ci-studio-common/pull/63) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.45](https://github.com/chef/ci-studio-common/tree/0.1.45) (2017-11-17)
 

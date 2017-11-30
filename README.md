@@ -174,14 +174,15 @@ AVAILABLE TOOLS:
 
 <!-- stdout "./bin/run-if-changed --help" -->
 ```
-Usage: WORKDIR=<WORKDIR> run-if-changed CMD
+Usage: GLOBS=<GLOBS> WORKDIR=<WORKDIR> run-if-changed CMD
 
-Only execute CMD from WORKDIR if there are changed files in WORKDIR.
+Only execute CMD from WORKDIR if there are changed files that match GLOBS.
 
 ENVIRONMENT VARIABLES:
     TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED   Force all tests to run if the '.travis.yml' file was modified. 
     TRAVIS_SUGAR_FILTER_TESTS                   Set to 'false' to force all tests to run. To filter tests only on a PR, use 'TRAVIS_SUGAR_FILTER_TESTS='
-    WORKDIR                                     The directory where, if there are changed, CMD should be executed.
+    WORKDIR                                     The directory where, if there are changes, CMD should be executed.
+    GLOBS                                       A list of glob patterns to inspect to determine if there are changes. Defaults to "<WORKDIR>/*"
 
 Example 1 :: Running Travis tests only if they have changed
 -----------------------------------------------------------

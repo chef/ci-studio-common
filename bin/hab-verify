@@ -81,7 +81,7 @@ function syntax() {
 
 case "$1" in
   "in-studio")
-    in_studio $2
+    in_studio "$2"
     ;;
   "lint")
     lint

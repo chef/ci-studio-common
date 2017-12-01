@@ -91,6 +91,11 @@ SUBCOMMANDS:
 ```
 <!-- stdout -->
 
+#### `ceval`
+
+<!-- stdout "./bin/ceval --help" -->
+<!-- stdout -->
+
 #### `citadel`
 
 <!-- stdout "./bin/citadel --help" -->

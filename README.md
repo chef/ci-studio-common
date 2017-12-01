@@ -11,6 +11,7 @@ This repository houses some scripts / files that are used across various Chef pr
   * [Environment Variables](#environment-variables)
   * [Helpers](#helpers)
     + [`aws-configure`](#aws-configure)
+    + [`ceval`](#ceval)
     + [`citadel`](#citadel)
     + [`hab-origin`](#hab-origin)
     + [`hab-studio`](#hab-studio)
@@ -94,6 +95,25 @@ SUBCOMMANDS:
 #### `ceval`
 
 <!-- stdout "./bin/ceval --help" -->
+```
+Usage: ceval COMMAND
+
+Conditionally evaluate the given COMMAND.
+
+    If the DEBUG environment variable is unset, ceval will evaluate the COMMAND using 'eval'.
+    If the DEBUG environment variable is set (to any value), ceval will simply echo the given COMMAND.
+
+GUIDANCE:
+
+  1. This command is intended to wrap desctructive or permanent commands that you do not want executed
+     when debugging the parent script. 
+
+        ceval "s3 cp myfile s3://my-bucket/my-file"
+
+  2. If you're command requires double quotes, make sure to escape them.
+
+        ceval "echo \"I'm a little tea pot\""
+```
 <!-- stdout -->
 
 #### `citadel`

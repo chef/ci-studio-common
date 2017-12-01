@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.49 -->
+<!-- latest_release 0.1.50 -->
+## [0.1.50](https://github.com/chef/ci-studio-common/tree/0.1.50) (2017-12-01)
+
+#### Merged Pull Requests
+- Add ability to conditionally execute certain commands [#67](https://github.com/chef/ci-studio-common/pull/67) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.49](https://github.com/chef/ci-studio-common/tree/0.1.49) (2017-12-01)
 
 #### Merged Pull Requests
 - Use &#39;pwd&#39; instead of Travis build directory to determine location [#66](https://github.com/chef/ci-studio-common/pull/66) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.48](https://github.com/chef/ci-studio-common/tree/0.1.48) (2017-11-30)
 

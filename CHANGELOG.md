@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.48 -->
+<!-- latest_release 0.1.49 -->
+## [0.1.49](https://github.com/chef/ci-studio-common/tree/0.1.49) (2017-12-01)
+
+#### Merged Pull Requests
+- Use &#39;pwd&#39; instead of Travis build directory to determine location [#66](https://github.com/chef/ci-studio-common/pull/66) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.48](https://github.com/chef/ci-studio-common/tree/0.1.48) (2017-11-30)
 
 #### Merged Pull Requests
 - Pass the second command as a single parameter [#65](https://github.com/chef/ci-studio-common/pull/65) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.47](https://github.com/chef/ci-studio-common/tree/0.1.47) (2017-11-30)
 

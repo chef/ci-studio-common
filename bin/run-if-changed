@@ -54,7 +54,8 @@ function enforce_requirements() {
 }
 
 function run_if_changed() {
-  # If unspecified, set the workdir to the current working directoy
+  # If unspecified, set the workdir to the current working directory
+  CWD=$(pwd)
   WORKDIR=${WORKDIR:-"./"}
   GLOBS=${GLOBS:-"$WORKDIR/*"}
 
@@ -76,7 +77,9 @@ function run_if_changed() {
     echo "No files were modified in '${WORKDIR}': exiting."
     exit 0
   else
-    cd "$TRAVIS_BUILD_DIR/$WORKDIR" || exit 1
+    echo "cd $CWD/$WORKDIR"
+    cd "$CWD/$WORKDIR" || exit 1
+    echo "$@"
     eval "$@"
   fi
 }

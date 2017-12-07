@@ -315,7 +315,7 @@ function go_debug_attach_running_service() {
   fi
   go_debug_attach_to_pid $pid
 }
-add_alias "go_debug_attach_running_service " "gdas"
+add_alias "go_debug_attach_running_service" "gdas"
 
 
 # Connect to the provided PID process (Must be a Go Applicaiton)
@@ -344,7 +344,7 @@ function go_debug_attach_to_pid() {
     eval $go_cmd
   popd >/dev/null
 }
-add_alias "go_debug_attach_to_pid " "gdatt"
+add_alias "go_debug_attach_to_pid" "gdatp"
 
 # Helper function to search for the PID of the service
 function grep_service_pid() {

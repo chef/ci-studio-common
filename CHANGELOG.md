@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.51 -->
+<!-- latest_release 0.1.52 -->
+## [0.1.52](https://github.com/chef/ci-studio-common/tree/0.1.52) (2017-12-20)
+
+#### Merged Pull Requests
+- Specify Output Location for go_build [#70](https://github.com/chef/ci-studio-common/pull/70) ([lancewf](https://github.com/lancewf))
+<!-- latest_release -->
+
 ## [0.1.51](https://github.com/chef/ci-studio-common/tree/0.1.51) (2017-12-07)
 
 #### Merged Pull Requests
 - Fix typos in aliases [#68](https://github.com/chef/ci-studio-common/pull/68) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.50](https://github.com/chef/ci-studio-common/tree/0.1.50) (2017-12-01)
 

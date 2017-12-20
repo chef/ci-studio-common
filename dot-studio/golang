@@ -131,6 +131,7 @@ document "go_build" <<DOC
   Builds the $pkg_name binary. (a.k.a. go build)
 
   @(arg:1) The path to the go main package (default: cmd/${pkg_name}/${pkg_name}.go)
+  @(arg:2) The path where the built binary file is placed.
 
   This helper will enfore the Go Workspace configureation.
 
@@ -149,14 +150,19 @@ document "go_build" <<DOC
   Example 2 :: Build the default binary without deps and/or 'go generate'.
   ------------------------------------------------------------------------
   GO_FAST=true go_build
+
+  Example 3 :: Build and place the binary file in a specific location.
+  ------------------------------------------------------------------------
+  GO_FAST=true go_build main.go /src/bin/main
 DOC
 function go_build() {
   [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
+  [[ "$2" == "" ]] && go_output="" || go_output="-o $2"
 
   # Setup the go workspace
   setup_go_workspace
 
-  local go_cmd="go build"
+  local go_cmd="go build $go_output"
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then

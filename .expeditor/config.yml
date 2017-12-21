@@ -1,5 +1,5 @@
 slack:
-  notify_channel: eng-services-notify
+  notify_channel: jex-notify
 
 habitat_packages:
   - ci-studio-common

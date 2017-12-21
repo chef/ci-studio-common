@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.52 -->
+<!-- latest_release 0.1.53 -->
+## [0.1.53](https://github.com/chef/ci-studio-common/tree/0.1.53) (2017-12-21)
+
+#### Merged Pull Requests
+- golang: run `dep ensure -vendor-only` [#74](https://github.com/chef/ci-studio-common/pull/74) ([sdelano](https://github.com/sdelano))
+<!-- latest_release -->
+
 ## [0.1.52](https://github.com/chef/ci-studio-common/tree/0.1.52) (2017-12-20)
 
 #### Merged Pull Requests
 - Specify Output Location for go_build [#70](https://github.com/chef/ci-studio-common/pull/70) ([lancewf](https://github.com/lancewf))
-<!-- latest_release -->
 
 ## [0.1.51](https://github.com/chef/ci-studio-common/tree/0.1.51) (2017-12-07)
 

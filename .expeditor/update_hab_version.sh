@@ -5,7 +5,8 @@
 #
 set -evx
 
-hab_version=$(cat .hab-version)
+hab_version=$(cat tools/hab/VERSION)
 
-sed -i -r "s/bash -s -- -v .+$/bash -s -- -v $hab_version/" tools/hab.sh
+echo "$hab_version" > .hab-version
+sed -i -r "s/bash -s -- -v .+$/bash -s -- -v $hab_version/" tools/hab/install.sh
 sed -i -r "s/export SUPPORTED_HAB_VERSION=\".+\"/export SUPPORTED_HAB_VERSION=\"$hab_version\"/" bin/studio-common

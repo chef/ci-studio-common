@@ -13,11 +13,21 @@ merge_actions:
       ignore_labels:
         - "Changelog: Skip Update"
         - "Expeditor: Skip All"
+  - bash:.expeditor/update_docker-compose_version.sh:
+      ignore_labels:
+        - "Expeditor: Skip All"
+      only_if_modified:
+        - tools/docker-compose/VERSION
   - bash:.expeditor/update_hab_version.sh:
       ignore_labels:
         - "Expeditor: Skip All"
       only_if_modified:
-        - .hab-version
+        - tools/hab/VERSION
+  - bash:.expeditor/update_terraform_version.sh:
+      ignore_labels:
+        - "Expeditor: Skip All"
+      only_if_modified:
+        - tools/terraform/VERSION
   - bash:.expeditor/update_readme.sh:
       ignore_labels:
         - "Expeditor: Skip All"

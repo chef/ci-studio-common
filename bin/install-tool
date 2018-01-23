@@ -45,7 +45,7 @@ function install_tool() {
     # Install the TOOL
     tool="$1"
     version="$2"
-    tool_file="$INSTALL_TOOL_DIR/$tool.sh"
+    tool_file="$INSTALL_TOOL_DIR/$tool/install.sh"
 
     if [[ ! -f "$tool_file" ]];
     then

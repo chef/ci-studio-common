@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.55 -->
+<!-- latest_release 0.1.56 -->
+## [0.1.56](https://github.com/chef/ci-studio-common/tree/0.1.56) (2018-01-23)
+
+#### Merged Pull Requests
+- Generalize the ability to update versions for tools [#76](https://github.com/chef/ci-studio-common/pull/76) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [0.1.55](https://github.com/chef/ci-studio-common/tree/0.1.55) (2018-01-23)
 
 #### Merged Pull Requests
 - Update Habitat to 0.52.0 [#75](https://github.com/chef/ci-studio-common/pull/75) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.54](https://github.com/chef/ci-studio-common/tree/0.1.54) (2017-12-21)
 

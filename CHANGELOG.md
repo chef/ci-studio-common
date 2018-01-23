@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.54 -->
+<!-- latest_release 0.1.55 -->
+## [0.1.55](https://github.com/chef/ci-studio-common/tree/0.1.55) (2018-01-23)
+
+#### Merged Pull Requests
+- Update Habitat to 0.52.0 [#75](https://github.com/chef/ci-studio-common/pull/75) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.54](https://github.com/chef/ci-studio-common/tree/0.1.54) (2017-12-21)
 
 #### Merged Pull Requests
 - Make wait_for_success to have a timeout [#72](https://github.com/chef/ci-studio-common/pull/72) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.53](https://github.com/chef/ci-studio-common/tree/0.1.53) (2017-12-21)
 

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.56 -->
+<!-- latest_release 0.1.57 -->
+## [0.1.57](https://github.com/chef/ci-studio-common/tree/0.1.57) (2018-01-30)
+
+#### Merged Pull Requests
+- Update terraform to 0.11.2 [#77](https://github.com/chef/ci-studio-common/pull/77) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [0.1.56](https://github.com/chef/ci-studio-common/tree/0.1.56) (2018-01-23)
 
 #### Merged Pull Requests
 - Generalize the ability to update versions for tools [#76](https://github.com/chef/ci-studio-common/pull/76) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [0.1.55](https://github.com/chef/ci-studio-common/tree/0.1.55) (2018-01-23)
 

@@ -16,6 +16,9 @@
 # limitations under the License.
 #
 
+# Fail fast
+set -e
+
 channel="${1:-stable}"
 
 curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -c $channel -P chefdk

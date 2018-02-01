@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-version="${1:-0.11.2}"
+version="${1:-0.11.3}"
 
 if [ ! -d "$HOME/tools/terraform-$version" ]; then
   mkdir -p $HOME/tools/terraform-$version

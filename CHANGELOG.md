@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.59 -->
+<!-- latest_release 0.1.60 -->
+## [0.1.60](https://github.com/chef/ci-studio-common/tree/0.1.60) (2018-02-01)
+
+#### Merged Pull Requests
+- Update terraform to 0.11.3 [#79](https://github.com/chef/ci-studio-common/pull/79) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [0.1.59](https://github.com/chef/ci-studio-common/tree/0.1.59) (2018-02-01)
 
 #### Merged Pull Requests
 - Exist fast for tools/chefdk.sh [#69](https://github.com/chef/ci-studio-common/pull/69) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.58](https://github.com/chef/ci-studio-common/tree/0.1.58) (2018-02-01)
 

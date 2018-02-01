@@ -50,7 +50,8 @@ function download_sig_key() {
   hab origin key download "$origin"
 
   # Extract the name of the key+revision from the public key
-  key_with_revision=$(find "$HOME/.hab/cache/keys" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1)
+  # (@afiune) The last entry is the active key
+  key_with_revision=$(find "$HOME/.hab/cache/keys" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1 | tail -1)
 
   if [ ! -f "$HOME/.hab/cache/keys/${key_with_revision}.sig.key" ]
   then

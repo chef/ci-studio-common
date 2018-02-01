@@ -47,6 +47,12 @@ before_install:
   - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
 ```
 
+If you would like to make an installation from a branch that is under
+development, you can add `-s -- BRANCH_NAME` at the end of the `curl` command.
+```
+curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- BRANCH_NAME
+```
+
 ### Environment Variables
 
 Various helpers and other operations assume the presence of certain environment variables. Here are the list of environment variables that should be present:

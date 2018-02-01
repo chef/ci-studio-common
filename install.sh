@@ -16,14 +16,21 @@
 # limitations under the License.
 #
 
+# The branch we will install the source code from
+#
+# Example: Install from the 'foo' branch
+# => curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- foo
+branch=${1-master}
+
 if [ -d $HOME/ci-studio-common ]
 then
   rm -rf $HOME/ci-studio-common
 fi
 
 pushd /tmp
-  curl -sLo ci-studio-common.zip https://github.com/chef/ci-studio-common/archive/master.zip
+  curl -sLo ci-studio-common.zip https://github.com/chef/ci-studio-common/archive/${branch}.zip
   unzip ci-studio-common.zip
   rm -f ci-studio-common.zip || true
-  mv ci-studio-common-master "$HOME/ci-studio-common"
+  ci_dir=$(echo "ci-studio-common-${branch}" | tr '/' '-')
+  mv $ci_dir "$HOME/ci-studio-common"
 popd

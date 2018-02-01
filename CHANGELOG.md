@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.58 -->
+<!-- latest_release 0.1.59 -->
+## [0.1.59](https://github.com/chef/ci-studio-common/tree/0.1.59) (2018-02-01)
+
+#### Merged Pull Requests
+- Exist fast for tools/chefdk.sh [#69](https://github.com/chef/ci-studio-common/pull/69) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [0.1.58](https://github.com/chef/ci-studio-common/tree/0.1.58) (2018-02-01)
 
 #### Merged Pull Requests
 - Fix hab-origin with multiple pub-keys &amp; Enable installation from a dev branch [#78](https://github.com/chef/ci-studio-common/pull/78) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.57](https://github.com/chef/ci-studio-common/tree/0.1.57) (2018-01-30)
 

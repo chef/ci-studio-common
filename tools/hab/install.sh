@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v 0.52.0
+curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v 0.53.0
 
 echo ""
 echo "hab --version"

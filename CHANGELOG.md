@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.60 -->
+<!-- latest_release 0.1.61 -->
+## [0.1.61](https://github.com/chef/ci-studio-common/tree/0.1.61) (2018-02-08)
+
+#### Merged Pull Requests
+- Update Hab to 0.53.0 [#81](https://github.com/chef/ci-studio-common/pull/81) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.60](https://github.com/chef/ci-studio-common/tree/0.1.60) (2018-02-01)
 
 #### Merged Pull Requests
 - Update terraform to 0.11.3 [#79](https://github.com/chef/ci-studio-common/pull/79) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [0.1.59](https://github.com/chef/ci-studio-common/tree/0.1.59) (2018-02-01)
 

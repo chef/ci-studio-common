@@ -147,13 +147,9 @@ document "go_build" <<DOC
   2) To run 'dep ensure' set:
   => export RUN_GO_DEP=true
 
-  Example 2 :: Build the default binary without deps and/or 'go generate'.
+  Example 2 :: Build and place the binary file in a specific location.
   ------------------------------------------------------------------------
-  GO_FAST=true go_build
-
-  Example 3 :: Build and place the binary file in a specific location.
-  ------------------------------------------------------------------------
-  GO_FAST=true go_build main.go /src/bin/main
+  go_build main.go /src/bin/main
 DOC
 function go_build() {
   [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
@@ -176,10 +172,8 @@ function go_build() {
   fi
 
   pushd $scaffolding_go_pkg_path >/dev/null
-    if [[ $GO_FAST != true ]]; then
-      [[ $RUN_GO_GENERATE == true ]] && echo "=> Executing Go generate" && go generate
-      [[ $RUN_GO_DEP == true ]] && dep_ensure
-    fi;
+    [[ $RUN_GO_GENERATE == true ]] && echo "=> Executing Go generate" && go generate
+    [[ $RUN_GO_DEP == true ]] && dep_ensure
     echo "=> Executing Go build"
     eval "$go_cmd $go_main"
     # Save the exit code to return it latter
@@ -192,25 +186,22 @@ function go_build() {
 add_alias "go_build" "gb"
 
 document "dep_ensure" <<DOC
-  Runs the go dependency solver. (a.k.a. dep ensure)
+  Runs the go dependency solver if vendor/ is missing.
 
   This helper will ensure your Go workspace is configured and that
   you have the dep tool installed.
-
-  Set 'GO_FAST=true' env variable to skip this task only for faster
-  development cycles.
 DOC
 function dep_ensure() {
   local go_cmd="dep ensure -vendor-only";
-  if [[ $GO_FAST != true ]]; then
-    echo "(help) You can always set 'GO_FAST=true' to go faster!";
-    install_go_tool github.com/golang/dep/cmd/dep;
-    echo "=> Executing Go dependency solver ($go_cmd)";
-    pushd $scaffolding_go_pkg_path >/dev/null;
+  pushd $scaffolding_go_pkg_path >/dev/null;
+    # Run dep ensure only if vendor/ directory is missing
+    if [ ! -d vendor ]; then
+      install_go_tool github.com/golang/dep/cmd/dep;
+      echo "=> Executing Go dependency solver ($go_cmd)";
       eval $go_cmd;
       local EXIT_CODE=$?;
-    popd >/dev/null;
-  fi;
+    fi;
+  popd >/dev/null;
   return $EXIT_CODE;
 }
 add_alias "dep_ensure" "de"

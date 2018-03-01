@@ -64,14 +64,18 @@ fi;
 
 if $need_upgrade; then
   echo "ERROR: Habitat needs to be upgraded to version '$SUPPORTED_HAB_VERSION'";
-  echo "       Exit the studio and run the command:";
+  echo "       Run:";
+  echo "       => hab studio rm";
+  echo "       to remove the studio, and then";
   echo "       => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION";
   exit 1
 fi;
 
 if $is_newer; then
   echo "WARNING: Version '$installed_version' of Habitat has not been fully tested for compatibility with ci-studio-common.";
-  echo "         Please consider exiting the studio and running the following command to install the recommended version:";
+  echo "         Please consider exiting the studio, running:";
+  echo "         => hab studio rm";
+  echo "         to remove the studio, and then";
   echo "         => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION";
 fi;
 

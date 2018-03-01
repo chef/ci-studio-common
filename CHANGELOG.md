@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.62 -->
+<!-- latest_release 0.1.63 -->
+## [0.1.63](https://github.com/chef/ci-studio-common/tree/0.1.63) (2018-03-01)
+
+#### Merged Pull Requests
+- Update version help to include `hab studio rm` [#83](https://github.com/chef/ci-studio-common/pull/83) ([baumanj](https://github.com/baumanj))
+<!-- latest_release -->
+
 ## [0.1.62](https://github.com/chef/ci-studio-common/tree/0.1.62) (2018-02-14)
 
 #### Merged Pull Requests
 - dep_ensure runs only when vendor/ is missing [#82](https://github.com/chef/ci-studio-common/pull/82) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [0.1.61](https://github.com/chef/ci-studio-common/tree/0.1.61) (2018-02-08)
 

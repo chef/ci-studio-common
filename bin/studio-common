@@ -30,7 +30,7 @@ DOC
 fi;
 
 # This value is automatically updated by Expeditor to reflect .hab-version
-export SUPPORTED_HAB_VERSION="0.53.0";
+export SUPPORTED_HAB_VERSION="0.54.0";
 
 # Ensure that the installed version of the hab toolchain is >= to the required version.
 #

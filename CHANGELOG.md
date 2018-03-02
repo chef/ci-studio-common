@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.63 -->
+<!-- latest_release 0.1.64 -->
+## [0.1.64](https://github.com/chef/ci-studio-common/tree/0.1.64) (2018-03-02)
+
+#### Merged Pull Requests
+- Bump Habitat to 0.54.0 [#84](https://github.com/chef/ci-studio-common/pull/84) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.63](https://github.com/chef/ci-studio-common/tree/0.1.63) (2018-03-01)
 
 #### Merged Pull Requests
 - Update version help to include `hab studio rm` [#83](https://github.com/chef/ci-studio-common/pull/83) ([baumanj](https://github.com/baumanj))
-<!-- latest_release -->
 
 ## [0.1.62](https://github.com/chef/ci-studio-common/tree/0.1.62) (2018-02-14)
 

@@ -122,21 +122,27 @@ function export_docker_image() {
 }
 
 document "install_if_missing" <<DOC
-  Install the package and binlink the binary only if it is missing.
+  Install the package if it is not installed already and binlink the binary to
+  the latest installed package.
 
-  @(arg:1) The name of the package that contains the binary
-  @(arg:2) The name of the binary to binlink
+  @(arg:1) The name of the package that contains the binary (e.g., core/musl)
+  @(arg:2) The name of the binary to binlink (e.g., musl-gcc)
 DOC
 function install_if_missing() {
+  if [ "$#" -ne 2 ]; then
+    echo "ERROR: Wrong number of arguments to ${FUNCNAME[0]}"
+    describe "${FUNCNAME[0]}"
+    return 1
+  fi
+
   # Install the package if it is not installed
   if [[ ! -d "/hab/pkgs/$1" ]];
   then
-    install "$1" > /dev/null
+    install "$1"
+  else
+    echo "$(hab pkg path "$1") is already installed"
   fi
 
-  # binlink the binary if it is not already binlinked
-  if [[ ! -L "/hab/bin/$2" ]];
-  then
-    hab pkg binlink "$1" "$2" > /dev/null
-  fi
+  # Ensure we are binlinking to the same version `hab pkg exec` would run
+  hab pkg binlink --force "$1" "$2"
 }

@@ -116,19 +116,19 @@ function install_go_tool() {
     go_cmd="$go_cmd $GO_ARGS"
   fi
 
-  pushd $GOPATH >/dev/null
-  for i in "$@"; do
-    go_tool=$(basename $i)
-    if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
-      echo "=> Installing Go Tool '${go_tool}'"
-      if [[ "$GO_TOOL_METHOD" == "install" ]]; then
-        eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i"
-      else
-        eval "$go_cmd $i"
+  ( cd "$GOPATH" || exit
+    for i in "$@"; do
+      go_tool=$(basename $i)
+      if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
+        echo "=> Installing Go Tool '${go_tool}'"
+        if [[ "$GO_TOOL_METHOD" == "install" ]]; then
+          eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i"
+        else
+          eval "$go_cmd $i"
+        fi
       fi
-    fi
-  done
-  popd >/dev/null
+    done
+  )
 }
 
 document "go_build" <<DOC
@@ -181,7 +181,7 @@ function go_build() {
     export CC=$(hab pkg path core/musl)/bin/musl-gcc
   fi
 
-  pushd $scaffolding_go_pkg_path >/dev/null
+  ( cd "$scaffolding_go_pkg_path" || exit
     if [[ $RUN_GO_GENERATE == true ]]; then
       echo "=> Executing Go generate"
       go generate
@@ -192,12 +192,7 @@ function go_build() {
       echo "=> Executing Go build"
       eval "$go_cmd $go_main"
     fi
-    # Save the exit code to return it latter
-    # this will make the function to exit with
-    # a non-zero code and don't procees from there
-    EXIT_CODE=$?
-  popd >/dev/null
-  return $EXIT_CODE
+  )
 }
 add_alias "go_build" "gb"
 
@@ -209,16 +204,14 @@ document "dep_ensure" <<DOC
 DOC
 function dep_ensure() {
   local go_cmd="dep ensure -vendor-only"
-  pushd $scaffolding_go_pkg_path >/dev/null
+  ( cd "$scaffolding_go_pkg_path" || exit
     # Run dep ensure only if vendor/ directory is missing
     if [ ! -d vendor ]; then
       install_go_tool github.com/golang/dep/cmd/dep
       echo "=> Executing Go dependency solver ($go_cmd)"
       eval $go_cmd
-      local EXIT_CODE=$?
     fi
-  popd >/dev/null
-  return $EXIT_CODE
+  )
 }
 add_alias "dep_ensure" "de"
 
@@ -295,12 +288,12 @@ function go_debug_mode() {
     go_cmd="$go_cmd -- $(service_parameters)"
   fi
 
-  pushd $scaffolding_go_pkg_path >/dev/null
+  ( cd "$scaffolding_go_pkg_path" || exit
     if [[ $go_cmd != *"headless"* ]]; then
       echo "=> Starting debug console:"
     fi
     eval $go_cmd
-  popd >/dev/null
+  )
 }
 add_alias "go_debug_mode" "gdm"
 
@@ -359,10 +352,10 @@ function go_debug_attach_to_pid() {
   fi
 
   install_go_tool github.com/derekparker/delve/cmd/dlv
-  pushd $scaffolding_go_pkg_path >/dev/null
+  ( cd "$scaffolding_go_pkg_path" || exit
     echo "=> Connection to PID '${1}':"
     eval $go_cmd
-  popd >/dev/null
+  )
 }
 add_alias "go_debug_attach_to_pid" "gdatp"
 

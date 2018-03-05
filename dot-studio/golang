@@ -34,7 +34,9 @@ function setup_go_workspace() {
   fi;
 
   # Verify if the Go Workspace has been already configured
-  [[ $scaffolding_go_workspace_src  ]] && return 0;
+  if [[ $scaffolding_go_workspace_src  ]]; then
+    return 0
+  fi
 
   # Currently the scaffolding-go has all the logic to setup the
   # Go Workspace, lets leverage all its functionality
@@ -47,7 +49,7 @@ function setup_go_workspace() {
   # Verify if we have the go_before callback
   # If not lets setup the workspace ourself
   go_before_callback=scaffolding_go_before
-  if [ -n "$(type -t $go_before_callback)" ] && [ "$(type -t $go_before_callback)" = function ]
+  if [ "$(type -t $go_before_callback)" = function ]
   then
     eval "$go_before_callback";
   else
@@ -104,7 +106,9 @@ DOC
 function install_go_tool() {
   setup_go_workspace
   local go_cmd="go get -u";
-  [[ "$GO_TOOL_METHOD" == "install" ]] && go_cmd="go install -v";
+  if [[ "$GO_TOOL_METHOD" == "install" ]]; then
+   go_cmd="go install -v"
+ fi
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
@@ -152,13 +156,19 @@ document "go_build" <<DOC
   go_build main.go /src/bin/main
 DOC
 function go_build() {
-  [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
-  [[ "$2" == "" ]] && go_output="" || go_output="-o $2"
+  if [ "$1" ]; then
+    local go_main="$1"
+  else
+    local go_main="cmd/${pkg_name}/${pkg_name}.go"
+  fi
 
-  # Setup the go workspace
+  if [ "$2" ]; then
+    local go_output="-o $2"
+  fi
+
   setup_go_workspace
 
-  local go_cmd="go build $go_output"
+  local go_cmd="go build ${go_output:-}"
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
@@ -172,10 +182,16 @@ function go_build() {
   fi
 
   pushd $scaffolding_go_pkg_path >/dev/null
-    [[ $RUN_GO_GENERATE == true ]] && echo "=> Executing Go generate" && go generate
-    [[ $RUN_GO_DEP == true ]] && dep_ensure
-    echo "=> Executing Go build"
-    eval "$go_cmd $go_main"
+    if [[ $RUN_GO_GENERATE == true ]]; then
+      echo "=> Executing Go generate"
+      go generate
+    fi
+
+    if [[ $RUN_GO_DEP == true ]]; then
+      dep_ensure
+      echo "=> Executing Go build"
+      eval "$go_cmd $go_main"
+    fi
     # Save the exit code to return it latter
     # this will make the function to exit with
     # a non-zero code and don't procees from there
@@ -238,7 +254,11 @@ document "go_debug_mode" <<DOC
   }
 DOC
 function go_debug_mode() {
-  [[ "$1" == "" ]] && go_main="cmd/${pkg_name}/${pkg_name}.go" || go_main=$1
+  if [ "$1" ]; then
+    local go_main="$1"
+  else
+    local go_main="cmd/${pkg_name}/${pkg_name}.go"
+  fi
 
   local go_cmd="dlv debug"
   local pid=$(grep_service_pid)
@@ -266,7 +286,9 @@ function go_debug_mode() {
   fi;
 
   # Add extra debug options, helpful to stand up a Delve Server
-  [ "x${GO_DEBUG_OPTS}" != "x" ] && go_cmd="$go_cmd $GO_DEBUG_OPTS";
+  if [ "${GO_DEBUG_OPTS:-}" ]; then
+    go_cmd="$go_cmd $GO_DEBUG_OPTS"
+  fi
 
   # If 'service_parameters' function exists, pass it to the debugger
   if [[ "$(type -t service_parameters)" == "function" ]]; then
@@ -274,7 +296,9 @@ function go_debug_mode() {
   fi;
 
   pushd $scaffolding_go_pkg_path >/dev/null;
-    [[ $go_cmd != *"headless"* ]] && echo "=> Starting debug console:"
+    if [[ $go_cmd != *"headless"* ]]; then
+      echo "=> Starting debug console:"
+    fi
     eval $go_cmd
   popd >/dev/null
 }
@@ -293,8 +317,7 @@ document "go_debug_server" <<DOC
   the Studio so that Docker exposes the provided port. Ex. 'HAB_DOCKER_OPTS="-p 2345:2345"'
 DOC
 function go_debug_server() {
-  local port=2345
-  [[ "x$1" != "x" ]] && port=$1;
+  local port=${1:-2345}
   echo "=> Starting headless Delve Server in port '*:$port'"
   GO_DEBUG_OPTS="--headless --listen=:$port --log" go_debug_mode
 }

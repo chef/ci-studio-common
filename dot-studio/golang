@@ -30,8 +30,8 @@ function setup_go_workspace() {
   if [[ ! "$pkg_scaffolding" =~ "scaffolding-go" ]]; then
     echo "ERROR: Unable to setup Go Workspace."
     echo "${FUNCNAME[0]}: requires the 'pkg_scaffolding' variable to exist in your plan.sh"
-    return 2;
-  fi;
+    return 2
+  fi
 
   # Verify if the Go Workspace has been already configured
   if [[ $scaffolding_go_workspace_src  ]]; then
@@ -41,8 +41,8 @@ function setup_go_workspace() {
   # Currently the scaffolding-go has all the logic to setup the
   # Go Workspace, lets leverage all its functionality
   echo "=> Configuring Go Workspace. [please wait]"
-  export scaffolding_go_gopath=${scaffolding_go_gopath:-/hab/cache/src/go};
-  install $pkg_scaffolding >/dev/null;
+  export scaffolding_go_gopath=${scaffolding_go_gopath:-/hab/cache/src/go}
+  install $pkg_scaffolding >/dev/null
   source "$(hab pkg path $pkg_scaffolding)/lib/"*
   export PATH="$PATH:${scaffolding_go_gopath}/bin"
 
@@ -51,23 +51,23 @@ function setup_go_workspace() {
   go_before_callback=scaffolding_go_before
   if [ "$(type -t $go_before_callback)" = function ]
   then
-    eval "$go_before_callback";
+    eval "$go_before_callback"
   else
-    mkdir -p "${scaffolding_go_workspace_src}/${scaffolding_go_base_path}";
+    mkdir -p "${scaffolding_go_workspace_src}/${scaffolding_go_base_path}"
     if [[ ! -e "$scaffolding_go_pkg_path" ]]; then
-      ln -s /src "$scaffolding_go_pkg_path";
-    fi;
-  fi;
+      ln -s /src "$scaffolding_go_pkg_path"
+    fi
+  fi
 
   # Install go & git
-  install_if_missing core/go go;
-  install_if_missing core/git git;
+  install_if_missing core/go go
+  install_if_missing core/git git
 
-  echo "=> Available scaffolding variables:";
-  echo "\$scaffolding_go_gopath        - $scaffolding_go_gopath";
-  echo "\$scaffolding_go_workspace_src - $scaffolding_go_workspace_src";
-  echo "\$scaffolding_go_pkg_path      - $scaffolding_go_pkg_path";
-  return 0;
+  echo "=> Available scaffolding variables:"
+  echo "\$scaffolding_go_gopath        - $scaffolding_go_gopath"
+  echo "\$scaffolding_go_workspace_src - $scaffolding_go_workspace_src"
+  echo "\$scaffolding_go_pkg_path      - $scaffolding_go_pkg_path"
+  return 0
 }
 
 document "enter_go_workspace" <<DOC
@@ -105,30 +105,30 @@ document "install_go_tool" <<DOC
 DOC
 function install_go_tool() {
   setup_go_workspace
-  local go_cmd="go get -u";
+  local go_cmd="go get -u"
   if [[ "$GO_TOOL_METHOD" == "install" ]]; then
    go_cmd="go install -v"
  fi
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
-    go_static_linked_envs;
-    go_cmd="$go_cmd $GO_ARGS";
-  fi;
+    go_static_linked_envs
+    go_cmd="$go_cmd $GO_ARGS"
+  fi
 
-  pushd $GOPATH >/dev/null;
+  pushd $GOPATH >/dev/null
   for i in "$@"; do
-    go_tool=$(basename $i);
+    go_tool=$(basename $i)
     if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
-      echo "=> Installing Go Tool '${go_tool}'";
+      echo "=> Installing Go Tool '${go_tool}'"
       if [[ "$GO_TOOL_METHOD" == "install" ]]; then
-        eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i";
+        eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i"
       else
-        eval "$go_cmd $i";
-      fi;
-    fi;
-  done;
-  popd >/dev/null;
+        eval "$go_cmd $i"
+      fi
+    fi
+  done
+  popd >/dev/null
 }
 
 document "go_build" <<DOC
@@ -172,13 +172,13 @@ function go_build() {
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
-    go_static_linked_envs;
-    go_cmd="$go_cmd $GO_ARGS";
-  fi;
+    go_static_linked_envs
+    go_cmd="$go_cmd $GO_ARGS"
+  fi
 
   if [[ $GO_STATIC_BIN == true ]]; then
-    install_if_missing core/musl musl-gcc;
-    export CC=$(hab pkg path core/musl)/bin/musl-gcc;
+    install_if_missing core/musl musl-gcc
+    export CC=$(hab pkg path core/musl)/bin/musl-gcc
   fi
 
   pushd $scaffolding_go_pkg_path >/dev/null
@@ -208,17 +208,17 @@ document "dep_ensure" <<DOC
   you have the dep tool installed.
 DOC
 function dep_ensure() {
-  local go_cmd="dep ensure -vendor-only";
-  pushd $scaffolding_go_pkg_path >/dev/null;
+  local go_cmd="dep ensure -vendor-only"
+  pushd $scaffolding_go_pkg_path >/dev/null
     # Run dep ensure only if vendor/ directory is missing
     if [ ! -d vendor ]; then
-      install_go_tool github.com/golang/dep/cmd/dep;
-      echo "=> Executing Go dependency solver ($go_cmd)";
-      eval $go_cmd;
-      local EXIT_CODE=$?;
-    fi;
-  popd >/dev/null;
-  return $EXIT_CODE;
+      install_go_tool github.com/golang/dep/cmd/dep
+      echo "=> Executing Go dependency solver ($go_cmd)"
+      eval $go_cmd
+      local EXIT_CODE=$?
+    fi
+  popd >/dev/null
+  return $EXIT_CODE
 }
 add_alias "dep_ensure" "de"
 
@@ -269,21 +269,21 @@ function go_debug_mode() {
   fi
 
   # Install the debugging tooli
-  install_go_tool github.com/derekparker/delve/cmd/dlv;
+  install_go_tool github.com/derekparker/delve/cmd/dlv
 
   # Start the service dependencies if defined
   if [[ "$(type -t start_dependencies)" == "function" ]]; then
     start_dependencies
-  fi;
+  fi
 
   # Add the main go package to debug
-  go_cmd="$go_cmd $go_main";
+  go_cmd="$go_cmd $go_main"
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
-    go_static_linked_envs;
-    go_cmd="$go_cmd --build-flags \"$GO_ARGS\"";
-  fi;
+    go_static_linked_envs
+    go_cmd="$go_cmd --build-flags \"$GO_ARGS\""
+  fi
 
   # Add extra debug options, helpful to stand up a Delve Server
   if [ "${GO_DEBUG_OPTS:-}" ]; then
@@ -293,9 +293,9 @@ function go_debug_mode() {
   # If 'service_parameters' function exists, pass it to the debugger
   if [[ "$(type -t service_parameters)" == "function" ]]; then
     go_cmd="$go_cmd -- $(service_parameters)"
-  fi;
+  fi
 
-  pushd $scaffolding_go_pkg_path >/dev/null;
+  pushd $scaffolding_go_pkg_path >/dev/null
     if [[ $go_cmd != *"headless"* ]]; then
       echo "=> Starting debug console:"
     fi
@@ -354,12 +354,12 @@ function go_debug_attach_to_pid() {
   local go_cmd="dlv attach $1 $pkg_name"
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
-    go_static_linked_envs;
-    go_cmd="$go_cmd --build-flags \"$GO_ARGS\"";
-  fi;
+    go_static_linked_envs
+    go_cmd="$go_cmd --build-flags \"$GO_ARGS\""
+  fi
 
-  install_go_tool github.com/derekparker/delve/cmd/dlv;
-  pushd $scaffolding_go_pkg_path >/dev/null;
+  install_go_tool github.com/derekparker/delve/cmd/dlv
+  pushd $scaffolding_go_pkg_path >/dev/null
     echo "=> Connection to PID '${1}':"
     eval $go_cmd
   popd >/dev/null
@@ -368,7 +368,7 @@ add_alias "go_debug_attach_to_pid" "gdatp"
 
 # Helper function to search for the PID of the service
 function grep_service_pid() {
-  install_if_missing core/busybox-static pgrep;
+  install_if_missing core/busybox-static pgrep
   pgrep $pkg_name
 }
 
@@ -380,14 +380,14 @@ function grep_service_pid() {
 #
 #   local go_cmd="go build"
 #   if [[ $GO_STATIC_BIN == true ]]; then
-#     go_static_linked_envs;
-#     go_cmd="$go_cmd $GO_ARGS";
-#   fi;
+#     go_static_linked_envs
+#     go_cmd="$go_cmd $GO_ARGS"
+#   fi
 #
 function go_static_linked_envs() {
-  install_if_missing core/musl musl-gcc;
-  install_if_missing core/gcc gcc;
-  export CC=$(hab pkg path core/musl)/bin/musl-gcc;
-  export GO_LDFLAGS="-linkmode external -extldflags '-static'";
-  export GO_ARGS="--ldflags '$GO_LDFLAGS'";
+  install_if_missing core/musl musl-gcc
+  install_if_missing core/gcc gcc
+  export CC=$(hab pkg path core/musl)/bin/musl-gcc
+  export GO_LDFLAGS="-linkmode external -extldflags '-static'"
+  export GO_ARGS="--ldflags '$GO_LDFLAGS'"
 }

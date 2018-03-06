@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.64 -->
+<!-- latest_release 0.1.65 -->
+## [0.1.65](https://github.com/chef/ci-studio-common/tree/0.1.65) (2018-03-06)
+
+#### Merged Pull Requests
+- Make install_if_missing update binlink even if no new package is inst… [#85](https://github.com/chef/ci-studio-common/pull/85) ([baumanj](https://github.com/baumanj))
+<!-- latest_release -->
+
 ## [0.1.64](https://github.com/chef/ci-studio-common/tree/0.1.64) (2018-03-02)
 
 #### Merged Pull Requests
 - Bump Habitat to 0.54.0 [#84](https://github.com/chef/ci-studio-common/pull/84) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.63](https://github.com/chef/ci-studio-common/tree/0.1.63) (2018-03-01)
 

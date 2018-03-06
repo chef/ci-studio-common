@@ -115,7 +115,7 @@ function install_go_tool() {
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
     go_static_linked_envs
-    go_cmd="$go_cmd $GO_ARGS"
+    go_cmd+=" $GO_ARGS"
   fi
 
   ( cd "$GOPATH" || exit
@@ -174,7 +174,7 @@ function go_build() {
 
   if [[ $GO_STATIC_BIN == true ]]; then
     go_static_linked_envs
-    go_cmd="$go_cmd $GO_ARGS"
+    go_cmd+=" $GO_ARGS"
   fi
 
   ( cd "$scaffolding_go_pkg_path" || exit
@@ -267,22 +267,22 @@ function go_debug_mode() {
   fi
 
   # Add the main go package to debug
-  go_cmd="$go_cmd $go_main"
+  go_cmd+=" $go_main"
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
     go_static_linked_envs
-    go_cmd="$go_cmd --build-flags \"$GO_ARGS\""
+    go_cmd+=" --build-flags \"$GO_ARGS\""
   fi
 
   # Add extra debug options, helpful to stand up a Delve Server
   if [ "${GO_DEBUG_OPTS:-}" ]; then
-    go_cmd="$go_cmd $GO_DEBUG_OPTS"
+    go_cmd+=" $GO_DEBUG_OPTS"
   fi
 
   # If 'service_parameters' function exists, pass it to the debugger
   if [[ "$(type -t service_parameters)" == "function" ]]; then
-    go_cmd="$go_cmd -- $(service_parameters)"
+    go_cmd+=" -- $(service_parameters)"
   fi
 
   ( cd "$scaffolding_go_pkg_path" || exit
@@ -347,7 +347,7 @@ function go_debug_attach_to_pid() {
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
     go_static_linked_envs
-    go_cmd="$go_cmd --build-flags \"$GO_ARGS\""
+    go_cmd+=" --build-flags \"$GO_ARGS\""
   fi
 
   install_go_tool github.com/derekparker/delve/cmd/dlv
@@ -373,7 +373,7 @@ function grep_service_pid() {
 #   local go_cmd="go build"
 #   if [[ $GO_STATIC_BIN == true ]]; then
 #     go_static_linked_envs
-#     go_cmd="$go_cmd $GO_ARGS"
+#     go_cmd+=" $GO_ARGS"
 #   fi
 #
 function go_static_linked_envs() {

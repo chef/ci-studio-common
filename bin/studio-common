@@ -165,7 +165,14 @@ fi
 
 source_msg="Helpers from ci-studio-common"
 
-for file in $(hab pkg path "chef/ci-studio-common")/dot-studio/*
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+dot_studio_dir="$script_dir/../dot-studio"
+if ! [ -d "$dot_studio_dir" ]; then
+  echo "ERROR: Expected dot-studio directory at $(realpath "$dot_studio_dir")"
+  exit 1
+fi
+
+for file in $dot_studio_dir/*
 do
   source "$file"
 done

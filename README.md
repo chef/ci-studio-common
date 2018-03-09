@@ -237,9 +237,17 @@ Example 1 :: Running Travis tests only if they have changed
 Please put the following at the **top** of your `.studiorc` file.
 
 ```bash
-hab pkg install chef/ci-studio-common
-source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
+# shellcheck disable=1090
+if [ -d "${CI_STUDIO_COMMON:-}" ]; then
+  echo "CI_STUDIO_COMMON override in effect; using $CI_STUDIO_COMMON, not chef/ci-studio-common habitat package"
+  source "$CI_STUDIO_COMMON/bin/studio-common"
+else
+  hab pkg install chef/ci-studio-common
+  source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
+fi
 ```
+
+Technically only the `else` body is necessary to _use_ `ci-studio-common`, but the `if` half allows the use of a locally modified copy of `ci-studio-common`, so changes can be delevoped and tested without building, promoting and installing a new `chef/ci-studio-common` habitat package. See [Development](#development) for more.
 
 ### What happens when you source studio-common?
 
@@ -504,6 +512,16 @@ function start_service() {
   # All the things you need to do to start your service
 }
 ```
+
+## Development
+
+If the `CI_STUDIO_COMMON` override pattern is implemented in the `.studiorc` which sources `ci-studio-common` ([example in a2](https://github.com/chef/a2/blob/master/.studiorc#L11-L14)), local changes to can be tested by placing the `ci-studio-common` checkout inside the repo which is sourcing it. This is necessary so that it is accessible from the studio `chroot`ed environment. To set the `CI_STUDIO_COMMON` environment variable inside the studio when `.studiorc` is sourced, we can make use of the `HAB_STUDIO_SECRET` facility ([documented here](https://www.habitat.sh/docs/reference/#environment-variables)). For example, if our `ci-studio-common` is at the same level of our `.studiorc`, we can enter the studio like this:
+
+```
+$ env HAB_STUDIO_SECRET_CI_STUDIO_COMMON=/src/ci-studio-common hab studio enter
+```
+
+(This is a bit of a hack as the value of CI_STUDIO_COMMON doesn't need to be secret, but it's currently the easiest way to get environment variables set inside the studio before `.studiorc` is sourced.)
 
 ## FAQ
 

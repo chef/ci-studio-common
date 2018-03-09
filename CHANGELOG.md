@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.65 -->
+<!-- latest_release 0.1.66 -->
+## [0.1.66](https://github.com/chef/ci-studio-common/tree/0.1.66) (2018-03-09)
+
+#### Merged Pull Requests
+- Allow for local development by sourcing dot-studio files with relative path [#87](https://github.com/chef/ci-studio-common/pull/87) ([baumanj](https://github.com/baumanj))
+<!-- latest_release -->
+
 ## [0.1.65](https://github.com/chef/ci-studio-common/tree/0.1.65) (2018-03-06)
 
 #### Merged Pull Requests
 - Make install_if_missing update binlink even if no new package is inst… [#85](https://github.com/chef/ci-studio-common/pull/85) ([baumanj](https://github.com/baumanj))
-<!-- latest_release -->
 
 ## [0.1.64](https://github.com/chef/ci-studio-common/tree/0.1.64) (2018-03-02)
 

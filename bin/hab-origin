@@ -43,20 +43,27 @@ function download_sig_key() {
 
   origin="$1"
 
+  if [ $EUID -eq 0 ]
+  then
+    hab_cache_key_path="/hab/cache/keys"
+  else
+    hab_cache_key_path="$HOME/.hab/cache/keys"
+  fi
+
   # Create the keys directory if it is missing
-  [ ! -d "$HOME/.hab/cache/keys" ] && mkdir -p "$HOME/.hab/cache/keys"
+  [ ! -d "$hab_cache_key_path" ] && mkdir -p "$hab_cache_key_path"
 
   # Make sure we have the public signing key
   hab origin key download "$origin"
 
   # Extract the name of the key+revision from the public key
   # (@afiune) The last entry is the active key
-  key_with_revision=$(find "$HOME/.hab/cache/keys" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1 | tail -1)
+  key_with_revision=$(find "$hab_cache_key_path" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1 | tail -1)
 
-  if [ ! -f "$HOME/.hab/cache/keys/${key_with_revision}.sig.key" ]
+  if [ ! -f "$hab_cache_key_path/${key_with_revision}.sig.key" ]
   then
     # Download the key from citadel
-    echo "$(citadel ${key_with_revision}.sig.key)" > "$HOME/.hab/cache/keys/${key_with_revision}.sig.key"
+    echo "$(citadel ${key_with_revision}.sig.key)" > "$hab_cache_key_path/${key_with_revision}.sig.key"
   fi
 }
 

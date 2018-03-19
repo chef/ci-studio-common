@@ -60,7 +60,7 @@ function download_sig_key() {
   # (@afiune) The last entry is the active key
   key_with_revision=$(find "$hab_cache_key_path" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1 | tail -1)
 
-  if ! grep -q SIG-SEC-1 "$hab_cache_key_path/${key_with_revision}.sig.key"
+  if ! grep -qs SIG-SEC-1 "$hab_cache_key_path/${key_with_revision}.sig.key"
   then
     # Download the key from citadel
     echo "$(citadel ${key_with_revision}.sig.key)" > "$hab_cache_key_path/${key_with_revision}.sig.key"

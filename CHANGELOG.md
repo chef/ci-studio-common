@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.66 -->
+<!-- latest_release 0.1.67 -->
+## [0.1.67](https://github.com/chef/ci-studio-common/tree/0.1.67) (2018-03-19)
+
+#### Merged Pull Requests
+- hab-origin improvements [#89](https://github.com/chef/ci-studio-common/pull/89) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [0.1.66](https://github.com/chef/ci-studio-common/tree/0.1.66) (2018-03-09)
 
 #### Merged Pull Requests
 - Allow for local development by sourcing dot-studio files with relative path [#87](https://github.com/chef/ci-studio-common/pull/87) ([baumanj](https://github.com/baumanj))
-<!-- latest_release -->
 
 ## [0.1.65](https://github.com/chef/ci-studio-common/tree/0.1.65) (2018-03-06)
 

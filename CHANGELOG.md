@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.68 -->
+<!-- latest_release 0.1.69 -->
+## [0.1.69](https://github.com/chef/ci-studio-common/tree/0.1.69) (2018-03-19)
+
+#### Merged Pull Requests
+- Document local development using CI_STUDIO_COMMON [#88](https://github.com/chef/ci-studio-common/pull/88) ([baumanj](https://github.com/baumanj))
+<!-- latest_release -->
+
 ## [0.1.68](https://github.com/chef/ci-studio-common/tree/0.1.68) (2018-03-19)
 
 #### Merged Pull Requests
 - Silence grep in hab-origin [#90](https://github.com/chef/ci-studio-common/pull/90) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [0.1.67](https://github.com/chef/ci-studio-common/tree/0.1.67) (2018-03-19)
 

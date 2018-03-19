@@ -32,6 +32,7 @@ This repository houses some scripts / files that are used across various Chef pr
 - [Running Integration Tests](#running-integration-tests)
   * [Getting Started](#getting-started)
   * [Overwriting Integration Testing Functions](#overwriting-integration-testing-functions)
+- [Development](#development)
 - [FAQ](#faq)
   * [How do you determine a CI environment vs a non-CI environment?](#how-do-you-determine-a-ci-environment-vs-a-non-ci-environment)
 

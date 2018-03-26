@@ -16,105 +16,22 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} [SUBCOMMAND]
 
-Utility to configure aspects of your Habitat Studio prior to launch.
-
-SUBCOMMANDS:
-    cleanup                               Remove any state created by any of the ${0##*/} commands.
-    configure-github-account ACCOUNT      Configure studios with GitHub credentials for ACCOUNT.
+  This utility has been deprecated. If you need to inject secrets into your hab studio,
+  please use the HAB_STUDIO_SECRET_ functionality.
 DOC
 }
 
-function configure_github_account_usage() {
-  cat /dev/stdin <<DOC
-Usage: ${0##*/} configure-github-account ACCOUNT
-
-Configure studios with GitHub credentials for ACCOUNT.
-
-Requires you have the following environment variables set: 
-    * <ACCOUNT>_GITHUB_TOKEN
-
-When executed, it will do the following:
-    * Add ~/.netrc entry for ACCOUNT in Studio.
-    * Make GITHUB_TOKEN environment variable available in Studio.
-DOC
-}
-
-function do_configure_github_account() {
-  init
-  
-  account="$1"
-  account_env="$(echo "${account^^}" | tr '-' '_')"
-  account_token="${account_env}_GITHUB_TOKEN"
-
-  if [[ -z "${!account_token}" ]];
-  then
-    echo "${0##*/}: Unable to find the required environment variable: $account_token."
-    echo "Make sure it is specified."
-    exit 2
-  fi
-
-  # Add credentials to ~/.netrc
-  if ! grep -w "machine github\.com" $HOME/.netrc > /dev/null
-  then
-    echo -e "machine github.com\n  login ${!account_token}" >> $HOME/.netrc
-  fi
-
-  # Add GITUB_TOKEN to .secrets
-  if ! grep -w "export GITHUB_TOKEN" .secrets > /dev/null
-  then
-    echo -e "export GITHUB_TOKEN=${!account_token}" >> .secrets
-  fi
-
-  echo "The GITHUB_TOKEN environment variable (and ~/.netrc file) will now be available when you start your studio."
-}
-
-function configure_github_account() {
-  case "$1" in
-    "-h"|"--help")
-      configure_github_account_usage
-      ;;
-    "")
-      configure_github_account_usage
-      exit 1
-      ;;
-    *)
-      do_configure_github_account $1
-      ;;
-  esac
-}
-
-function init() {
-  # We always want to export CI into our studio
-  if ! grep -w "export CI" .secrets > /dev/null
-  then
-    echo -e "export CI=true" >> .secrets
-  fi
-}
-
-function cleanup() {
-  rm -rf .secrets
-}
-
-case "$1" in
+case "${1:-}" in
   "configure-github-account")
-    configure_github_account $2
-    ;;
-  "cleanup")
-    cleanup
-    ;;
-  "-h"|"--help")
-    usage
-    ;;
-  "")
-    usage
-    exit 1
+    configure-github-account "$2"
     ;;
   *)
-    echo "${0##*/}: invalid option '$1'"
-    echo "Try '${0##*/} --help' for more information."
-    exit 2
+    usage
+    ;;
 esac

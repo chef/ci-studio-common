@@ -2,26 +2,39 @@
 
 load test_helpers
 
-@test "citadel errors out if aws cli is missing" {
-  run citadel foo-file
-  assert_failure
-  assert_match "citadel: Unable to find 'aws' executable"
-}
-
 @test "citadel errors out if the CITADEL_PROFILE is not configured" {
   export CITADEL_PROFILE=foo
-  install-tool aws
+
+  stub aws \
+    "--profile foo configure list : exit 255"
 
   run citadel foo-file
-  assert_failure 
-  assert_match "citadel: The 'foo' aws profile is not configured"
+  assert_failure
+  assert_output --partial "citadel: The 'foo' aws profile is not configured"
+
+  unstub aws
+
+  unset CITADEL_PROFILE
+}
+
+@test "citadel prints out the contents of the file" {
+  export CITADEL_PROFILE=foo
+
+  stub aws \
+    "--profile foo configure list : exit 0" \
+    "s3 cp --profile foo s3://foo-citadel/foo-file - : echo foo-contents"
+
+  run citadel foo-file
+  assert_success
+  assert_output "foo-contents"
+
+  unstub aws
+
+  unset CITADEL_PROFILE
 }
 
 @test "citadel errors out when no file is specified" {
-  install-tool aws
-
   run citaldel
   assert_failure
 }
 
-# When able, I want to be able to provide a mock wrapper around the aws s3.

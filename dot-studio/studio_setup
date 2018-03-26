@@ -29,13 +29,13 @@ document "generate_netrc_config" <<DOC
 DOC
 function generate_netrc_config() {
   if [[ -z "$GITHUB_TOKEN" ]]; then
-    echo -e "\nError: Unable to configure ~/.netrc in the studio."
+    echo -e "\\nError: Unable to configure ~/.netrc in the studio."
     echo "Missing the environment variable: GITHUB_TOKEN"
-    echo -e "\nVerify that you have a file called '.secrets' with the following export:"
+    echo -e "\\nVerify that you have a file called '.secrets' with the following export:"
     echo "export GITHUB_TOKEN=[your-secret-token]"
     exit 1
   else
-    echo -e "machine github.com\n  login $GITHUB_TOKEN" >> ~/.netrc
+    echo -e "machine github.com\\n  login $GITHUB_TOKEN" >> ~/.netrc
   fi
 }
 
@@ -61,8 +61,7 @@ function clone_function() {
   local function="$1"
 
   # Return an error if that is not a defined function
-  if [[ ! -f /tmp/docs/$function ]]
-  then
+  if [[ ! -f /tmp/docs/$function ]]; then
     echo "ERROR: ci-studio-common does not provide a '$function' function."
     return
   fi
@@ -71,8 +70,7 @@ function clone_function() {
   mkdir -p /src/.studio > /dev/null
 
   # Create the override-common file if it's Missing
-  if [[ ! -f /src/.studio/override-common ]]
-  then
+  if [[ ! -f /src/.studio/override-common ]]; then
     cat << EOF > /src/.studio/override-common
 #!/bin/bash
 # In this file, you can override functions included with ci-studio-common to meet your needs.
@@ -82,14 +80,13 @@ EOF
 
   # Add the contents of the function to the override file unless it has already
   # been overridden.
-  if ! grep -w "$function\(\)" /src/.studio/override-common > /dev/null
-  then
+  if ! grep -w "$function\\(\\)" /src/.studio/override-common > /dev/null; then
     cat << EOF >> /src/.studio/override-common
 
 document "$function" <<DOC
-$(cat /tmp/docs/$function)
+$(cat /tmp/docs/"$function")
 DOC
-function `declare -f $function`
+function $(declare -f "$function")
 EOF
     echo "A copy of the '$function' function has been added to /src/.studio/override-common."
   else

@@ -16,8 +16,10 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} [SUBCOMMAND]
 
 Helpers that extend functionality of the hab origin namespace.
@@ -27,24 +29,10 @@ SUBCOMMANDS:
 DOC
 }
 
-# Place any requirement we need for hab-origin to work
-function enforce_requirements() {
-  # Make sure the AWS CLI is installed
-  which aws &>/dev/null
-  if [[ $? -ne 0 ]]; then
-    echo "${0##*/}: Unable to find 'aws' executable."
-    echo "Make sure you have the aws cli installed. Try 'install-tool aws'."
-    exit 2
-  fi
-}
-
 function download_sig_key() {
-  enforce_requirements
+  origin=$1
 
-  origin="$1"
-
-  if [ $EUID -eq 0 ]
-  then
+  if [[ $EUID -eq 0 ]]; then
     hab_cache_key_path="/hab/cache/keys"
   else
     hab_cache_key_path="$HOME/.hab/cache/keys"
@@ -60,16 +48,15 @@ function download_sig_key() {
   # (@afiune) The last entry is the active key
   key_with_revision=$(find "$hab_cache_key_path" -name "$origin-20*.pub" -exec basename {} \; | cut -d'.' -f1 | tail -1)
 
-  if ! grep -qs SIG-SEC-1 "$hab_cache_key_path/${key_with_revision}.sig.key"
-  then
-    # Download the key from citadel
-    echo "$(citadel ${key_with_revision}.sig.key)" > "$hab_cache_key_path/${key_with_revision}.sig.key"
+  if grep -qs SIG-SEC-1 "$hab_cache_key_path/${key_with_revision}.sig.key"; then
+    echo "Downloading ${key_with_revision}.sig.key to ${hab_cache_key_path}"
+    citadel "${key_with_revision}.sig.key" > "$hab_cache_key_path/${key_with_revision}.sig.key"
   fi
 }
 
-case "$1" in
+case "${1:-}" in
   "download-sig-key")
-    download_sig_key $2
+    download_sig_key "${2:?origin argument required for download-sig-key.}"
     ;;
   "-h"|"--help")
     usage

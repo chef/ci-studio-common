@@ -42,7 +42,7 @@ function setup_go_workspace() {
   # Currently the scaffolding-go has all the logic to setup the
   # Go Workspace, lets leverage all its functionality
   echo "=> Configuring Go Workspace. [please wait]"
-  export scaffolding_go_gopath=${scaffolding_go_gopath:-/hab/cache/src/go}
+  export scaffolding_go_gopath="${scaffolding_go_gopath:-/hab/cache/src/go}"
   install "$pkg_scaffolding" >/dev/null
   source "$(hab pkg path "$pkg_scaffolding")/lib/"*
   export PATH="$PATH:${scaffolding_go_gopath}/bin"
@@ -50,11 +50,10 @@ function setup_go_workspace() {
   # Verify if we have the go_before callback
   # If not lets setup the workspace ourself
   go_before_callback=scaffolding_go_before
-  if [ "$(type -t $go_before_callback)" = function ]
-  then
+  if [[ "$(type -t $go_before_callback)" = function ]]; then
     eval "$go_before_callback"
   else
-    mkdir -p "${scaffolding_go_workspace_src}/${scaffolding_go_base_path}"
+    mkdir -p "${scaffolding_go_workspace_src}/${scaffolding_go_base_path}" || return
     if [[ ! -e "$scaffolding_go_pkg_path" ]]; then
       ln -s /src "$scaffolding_go_pkg_path"
     fi
@@ -110,7 +109,7 @@ function install_go_tool() {
   local go_cmd="go get -u"
   if [[ "$GO_TOOL_METHOD" == "install" ]]; then
    go_cmd="go install -v"
- fi
+  fi
 
   # Add static linked flags if needed
   if [[ $GO_STATIC_BIN == true ]]; then
@@ -158,7 +157,7 @@ document "go_build" <<DOC
   go_build main.go /src/bin/main
 DOC
 function go_build() {
-  if [ "$1" ]; then
+  if [[ "$1" ]]; then
     local go_main="$1"
   else
     local go_main="cmd/${pkg_name}/${pkg_name}.go"
@@ -202,10 +201,10 @@ function dep_ensure() {
   local go_cmd="dep ensure -vendor-only"
   ( cd "$scaffolding_go_pkg_path" || exit
     # Run dep ensure only if vendor/ directory is missing
-    if [ ! -d vendor ]; then
+    if [[ ! -d vendor ]]; then
       install_go_tool github.com/golang/dep/cmd/dep
       echo "=> Executing Go dependency solver ($go_cmd)"
-      eval $go_cmd
+      eval "$go_cmd"
     fi
   )
 }
@@ -244,7 +243,7 @@ document "go_debug_mode" <<DOC
 DOC
 #shellcheck disable=2120
 function go_debug_mode() {
-  if [ "$1" ]; then
+  if [[ "$1" ]]; then
     local go_main="$1"
   else
     local go_main="cmd/${pkg_name}/${pkg_name}.go"
@@ -276,7 +275,7 @@ function go_debug_mode() {
   fi
 
   # Add extra debug options, helpful to stand up a Delve Server
-  if [ "${GO_DEBUG_OPTS:-}" ]; then
+  if [[ "${GO_DEBUG_OPTS:-}" ]]; then
     go_cmd+=" $GO_DEBUG_OPTS"
   fi
 
@@ -289,7 +288,7 @@ function go_debug_mode() {
     if [[ $go_cmd != *"headless"* ]]; then
       echo "=> Starting debug console:"
     fi
-    eval $go_cmd
+    eval "$go_cmd"
   )
 }
 add_alias "go_debug_mode" "gdm"
@@ -353,7 +352,7 @@ function go_debug_attach_to_pid() {
   install_go_tool github.com/derekparker/delve/cmd/dlv
   ( cd "$scaffolding_go_pkg_path" || exit
     echo "=> Connection to PID '${1}':"
-    eval $go_cmd
+    eval "$go_cmd"
   )
 }
 add_alias "go_debug_attach_to_pid" "gdatp"

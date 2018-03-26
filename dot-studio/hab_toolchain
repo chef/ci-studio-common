@@ -74,12 +74,12 @@ function install() {
 
   if [[ "x$1" == "x" ]]; then
     # Trying to use the last package built
-    pushd /src >/dev/null
-      # If there are no packages available, build one for me
-      [[ ! -f results/last_build.env ]] && build .;
-      source results/last_build.env;
-      eval "hab pkg $install_cmd results/${pkg_artifact} >/dev/null";
-    popd >/dev/null;
+    cd /src || return
+    # If there are no packages available, build one for me
+    [[ ! -f results/last_build.env ]] && build .
+    source results/last_build.env
+    eval "hab pkg $install_cmd results/$pkg_artifact >/dev/null"
+    cd ../ || return
   else
     for pkg in "$@"
     do
@@ -96,29 +96,27 @@ document "export_docker_image" <<DOC
   If no last_build.env file is present, it will perform a build automatically.
 DOC
 function export_docker_image() {
-  pushd /src >/dev/null;
-    if [[ ! -f results/last_build.env ]]; then
-        echo "=> No Habitat build found - building now. [please wait]";
-        build >/dev/null;
-        [[ $? -ne 0 ]] && return 1;
-    fi;
-    source results/last_build.env;
-    echo "=> Latest build: $pkg_artifact";
-    echo "=> Exporting Habitat package into a Docker image. [please wait]";
-    hab pkg export docker "results/${pkg_artifact}" >/dev/null
-    if [[ $? -ne 0 ]]; then
-        # If something went wrong here is because the pkg export cmd failed
-        echo "Unable to export package as a Docker Image.";
-        echo "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose.";
-        popd > /dev/null;
-        return 1;
-    fi;
-    export DOCKER_TAG="${pkg_version}-${pkg_release}";
-    export DOCKER_REPO="${pkg_origin}/${pkg_name}";
-    export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}";
-    echo "=> Docker image successfully built: $DOCKER_IMAGE";
-    echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'";
-  popd >/dev/null
+  cd /src || return
+  if [[ ! -f results/last_build.env ]]; then
+    echo "=> No Habitat build found - building now. [please wait]"
+    build >/dev/null && return 1
+  fi
+  source results/last_build.env
+  echo "=> Latest build: $pkg_artifact"
+  echo "=> Exporting Habitat package into a Docker image. [please wait]"
+  if ! hab pkg export docker "results/${pkg_artifact}" >/dev/null; then
+    # If something went wrong here is because the pkg export cmd failed
+    echo "Unable to export package as a Docker Image."
+    echo "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose."
+    cd ../ || return
+    return 1
+  fi
+  export DOCKER_TAG="${pkg_version}-${pkg_release}"
+  export DOCKER_REPO="${pkg_origin}/${pkg_name}"
+  export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}"
+  echo "=> Docker image successfully built: $DOCKER_IMAGE"
+  echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
+  cd ../ || return
 }
 
 document "install_if_missing" <<DOC
@@ -136,8 +134,7 @@ function install_if_missing() {
   fi
 
   # Install the package if it is not installed
-  if [[ ! -d "/hab/pkgs/$1" ]];
-  then
+  if [[ ! -d "/hab/pkgs/$1" ]]; then
     install "$1"
   else
     echo "$(hab pkg path "$1") is already installed"

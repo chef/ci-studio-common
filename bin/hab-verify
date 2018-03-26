@@ -16,8 +16,10 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} [SUBCOMMAND]
 
 Helpers that perform common verification steps inside Habitat.
@@ -52,12 +54,8 @@ function in_studio() {
   origin="${HAB_ORIGIN:-chef}"
   export HAB_ORIGIN="$origin"
 
-  # We need to use $1 since we are calling the function as:
-  #
-  # in_studio TASK
-  #
-  # and it because its first parameter, not the global parameter of this script
-  if [[ -z "$1" ]]; then
+  # shellcheck disable=2048,2086
+  if [ -z $* ]; then
     echo "${0##*/}: Missing command to run in the context of a hab-studio"
     echo "Try '${0##*/} --help' for more information."
     exit 2
@@ -66,9 +64,8 @@ function in_studio() {
   hab-origin download-sig-key "$origin"
 
   # New version of Habitat doesn't source the .studiorc
-  cmd="source .studiorc;$1"
-
-  eval "hab studio $STUDIO_OPTS run \"$cmd\""
+  # shellcheck disable=2086
+  hab studio ${STUDIO_OPTS:-} run "source .studiorc; $*"
 }
 
 function lint() {
@@ -79,9 +76,9 @@ function syntax() {
   exec find . -name 'plan.sh' -exec bash -n {} \;
 }
 
-case "$1" in
+case "${1:-}" in
   "in-studio")
-    in_studio "$2"
+    in_studio "${@:2}"
     ;;
   "lint")
     lint

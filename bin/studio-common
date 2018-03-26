@@ -17,66 +17,67 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 # Error out if someone tries to execute this script, rather than sourcing it.
-if [[ "$BASH_SOURCE" == "$0" ]];
-then
-  cat /dev/stdin <<'DOC'
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  cat <<'DOC'
 ERROR: studio-common is designed to be sourced, not executed. Please source this file as exemplified below:
 
   source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
 
 DOC
   exit 1
-fi;
+fi
 
 # This value is automatically updated by Expeditor to reflect .hab-version
-export SUPPORTED_HAB_VERSION="0.54.0";
+export SUPPORTED_HAB_VERSION="0.54.0"
 
 # Ensure that the installed version of the hab toolchain is >= to the required version.
 #
 # Given the rapid development and release cadence of Habitat, we want to ensure that
 # developers are using a version of Habitat is is well tested against both this library
 # and the supporting automation (i.e. Expeditor builds).
-required_version="$SUPPORTED_HAB_VERSION";
-installed_version=$(hab -V | awk '{print $NF}' | cut -f1 -d/);
+required_version="$SUPPORTED_HAB_VERSION"
+installed_version=$(hab -V | awk '{print $NF}' | cut -f1 -d/)
 
-MAJOR=$(echo "$installed_version"  | cut -f1 -d.);
-MINOR=$(echo "$installed_version"  | cut -f2 -d.);
-PATCH=$(echo "$installed_version"  | cut -f3 -d.);
-R_MAJOR=$(echo "$required_version" | cut -f1 -d.);
-R_MINOR=$(echo "$required_version" | cut -f2 -d.);
-R_PATCH=$(echo "$required_version" | cut -f3 -d.);
+MAJOR=$(echo "$installed_version"  | cut -f1 -d.)
+MINOR=$(echo "$installed_version"  | cut -f2 -d.)
+PATCH=$(echo "$installed_version"  | cut -f3 -d.)
+R_MAJOR=$(echo "$required_version" | cut -f1 -d.)
+R_MINOR=$(echo "$required_version" | cut -f2 -d.)
+R_PATCH=$(echo "$required_version" | cut -f3 -d.)
 
-need_upgrade=false;
-is_newer=false;
+need_upgrade=false
+is_newer=false
 
-[[ $PATCH -lt $R_PATCH ]] && need_upgrade=true;
-[[ $PATCH -gt $R_PATCH ]] && is_newer=true;
+[[ $PATCH -lt $R_PATCH ]] && need_upgrade=true
+[[ $PATCH -gt $R_PATCH ]] && is_newer=true
 
 if [[ $MINOR -ne $R_MINOR ]]; then
-  [[ $MINOR -lt $R_MINOR ]] && need_upgrade=true || need_upgrade=false;
-  [[ $MINOR -gt $R_MINOR ]] && is_newer=true || is_newer=false;
-fi;
+  [[ $MINOR -lt $R_MINOR ]] && need_upgrade=true || need_upgrade=false
+  [[ $MINOR -gt $R_MINOR ]] && is_newer=true || is_newer=false
+fi
 if [[ $MAJOR -ne $R_MAJOR ]]; then
-  [[ $MAJOR -lt $R_MAJOR ]] && need_upgrade=true || need_upgrade=false;
-  [[ $MAJOR -gt $R_MAJOR ]] && is_newer=true || is_newer=false;
-fi;
+  [[ $MAJOR -lt $R_MAJOR ]] && need_upgrade=true || need_upgrade=false
+  [[ $MAJOR -gt $R_MAJOR ]] && is_newer=true || is_newer=false
+fi
 
 if $need_upgrade; then
-  echo "ERROR: Habitat needs to be upgraded to version '$SUPPORTED_HAB_VERSION'";
-  echo "       Run:";
-  echo "       => hab studio rm";
-  echo "       to remove the studio, and then";
-  echo "       => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION";
+  echo "ERROR: Habitat needs to be upgraded to version '$SUPPORTED_HAB_VERSION'"
+  echo "       Run:"
+  echo "       => hab studio rm"
+  echo "       to remove the studio, and then"
+  echo "       => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION"
   exit 1
 fi;
 
 if $is_newer; then
-  echo "WARNING: Version '$installed_version' of Habitat has not been fully tested for compatibility with ci-studio-common.";
-  echo "         Please consider exiting the studio, running:";
-  echo "         => hab studio rm";
-  echo "         to remove the studio, and then";
-  echo "         => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION";
+  echo "WARNING: Version '$installed_version' of Habitat has not been fully tested for compatibility with ci-studio-common."
+  echo "         Please consider exiting the studio, running:"
+  echo "         => hab studio rm"
+  echo "         to remove the studio, and then"
+  echo "         => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION"
 fi;
 
 # Assuming we have the correct version of Habitat installed, we can proceed.
@@ -87,8 +88,7 @@ export PLAN_CONTEXT="${PLAN_CONTEXT:-/src/habitat}"
 [[ -f /src/habitat/default.toml ]] && export TOML_FILE=/src/habitat/default.toml
 
 # The folder where all the documentation is stored
-[[ ! -d /tmp/docs ]] && mkdir /tmp/docs
-[[ ! -d /tmp/aliases ]] && mkdir /tmp/aliases
+mkdir -p /tmp/docs /tmp/aliases
 
 # This is a helper function that allows use to document functions inline with the
 # code, but also make that documentation available to end user in the studio.
@@ -101,7 +101,7 @@ function document() {
   name="$1"
   content=$(cat /dev/stdin)
 
-  [ -z "$CI" ] && echo -e "$content" > "/tmp/docs/${name}"
+  [[ -z "${CI:-}" ]] && echo -e "$content" > "/tmp/docs/${name}"
 }
 
 # This is a helper function that allows you to quickly and easily add an alias for
@@ -112,7 +112,7 @@ function add_alias() {
   a="$2"
 
   eval "alias $a=$fun"
-  [ -z "$CI" ] && echo -e "$a" > "/tmp/aliases/$fun"
+  [[ -z "${CI:-}" ]] && echo -e "$a" > "/tmp/aliases/$fun"
 }
 
 # This function allows the user to learn more about the studio.
@@ -120,46 +120,44 @@ function add_alias() {
 #   1. Passing no argument will print out a list of all documented functions
 #   2. Passing the name of a function will print out that functions documentation
 function describe() {
-  if [ -z "$CI" ]
-  then
-    echo ""
+  if [[ -z "${CI:-}" ]]; then
+    echo
     if [[ -z "$1" ]]; then
       echo "The following functions are available for your use in this studio:"
-      echo ""
+      echo
       for file in /tmp/docs/*
       do
         fun="$(basename "$file")"
-        printf "  $fun"
-        [[ -f "/tmp/aliases/$fun" ]] && printf " [alias: $(cat /tmp/aliases/$fun)]"
-        printf "\n"
+        echo -n "  $fun"
+        [[ -f "/tmp/aliases/$fun" ]] && printf " [alias: %s]" "$(cat /tmp/aliases/"$fun")"
+        echo
         echo "  $(head -n 1 "$file")"
       done
       if [[ -d "/tmp/aliases" ]]; then
-        echo ""
+        echo
         echo "ALIASES:"
         for a in /tmp/aliases/*
         do
-          printf "  %-6s Alias for: %s \n" "$(cat $a)" "$(basename "$a")"
+          printf "  %-6s Alias for: %s \\n" "$(cat "$a")" "$(basename "$a")"
         done
       fi
-      echo ""
+      echo
       echo "To learn more about a particular function, run 'describe <function>'."
     else
       cat "/tmp/docs/$1"
     fi
-    echo ""
+    echo
   fi
 }
 
 # This function allows the user to print a nice "welcome" or "getting started"
 # message when a new user enters the studio.
 function getting_started() {
-  [ -z "$CI" ] && cat /dev/stdin
+  [[ -z "${CI:-}" ]] && cat /dev/stdin
 }
 
 # Source the .secrets file (if it exists)
-if [ -f /src/.secrets ]
-then
+if [[ -f /src/.secrets ]]; then
   source /src/.secrets
 fi
 
@@ -167,7 +165,7 @@ source_msg="Helpers from ci-studio-common"
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 dot_studio_dir="$script_dir/../dot-studio"
-if ! [ -d "$dot_studio_dir" ]; then
+if ! [[ -d "$dot_studio_dir" ]]; then
   echo "ERROR: Expected dot-studio directory at $(realpath "$dot_studio_dir")"
   exit 1
 fi
@@ -179,8 +177,7 @@ done
 
 # Source all the files available in the .studio directory of the /src directory
 # Only if the '.studio/' directory exists and it is not empty
-if [ "$(ls -A /src/.studio 2>/dev/null)" ]
-then
+if ls -A /src/.studio &>/dev/null; then
   for file in /src/.studio/*
   do
     source "$file"

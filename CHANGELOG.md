@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.70 -->
+<!-- latest_release 0.1.71 -->
+## [0.1.71](https://github.com/chef/ci-studio-common/tree/0.1.71) (2018-04-02)
+
+#### Merged Pull Requests
+- Modernize ci-studio-common [#92](https://github.com/chef/ci-studio-common/pull/92) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.70](https://github.com/chef/ci-studio-common/tree/0.1.70) (2018-03-20)
 
 #### Merged Pull Requests
 - Golang helper fixes [#86](https://github.com/chef/ci-studio-common/pull/86) ([baumanj](https://github.com/baumanj))
-<!-- latest_release -->
 
 ## [0.1.69](https://github.com/chef/ci-studio-common/tree/0.1.69) (2018-03-19)
 

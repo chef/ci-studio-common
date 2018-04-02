@@ -13,11 +13,11 @@ This repository houses some scripts / files that are used across various Chef pr
     + [`aws-configure`](#aws-configure)
     + [`ceval`](#ceval)
     + [`citadel`](#citadel)
+    + [`configure-github-account`](#configure-github-account)
+    + [`did-modify`](#did-modify)
     + [`hab-origin`](#hab-origin)
-    + [`hab-studio`](#hab-studio)
     + [`hab-verify`](#hab-verify)
     + [`install-tool`](#install-tool)
-    + [`run-if-changed`](#run-if-changed)
 - [Habitat Studio](#habitat-studio)
   * [Installation](#installation-1)
   * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
@@ -92,8 +92,6 @@ To add a new profile, you MUST specify following environment variables:
 
 You can optionally specify '<PROFILE>_AWS_DEFAULT_REGION' to determine the default region for this profile.
 
-If no PROFILE is specified, aws-configure will defer to the value specified in AWS_PROFILE.
-
 SUBCOMMANDS:
     is-configured PROFILE     Returns '0' if the profile is configured. Otherwise, it returns '1'.
 ```
@@ -127,26 +125,37 @@ GUIDANCE:
 
 <!-- stdout "./bin/citadel --help" -->
 ```
-Usage: citadel FILE
-
-A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
-
-Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.
-
-ENVIRONMENT VARIABLES:
-    CITADEL_BUCKET        The name of the S3 bucket where citadel files are kept. (default: $AWS_PROFILE-citadel)
-    CITADEL_PROFILE       The name of the AWS CLI profile with access to citadel. (default: $AWS_PROFILE)
 ```
 <!-- stdout -->
 
 #### `configure-github-account`
 
 <!-- stdout "./bin/configure-github-account --help" -->
+```
+Usage: configure-github-account ACCOUNT
+
+Configure GitHub credentials for ACCOUNT.
+
+Requires you have the following environment variables set:
+    * <ACCOUNT>_GITHUB_TOKEN
+
+When executed, it will do the following:
+    * Add ~/.netrc entry for ACCOUNT that leverages <ACCOUNT>_GITHUB_TOKEN.
+```
 <!-- stdout -->
 
 #### `did-modify`
 
 <!-- stdout "./bin/did-modify --help" -->
+```
+Usage: did-modify [OPTIONS]
+
+Prints "true" to STDOUT if any files matching GLOBS were modified between HEAD and GITREF. Otherwise, prints "false".
+
+OPTIONS:
+    --git-ref=HEAD          A valid Git reference (e.g. HEAD, master, origin/master, etc). Defaults to "HEAD~1"
+    --globs=GLOB1,GLOB2     A list of glob patterns to inspect to determine if there are changes. Defaults to "*"
+```
 <!-- stdout -->
 
 #### `hab-origin`
@@ -190,10 +199,12 @@ Usage: install-tool TOOL [VERSION]
 Install one of the pre-configured TOOLs (listed below) at the specified VERSION (if specified).
 
 AVAILABLE TOOLS:
-    aws
     chefdk [CHANNEL]
-    docker-compose [VERSION]
     hab
+
+DEPRECATED TOOLS:
+    aws
+    docker-compose [VERSION]
     terraform [VERSION]
 ```
 <!-- stdout -->

@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 
+echo "WARNING: The 'terraform' tool is being deprecated. Please use the 'core/terraform' Habitat package intead."
+
 version="${1:-0.11.3}"
 
 if [ ! -d "$HOME/tools/terraform-$version" ]; then

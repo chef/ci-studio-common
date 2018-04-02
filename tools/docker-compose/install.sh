@@ -16,6 +16,8 @@
 # limitations under the License.
 #
 
+echo "WARNING: The 'docker-compose' tool is being deprecated. Please use the 'core/docker-compose' Habitat package intead."
+
 version="${1:-1.14.0}"
 system=$(uname -s)
 machine=$(uname -m)

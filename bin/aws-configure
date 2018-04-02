@@ -16,18 +16,10 @@
 # limitations under the License.
 #
 
-function enforce_requirements() {
-  # Make sure the AWS CLI is installed
-  which aws &>/dev/null
-  if [[ $? -ne 0 ]]; then
-    echo "${0##*/}: Unable to find 'aws' executable."
-    echo "Make sure you have the aws cli installed. Try 'install-tool aws'."
-    exit 2
-  fi
-}
+set -eou pipefail
 
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} [PROFILE]
 
 A non-interactive version of 'aws configure' that allows you to configure AWS CLI profiles.
@@ -39,72 +31,52 @@ To add a new profile, you MUST specify following environment variables:
 
 You can optionally specify '<PROFILE>_AWS_DEFAULT_REGION' to determine the default region for this profile.
 
-If no PROFILE is specified, ${0##*/} will defer to the value specified in AWS_PROFILE.
-
 SUBCOMMANDS:
     is-configured PROFILE     Returns '0' if the profile is configured. Otherwise, it returns '1'.
 DOC
 }
 
 function setup_profile() {
-  profile="$1"
-  profile_env="$(echo "${profile^^}" | tr '-' '_')"
+  profile=$1
+  profile_env="$(echo "$profile" | awk '{ print toupper($0) }' | tr '-' '_')"
 
-  enforce_requirements
-
-  if [[ -z "$profile" ]];
-  then
-    echo -e "${0##*/}: No profile specified. You must specify an AWS profile to configure.\n"
+  if [[ -z "$profile" ]]; then
+    echo -e "${0##*/}: No profile specified. You must specify an AWS profile to configure.\\n"
     usage
     exit 2
   fi
 
-  [[ ! -d $HOME/.aws ]] && mkdir -p $HOME/.aws > /dev/null
+  mkdir -p "$HOME/.aws"
 
   access_key_id="${profile_env}_AWS_ACCESS_KEY_ID"
   secret_access_key="${profile_env}_AWS_SECRET_ACCESS_KEY"
   region="${profile_env}_AWS_DEFAULT_REGION"
 
-  if [[ -z "${!access_key_id}" || -z "${!secret_access_key}" ]];
-  then
+  if [[ -z "${!access_key_id}" || -z "${!secret_access_key}" ]]; then
     echo "${0##*/}: Unable to find the required environment variables: $access_key_id and $secret_access_key."
     echo "Make sure that both are specified."
     exit 2
   fi
 
-  if is_configured $1
-  then
+  if is_configured "$profile"; then
     echo "${0##*/}: $profile has already been configured."
   else
-    cat << EOF >> $HOME/.aws/credentials
-[$profile]
-aws_access_key_id=${!access_key_id}
-aws_secret_access_key=${!secret_access_key}
-EOF
-
-    cat << EOF >> $HOME/.aws/config
-[profile $profile]
-region=${!region:-us-east-1}
-EOF
+    aws configure set aws_access_key_id "${!access_key_id}" --profile "$profile"
+    aws configure set aws_secret_access_key "${!secret_access_key}" --profile "$profile"
+    aws configure set region "${!region:-us-east-1}" --profile "$profile"
   fi
 }
 
 function is_configured() {
-  profile="$1"
-
-  test -f $HOME/.aws/credentials && test -f $HOME/.aws/config && grep -w "\[$profile\]" $HOME/.aws/credentials > /dev/null && grep -w "\[profile $profile\]" $HOME/.aws/config > /dev/null
-  return $?
+  aws --profile "$1" configure list || false
 }
 
-case "$1" in
-  "")
-    setup_profile "$AWS_PROFILE"
-    ;;
+case "${1:-}" in
   "-h"|"--help")
     usage
     ;;
   "is-configured")
-    exit $(is_configured $2)
+    is_configured "$2"
     ;;
   *)
     setup_profile "$1"

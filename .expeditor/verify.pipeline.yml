@@ -1,0 +1,29 @@
+steps:
+  - label: bats
+    command: bats /ci-studio-common/tests
+    plugins:
+      docker#v1.1.1:
+        image: "buildkite/plugin-tester"
+        workdir: /ci-studio-common
+
+  - label: in-studio
+    command:
+      - export PATH="${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:$PATH"
+      - aws-configure chef-cd
+      - hab-verify in-studio ci_lint
+      - hab-verify in-studio ci_syntax
+
+  - label: habitat
+    command:
+      - export PATH=\$PATH:/ci-studio-common/bin:\$HOME/tools/bin
+      - apt-get update
+      - apt-get install -y shellcheck
+      - aws-configure chef-cd
+      - hab-verify lint
+      - hab-verify syntax
+    plugins:
+      docker#v1.1.1:
+        image: ubuntu:16.04
+        workdir: /ci-studio-common
+        environment:
+          - INSTALL_TOOL_DIR=/ci-studio-common/tools

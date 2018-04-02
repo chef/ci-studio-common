@@ -8,25 +8,22 @@
 #
 
 function install_from_source() {
-  pushd /src > /dev/null
-    build .
-    source results/last_build.env
-    hab pkg install "results/$pkg_artifact"
-    source "$(hab pkg path $pkg_ident)/bin/studio-common"
-    OPTS="--binlink" install alasconnect/shellcheck
-  popd > /dev/null
+  cd /src || return
+  build .
+  # shellcheck disable=SC1091
+  source results/last_build.env
+  hab pkg install "results/$pkg_artifact"
+  source "$(hab pkg path "$pkg_ident")/bin/studio-common"
+  OPTS="--binlink" install alasconnect/shellcheck
 }
 
 function lint() {
-  pushd /src > /dev/null
-    shellcheck -s bash bin/* lib/*
-  popd > /dev/null
+  # shellcheck disable=2086
+  shellcheck /src/bin/* /src/dot-studio/*
 }
 
 function syntax() {
-  pushd /src > /dev/null
-    bash -n bin/* lib/*
-  popd > /dev/null
+  bash -n /src/bin/* src/dot-studio/*
 }
 
 function ci_lint() {

@@ -113,7 +113,7 @@ Conditionally evaluate the given COMMAND.
 GUIDANCE:
 
   1. This command is intended to wrap desctructive or permanent commands that you do not want executed
-     when debugging the parent script. 
+     when debugging the parent script.
 
         ceval "s3 cp myfile s3://my-bucket/my-file"
 
@@ -139,6 +139,16 @@ ENVIRONMENT VARIABLES:
 ```
 <!-- stdout -->
 
+#### `configure-github-account`
+
+<!-- stdout "./bin/configure-github-account --help" -->
+<!-- stdout -->
+
+#### `did-modify`
+
+<!-- stdout "./bin/did-modify --help" -->
+<!-- stdout -->
+
 #### `hab-origin`
 
 <!-- stdout "./bin/hab-origin --help" -->
@@ -149,20 +159,6 @@ Helpers that extend functionality of the hab origin namespace.
 
 SUBCOMMANDS:
     download-sig-key ORIGIN     Download the private signing key for ORIGIN stored in the citadel S3 bucket.
-```
-<!-- stdout -->
-
-#### `hab-studio`
-
-<!-- stdout "./bin/hab-studio --help" -->
-```
-Usage: hab-studio [SUBCOMMAND]
-
-Utility to configure aspects of your Habitat Studio prior to launch.
-
-SUBCOMMANDS:
-    cleanup                               Remove any state created by any of the hab-studio commands.
-    configure-github-account ACCOUNT      Configure studios with GitHub credentials for ACCOUNT.
 ```
 <!-- stdout -->
 
@@ -199,35 +195,6 @@ AVAILABLE TOOLS:
     docker-compose [VERSION]
     hab
     terraform [VERSION]
-```
-<!-- stdout -->
-
-#### `run-if-changed`
-
-<!-- stdout "./bin/run-if-changed --help" -->
-```
-Usage: GLOBS=<GLOBS> WORKDIR=<WORKDIR> run-if-changed CMD
-
-Only execute CMD from WORKDIR if there are changed files that match GLOBS.
-
-ENVIRONMENT VARIABLES:
-    TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED   Force all tests to run if the '.travis.yml' file was modified. 
-    TRAVIS_SUGAR_FILTER_TESTS                   Set to 'false' to force all tests to run. To filter tests only on a PR, use 'TRAVIS_SUGAR_FILTER_TESTS='
-    WORKDIR                                     The directory where, if there are changes, CMD should be executed.
-    GLOBS                                       A list of glob patterns to inspect to determine if there are changes. Defaults to "<WORKDIR>/*"
-
-Example 1 :: Running Travis tests only if they have changed
------------------------------------------------------------
-  ---
-  env:
-    global:
-      - TRAVIS_SUGAR_FILTER_TESTS=
-      - TRAVIS_SUGAR_FORCE_IF_TRAVIS_YAML_CHANGED=true
-
-  matrix:
-    include:
-      - env: NAME=component_test
-        script: WORKDIR=component_dir run-if-changed make test
 ```
 <!-- stdout -->
 
@@ -455,7 +422,7 @@ function install ()
 
 ### The `.studio` directory
 
-If you have a lot of helpers, putting them all in your `.studiorc` file can quickly result in a large, difficult to comprehend file. `ci-studio-common` allows you to split up those helpers into logical files and store them in a `.studio` directory (much like the `dot-studio` folder of this repository).  
+If you have a lot of helpers, putting them all in your `.studiorc` file can quickly result in a large, difficult to comprehend file. `ci-studio-common` allows you to split up those helpers into logical files and store them in a `.studio` directory (much like the `dot-studio` folder of this repository).
 
 When you `source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"`, all the files in your `.studio` directory will automatically be sourced. Any `document` tags you specify will also automatically be made available under `describe`.
 

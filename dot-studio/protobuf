@@ -29,7 +29,7 @@ document "compile_go_protobuf" <<DOC
   GOPATH=\$(go env GOPATH)
 
   protoc -I. \\
-    -I$GOPATH/src \\
+    -I\$GOPATH/src \\
     --go_out=plugins=grpc:. \\
     proto/*.proto
   ------------------------------------------------------------------
@@ -40,12 +40,12 @@ function compile_go_protobuf() {
 
   # Verify that the script exist ans it is an executable
   if [[ -x $proto_script ]]; then
-    install_if_missing core/protobuf-cpp protoc;
-    GO_TOOL_METHOD="install" install_go_tool github.com/golang/protobuf/protoc-gen-go;
+    install_if_missing core/protobuf-cpp protoc
+    GO_TOOL_METHOD="install" install_go_tool github.com/golang/protobuf/protoc-gen-go
 
     # Install grpc-gateway
     # only_if the script has an entry like: '--grpc-gateway_out'
-    if [[ "$(grep -w "\-\-grpc-gateway_out" $proto_script)" != "" ]]; then
+    if [[ "$(grep -w "\\-\\-grpc-gateway_out" "$proto_script")" != "" ]]; then
       local grpc_gateway_proto_tools=(
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
@@ -53,25 +53,26 @@ function compile_go_protobuf() {
 
       # BUG: protoc-gen-grpc-gateway depends on github.com/golang/glog
       #      so we have to install it first via 'go get'
-      install_go_tool github.com/golang/glog >/dev/null;
-      GO_TOOL_METHOD="install" install_go_tool ${grpc_gateway_proto_tools[@]};
-    fi;
+      install_go_tool github.com/golang/glog >/dev/null
+      # shellcheck disable=SC2068
+      GO_TOOL_METHOD="install" install_go_tool ${grpc_gateway_proto_tools[@]}
+    fi
 
     # Install protoc-gen-lint from the internet instead of
     # installing it from our vendor/ directory. (why? because if
     # not we will need to add it to all our Gopkg.toml files)
     #
     # only_if the script has an entry like: '--lint_out'
-    if [[ "$(grep -w "\-\-lint_out" $proto_script)" != "" ]]; then
+    if [[ "$(grep -w "\\-\\-lint_out" "$proto_script")" != "" ]]; then
       install_go_tool github.com/ckaznocha/protoc-gen-lint
-    fi;
+    fi
 
     eval "$proto_script";
   else
     echo "ERROR: '$proto_script' doesn't exist or is not executable."
     echo "Try 'describe ${FUNCNAME[0]}'."
-    return 1;
-  fi;
+    return 1
+  fi
 }
 add_alias "compile_go_protobuf" "co"
 

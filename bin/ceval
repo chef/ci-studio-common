@@ -16,8 +16,10 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} COMMAND
 
 Conditionally evaluate the given COMMAND.
@@ -28,7 +30,7 @@ Conditionally evaluate the given COMMAND.
 GUIDANCE:
 
   1. This command is intended to wrap desctructive or permanent commands that you do not want executed
-     when debugging the parent script. 
+     when debugging the parent script.
 
         ceval "s3 cp myfile s3://my-bucket/my-file"
 
@@ -39,14 +41,14 @@ DOC
 }
 
 function conditional_eval() {
-  if [[ -z "$DEBUG" ]]; then
+  if [[ -z "${DEBUG:-}" ]]; then
     eval "$@"
   else
     echo "$@"
   fi
 }
 
-case "$1" in
+case "${1:-}" in
   "-h"|"--help"|"")
     usage
     ;;

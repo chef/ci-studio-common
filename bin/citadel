@@ -16,21 +16,14 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 export CITADEL_PROFILE="${CITADEL_PROFILE:-$AWS_PROFILE}"
-export CITADEL_BUCKET="${CITADEL_BUCKET:-${AWS_PROFILE}-citadel}"
+export CITADEL_BUCKET="${CITADEL_BUCKET:-${CITADEL_PROFILE}-citadel}"
 
 function enforce_requirements() {
-  # Make sure the AWS CLI is installed
-  which aws &>/dev/null
-  if [[ $? -ne 0 ]]; then
-    echo "${0##*/}: Unable to find 'aws' executable."
-    echo "Make sure you have the aws cli installed. Try 'install-tool aws'."
-    exit 2
-  fi
-
   # Make sure the necessary profile is configured
-  aws-configure is-configured $CITADEL_PROFILE &>/dev/null
-  if [[ $? -ne 0 ]]; then
+  if ! aws-configure is-configured "$CITADEL_PROFILE" &>/dev/null; then
     echo "${0##*/}: The '$CITADEL_PROFILE' aws profile is not configured."
     echo "Make sure you have '$CITADEL_PROFILE' configured. Try 'aws-configure $CITADEL_PROFILE'"
     exit 2
@@ -38,7 +31,7 @@ function enforce_requirements() {
 }
 
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} FILE
 
 A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
@@ -46,19 +39,17 @@ A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKE
 Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.
 
 ENVIRONMENT VARIABLES:
-    CITADEL_BUCKET        The name of the S3 bucket where citadel files are kept. (default: \$AWS_PROFILE-citadel)
+    CITADEL_BUCKET        The name of the S3 bucket where citadel files are kept. (default: \$CITADEL_PROFILE-citadel)
     CITADEL_PROFILE       The name of the AWS CLI profile with access to citadel. (default: \$AWS_PROFILE)
 DOC
 }
 
 function get_file() {
   enforce_requirements
-
-  file="$1"
-  aws s3 cp --profile $CITADEL_PROFILE s3://$CITADEL_BUCKET/$file -
+  aws s3 cp --profile "$CITADEL_PROFILE" "s3://$CITADEL_BUCKET/$1" -
 }
 
-case "$1" in
+case "${1:-}" in
   "-h"|"--help")
     usage
     ;;
@@ -67,6 +58,6 @@ case "$1" in
     exit 1
     ;;
   *)
-    get_file $1
+    get_file "$1"
     ;;
 esac

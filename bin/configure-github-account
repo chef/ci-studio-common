@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# Copyright:: Copyright 2017 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+set -eou pipefail
+
+function usage() {
+  cat <<DOC
+Usage: ${0##*/} ACCOUNT
+
+Configure GitHub credentials for ACCOUNT.
+
+Requires you have the following environment variables set:
+    * <ACCOUNT>_GITHUB_TOKEN
+
+When executed, it will do the following:
+    * Add ~/.netrc entry for ACCOUNT that leverages <ACCOUNT>_GITHUB_TOKEN.
+DOC
+}
+
+function configure_github_account() {
+  account=$1
+  account_env="$(echo "$account" | awk '{ print toupper($0) }' | tr '-' '_')"
+  account_token="${account_env}_GITHUB_TOKEN"
+  home="${GITHUB_HOME:-$HOME}"
+
+  if [[ -z "${!account_token:-}" ]]; then
+    echo "${0##*/}: Unable to find the required environment variable: $account_token."
+    echo "Make sure it is specified."
+    exit 2
+  fi
+
+  # Add credentials to ~/.netrc
+  if ! grep -Fwq "machine github.com" "$home/.netrc"; then
+    echo -e "machine github.com\\n  login ${!account_token}" >> "$home/.netrc"
+  fi
+}
+
+case "${1:-}" in
+  "-h"|"--help")
+    usage
+    ;;
+  "")
+    usage
+    exit 1
+    ;;
+  *)
+    configure_github_account "$1"
+    ;;
+esac

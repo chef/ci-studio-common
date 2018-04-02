@@ -16,56 +16,45 @@
 # limitations under the License.
 #
 
+set -eou pipefail
+
 INSTALL_TOOL_DIR="${INSTALL_TOOL_DIR:-$HOME/ci-studio-common/tools}"
 
 function usage() {
-  cat /dev/stdin <<DOC
+  cat <<DOC
 Usage: ${0##*/} TOOL [VERSION]
 
 Install one of the pre-configured TOOLs (listed below) at the specified VERSION (if specified).
 
 AVAILABLE TOOLS:
-    aws
     chefdk [CHANNEL]
-    docker-compose [VERSION]
     hab
+
+DEPRECATED TOOLS:
+    aws
+    docker-compose [VERSION]
     terraform [VERSION]
 DOC
 }
 
 function install_tool() {
-  if [[ -z "$STUDIO_TYPE" ]];
-  then
-    # Create the tools bin directory
-    if [[ ! -d "$HOME/tools/bin" ]];
-    then
-      mkdir -p "$HOME/tools/bin"
-    fi
+  # Create the tools bin directory
+  mkdir -p "$HOME/tools/bin"
 
-    # Install the TOOL
-    tool="$1"
-    version="$2"
-    tool_file="$INSTALL_TOOL_DIR/$tool/install.sh"
+  # Install the TOOL
+  tool="$1"
+  param="${2:-}"
+  tool_file="$INSTALL_TOOL_DIR/$tool/install.sh"
 
-    if [[ ! -f "$tool_file" ]];
-    then
-      usage
-      exit 1
-    else
-      if [[ -z "$version" ]];
-      then
-        eval "bash $tool_file"
-      else
-        eval "bash $tool_file $version"
-      fi
-    fi
-  else
-    echo "The 'install-tool' utility is intended to be used in Travis CI only."
+  if [[ ! -f "$tool_file" ]]; then
+    usage
     exit 1
+  else
+    ceval "bash $tool_file $param"
   fi
 }
 
-case "$1" in
+case "${1:-}" in
   "-h"|"--help")
     usage
     ;;

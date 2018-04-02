@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# Copyright:: Copyright 2018 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+function usage() {
+  cat <<DOC
+Usage: ${0##*/} [OPTIONS]
+
+Prints "true" to STDOUT if any files matching GLOBS were modified between HEAD and GITREF. Otherwise, prints "false".
+
+OPTIONS:
+    --git-ref=HEAD          A valid Git reference (e.g. HEAD, master, origin/master, etc). Defaults to "HEAD~1"
+    --globs=GLOB1,GLOB2     A list of glob patterns to inspect to determine if there are changes. Defaults to "*"
+DOC
+}
+
+function did_modify() {
+  globs="*"
+  git_ref="HEAD~1"
+
+  for opt
+  do
+    case $opt in
+      --globs=*)
+        globs="${opt#*=}"
+        ;;
+      --git_ref=*)
+        git_ref="${opt#*=}"
+        ;;
+    esac
+  done
+
+  # shellcheck disable=SC2086
+  if git diff --quiet "${git_ref}"...HEAD -- ${globs//,/ }; then
+    echo -n "false"
+  else
+    echo -n "true"
+  fi
+}
+
+case "${1:-}" in
+  "-h"|"--help")
+    usage
+    ;;
+  *)
+    did_modify "$@"
+    ;;
+esac

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.71 -->
+<!-- latest_release 0.1.72 -->
+## [0.1.72](https://github.com/chef/ci-studio-common/tree/0.1.72) (2018-04-05)
+
+#### Merged Pull Requests
+- Download the hab origin key if missing [#93](https://github.com/chef/ci-studio-common/pull/93) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.71](https://github.com/chef/ci-studio-common/tree/0.1.71) (2018-04-02)
 
 #### Merged Pull Requests
 - Modernize ci-studio-common [#92](https://github.com/chef/ci-studio-common/pull/92) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.70](https://github.com/chef/ci-studio-common/tree/0.1.70) (2018-03-20)
 

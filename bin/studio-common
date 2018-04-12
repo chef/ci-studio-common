@@ -17,8 +17,6 @@
 # limitations under the License.
 #
 
-set -eou pipefail
-
 # Error out if someone tries to execute this script, rather than sourcing it.
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   cat <<'DOC'

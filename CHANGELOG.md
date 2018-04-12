@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.72 -->
+<!-- latest_release 0.1.73 -->
+## [0.1.73](https://github.com/chef/ci-studio-common/tree/0.1.73) (2018-04-12)
+
+#### Merged Pull Requests
+- Unset CC during protobuf compile [#94](https://github.com/chef/ci-studio-common/pull/94) ([stevendanna](https://github.com/stevendanna))
+<!-- latest_release -->
+
 ## [0.1.72](https://github.com/chef/ci-studio-common/tree/0.1.72) (2018-04-05)
 
 #### Merged Pull Requests
 - Download the hab origin key if missing [#93](https://github.com/chef/ci-studio-common/pull/93) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.71](https://github.com/chef/ci-studio-common/tree/0.1.71) (2018-04-02)
 

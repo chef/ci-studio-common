@@ -37,6 +37,8 @@ document "compile_go_protobuf" <<DOC
 DOC
 function compile_go_protobuf() {
   proto_script="${1:-scripts/grpc.sh}"
+  OLD_CC=$CC
+  unset CC
 
   # Verify that the script exist ans it is an executable
   if [[ -x $proto_script ]]; then
@@ -71,8 +73,10 @@ function compile_go_protobuf() {
   else
     echo "ERROR: '$proto_script' doesn't exist or is not executable."
     echo "Try 'describe ${FUNCNAME[0]}'."
+    CC=$OLD_CC
     return 1
   fi
+
+  CC=$OLD_CC
 }
 add_alias "compile_go_protobuf" "co"
-

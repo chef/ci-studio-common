@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.73 -->
+<!-- latest_release 0.1.74 -->
+## [0.1.74](https://github.com/chef/ci-studio-common/tree/0.1.74) (2018-04-12)
+
+#### Merged Pull Requests
+- Don&#39;t use unbound variables [#95](https://github.com/chef/ci-studio-common/pull/95) ([stevendanna](https://github.com/stevendanna))
+<!-- latest_release -->
+
 ## [0.1.73](https://github.com/chef/ci-studio-common/tree/0.1.73) (2018-04-12)
 
 #### Merged Pull Requests
 - Unset CC during protobuf compile [#94](https://github.com/chef/ci-studio-common/pull/94) ([stevendanna](https://github.com/stevendanna))
-<!-- latest_release -->
 
 ## [0.1.72](https://github.com/chef/ci-studio-common/tree/0.1.72) (2018-04-05)
 

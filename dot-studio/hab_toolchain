@@ -68,8 +68,10 @@ DOC
 function install() {
   install_cmd="install"
 
-  if [[ "x$OPTS" != "x" ]]; then
-    install_cmd="$install_cmd $OPTS"
+  local install_cmd_opts=${OPTS:-""}
+
+  if [[ "x$install_cmd_opts" != "x" ]]; then
+    install_cmd="$install_cmd $install_cmd_opts"
   fi
 
   if [[ "x$1" == "x" ]]; then

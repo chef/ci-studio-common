@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.76 -->
+<!-- latest_release 0.1.77 -->
+## [0.1.77](https://github.com/chef/ci-studio-common/tree/0.1.77) (2018-04-13)
+
+#### Merged Pull Requests
+- install_if_missing, just do it quietly [#98](https://github.com/chef/ci-studio-common/pull/98) ([sdelano](https://github.com/sdelano))
+<!-- latest_release -->
+
 ## [0.1.76](https://github.com/chef/ci-studio-common/tree/0.1.76) (2018-04-13)
 
 #### Merged Pull Requests
 - Actually wait in wait function [#97](https://github.com/chef/ci-studio-common/pull/97) ([stevendanna](https://github.com/stevendanna))
-<!-- latest_release -->
 
 ## [0.1.75](https://github.com/chef/ci-studio-common/tree/0.1.75) (2018-04-12)
 

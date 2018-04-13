@@ -94,7 +94,7 @@ function wait_or_fail_for_port_to_listen() {
   local SECONDS_WAITING=${2:-60}
 
   local COUNTER=0
-  while netstat -an | grep "$1" | grep LISTEN &>/dev/null; do
+  while ! netstat -an | grep "$1" | grep LISTEN &>/dev/null; do
     sleep 1
 
     if [[ $COUNTER -ge "$SECONDS_WAITING" ]]; then

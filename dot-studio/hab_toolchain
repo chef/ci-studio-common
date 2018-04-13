@@ -137,11 +137,9 @@ function install_if_missing() {
 
   # Install the package if it is not installed
   if [[ ! -d "/hab/pkgs/$1" ]]; then
-    install "$1"
-  else
-    echo "$(hab pkg path "$1") is already installed"
+    install "$1" > /dev/null
   fi
 
   # Ensure we are binlinking to the same version `hab pkg exec` would run
-  hab pkg binlink --force "$1" "$2"
+  hab pkg binlink --force "$1" "$2" > /dev/null
 }

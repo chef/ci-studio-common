@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.74 -->
+<!-- latest_release 0.1.75 -->
+## [0.1.75](https://github.com/chef/ci-studio-common/tree/0.1.75) (2018-04-12)
+
+#### Merged Pull Requests
+- Don&#39;t set -eou pipefile in bin/studio-common [#96](https://github.com/chef/ci-studio-common/pull/96) ([stevendanna](https://github.com/stevendanna))
+<!-- latest_release -->
+
 ## [0.1.74](https://github.com/chef/ci-studio-common/tree/0.1.74) (2018-04-12)
 
 #### Merged Pull Requests
 - Don&#39;t use unbound variables [#95](https://github.com/chef/ci-studio-common/pull/95) ([stevendanna](https://github.com/stevendanna))
-<!-- latest_release -->
 
 ## [0.1.73](https://github.com/chef/ci-studio-common/tree/0.1.73) (2018-04-12)
 

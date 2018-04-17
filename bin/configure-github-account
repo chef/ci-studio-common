@@ -45,7 +45,7 @@ function configure_github_account() {
   fi
 
   # Add credentials to ~/.netrc
-  if ! grep -Fwq "machine github.com" "$home/.netrc"; then
+  if ! grep -Fwq "machine github.com" "$home/.netrc" &>/dev/null; then
     echo -e "machine github.com\\n  login ${!account_token}" >> "$home/.netrc"
   fi
 }

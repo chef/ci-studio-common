@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.77 -->
+<!-- latest_release 0.1.78 -->
+## [0.1.78](https://github.com/chef/ci-studio-common/tree/0.1.78) (2018-04-17)
+
+#### Merged Pull Requests
+- Silence all output for certain commands [#99](https://github.com/chef/ci-studio-common/pull/99) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.77](https://github.com/chef/ci-studio-common/tree/0.1.77) (2018-04-13)
 
 #### Merged Pull Requests
 - install_if_missing, just do it quietly [#98](https://github.com/chef/ci-studio-common/pull/98) ([sdelano](https://github.com/sdelano))
-<!-- latest_release -->
 
 ## [0.1.76](https://github.com/chef/ci-studio-common/tree/0.1.76) (2018-04-13)
 

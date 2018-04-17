@@ -24,7 +24,7 @@ function enforce_integration_testing() {
 
   for command in "${commands[@]}"
   do
-    if ! type "$command" > /dev/null 2>&1
+    if ! type "$command" &> /dev/null
     then
       echo ""
       echo "  ERROR: Your .studiorc file, or a file in the .studio direcotry, must declare the '$command' function."

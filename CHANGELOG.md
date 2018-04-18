@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.78 -->
+<!-- latest_release 0.1.79 -->
+## [0.1.79](https://github.com/chef/ci-studio-common/tree/0.1.79) (2018-04-18)
+
+#### Merged Pull Requests
+- Automatically promote hab pkg to stable when PR is merged [#100](https://github.com/chef/ci-studio-common/pull/100) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.78](https://github.com/chef/ci-studio-common/tree/0.1.78) (2018-04-17)
 
 #### Merged Pull Requests
 - Silence all output for certain commands [#99](https://github.com/chef/ci-studio-common/pull/99) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.77](https://github.com/chef/ci-studio-common/tree/0.1.77) (2018-04-13)
 

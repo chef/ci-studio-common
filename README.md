@@ -68,7 +68,7 @@ where:
 * `<AWS_PROFILE>` is the profile you specify in `aws-configure` (e.g. `CHEF_CD`)
 * `<GITHUB_USER>` is the GitHub user associated with the token (e.g. `CHEF_CI`)
 
-> For Chef Software, these values are automatically applied to Travis Projects by Engineering Services.
+> For Chef Software, these values are automatically applied to TravisCI and Buildkite by Release Engineering
 
 ### Helpers
 <!--
@@ -125,6 +125,15 @@ GUIDANCE:
 
 <!-- stdout "./bin/citadel --help" -->
 ```
+Usage: citadel FILE
+
+A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
+
+Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.
+
+ENVIRONMENT VARIABLES:
+    CITADEL_BUCKET        The name of the S3 bucket where citadel files are kept. (default: $CITADEL_PROFILE-citadel)
+    CITADEL_PROFILE       The name of the AWS CLI profile with access to citadel. (default: $AWS_PROFILE)
 ```
 <!-- stdout -->
 

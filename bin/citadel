@@ -18,9 +18,6 @@
 
 set -eou pipefail
 
-export CITADEL_PROFILE="${CITADEL_PROFILE:-$AWS_PROFILE}"
-export CITADEL_BUCKET="${CITADEL_BUCKET:-${CITADEL_PROFILE}-citadel}"
-
 function enforce_requirements() {
   # Make sure the necessary profile is configured
   if ! aws-configure is-configured "$CITADEL_PROFILE" &>/dev/null; then
@@ -45,6 +42,9 @@ DOC
 }
 
 function get_file() {
+  export CITADEL_PROFILE="${CITADEL_PROFILE:-$AWS_PROFILE}"
+  export CITADEL_BUCKET="${CITADEL_BUCKET:-${CITADEL_PROFILE}-citadel}"
+
   enforce_requirements
   aws s3 cp --profile "$CITADEL_PROFILE" "s3://$CITADEL_BUCKET/$1" -
 }

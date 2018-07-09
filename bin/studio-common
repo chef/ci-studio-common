@@ -168,7 +168,7 @@ if ! [[ -d "$dot_studio_dir" ]]; then
   exit 1
 fi
 
-for file in $dot_studio_dir/*
+for file in "$dot_studio_dir"/*
 do
   source "$file"
 done

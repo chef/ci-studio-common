@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.80 -->
+<!-- latest_release 0.1.81 -->
+## [0.1.81](https://github.com/chef/ci-studio-common/tree/0.1.81) (2018-07-09)
+
+#### Merged Pull Requests
+- Bump Habitat to 0.58.0 [#104](https://github.com/chef/ci-studio-common/pull/104) ([schisamo](https://github.com/schisamo))
+<!-- latest_release -->
+
 ## [0.1.80](https://github.com/chef/ci-studio-common/tree/0.1.80) (2018-04-18)
 
 #### Merged Pull Requests
 - Fix wait_for_success to wait for success and not failure [#101](https://github.com/chef/ci-studio-common/pull/101) ([tylercloke](https://github.com/tylercloke))
-<!-- latest_release -->
 
 ## [0.1.79](https://github.com/chef/ci-studio-common/tree/0.1.79) (2018-04-18)
 

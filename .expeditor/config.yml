@@ -6,6 +6,9 @@ slack:
 habitat_packages:
   - ci-studio-common
 
+github:
+  delete_branch_on_merge: true
+
 promote:
   channels:
     - dev

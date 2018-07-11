@@ -6,6 +6,11 @@ slack:
 habitat_packages:
   - ci-studio-common
 
+promote:
+  channels:
+    - dev
+    - stable
+
 merge_actions:
   - built_in:bump_version:
       ignore_labels:

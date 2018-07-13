@@ -20,7 +20,7 @@ set -eou pipefail
 
 function usage() {
   cat <<DOC
-Usage: ${0##*/} [SUBCOMMAND]
+Usage: ${0##*/} SUBCOMMAND
 
 Helpers that perform common verification steps inside Habitat.
 

@@ -2,6 +2,19 @@
 
 This repository houses some scripts / files that are used across various Chef projects. These are designed and intended to be used by Chef Developers who are working on some specific projects. We are keeping it public as to simplify the download process for our developers.
 
+## Dependencies
+
+* `git`
+* `perl`
+
+## Changes in 1.0.0
+
+* `ci-studio-common` now installs into `/opt/ci-studio-common` instead of `$HOME/ci-studio-common` as a git repository.
+* The `install-tool` utility has been removed. Please install Habitat and install the utilities that way.
+* The `run-if-changed` utility has been removed. Please use the `did-modify` utility instead.
+* The `hab-studio` utility, and support for the `.secrets` file, has been removed. Please use the [secrets functionality](https://www.habitat.sh/docs/using-builder/#working-with-origin-secrets) now included with Habitat.
+
+
 <!-- You don't need to modify this TOC. It will automatically update when a PR is merged using Expeditor. -->
 
 <!-- toc -->
@@ -38,14 +51,13 @@ This repository houses some scripts / files that are used across various Chef pr
 
 <!-- tocstop -->
 
-## TravisCI
+## CI Services (Travis, Buildkite, etc)
 
 ### Installation
 
 ```yaml
 before_install:
   - curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash
-  - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
 ```
 
 If you would like to make an installation from a branch that is under
@@ -121,6 +133,11 @@ GUIDANCE:
 ```
 <!-- stdout -->
 
+#### `ci-studio-common-util`
+
+<!-- stdout "./bin/ci-studio-common-util --help" -->
+<!-- stdout -->
+
 #### `citadel`
 
 <!-- stdout "./bin/citadel --help" -->
@@ -167,6 +184,11 @@ OPTIONS:
 ```
 <!-- stdout -->
 
+#### `file-mod`
+
+<!-- stdout "./bin/file-mod --help" -->
+<!-- stdout -->
+
 #### `hab-origin`
 
 <!-- stdout "./bin/hab-origin --help" -->
@@ -199,23 +221,19 @@ ENVIRONMENT VARIABLES:
 ```
 <!-- stdout -->
 
-#### `install-tool`
+#### `install-buildkite-agent`
 
-<!-- stdout "./bin/install-tool --help" -->
-```
-Usage: install-tool TOOL [VERSION]
+<!-- stdout "./bin/install-buildkite-agent --help" -->
+<!-- stdout -->
 
-Install one of the pre-configured TOOLs (listed below) at the specified VERSION (if specified).
+#### `install-habitat`
 
-AVAILABLE TOOLS:
-    chefdk [CHANNEL]
-    hab
+<!-- stdout "./bin/install-habitat -h" -->
+<!-- stdout -->
 
-DEPRECATED TOOLS:
-    aws
-    docker-compose [VERSION]
-    terraform [VERSION]
-```
+#### `purge-habitat`
+
+<!-- stdout "./bin/purge-habitat --help" -->
 <!-- stdout -->
 
 ## Habitat Studio
@@ -445,16 +463,6 @@ function install ()
 If you have a lot of helpers, putting them all in your `.studiorc` file can quickly result in a large, difficult to comprehend file. `ci-studio-common` allows you to split up those helpers into logical files and store them in a `.studio` directory (much like the `dot-studio` folder of this repository).
 
 When you `source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"`, all the files in your `.studio` directory will automatically be sourced. Any `document` tags you specify will also automatically be made available under `describe`.
-
-### The `.secrets` file
-
-It is currently difficult/impossible to inject secrets into your Hab Studio. To get around this, `ci-studio-common` will automatically source the `/src/.secrets` file (if it exists). The current recommended practice is to export environment variables containing your secrets.
-
-```bash
-export GITHUB_TOKEN="<your personal access token>"
-```
-
-> Make sure the `.secret` file is added to your `.gitignore`!
 
 ## Running Integration Tests
 

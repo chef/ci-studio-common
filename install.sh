@@ -21,16 +21,17 @@
 # Example: Install from the 'foo' branch
 # => curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- foo
 branch=${1-master}
+install_dir="/opt/ci-studio-common"
 
-if [ -d $HOME/ci-studio-common ]
-then
-  rm -rf $HOME/ci-studio-common
+# Create the installation directory
+if [ -d "$install_dir" ]; then
+  rm -rf "$install_dir"
 fi
 
-pushd /tmp
-  curl -sLo ci-studio-common.zip https://github.com/chef/ci-studio-common/archive/${branch}.zip
-  unzip ci-studio-common.zip
-  rm -f ci-studio-common.zip || true
-  ci_dir=$(echo "ci-studio-common-${branch}" | tr '/' '-')
-  mv $ci_dir "$HOME/ci-studio-common"
-popd
+# Download and install ci-studio-common
+git clone https://github.com/chef/ci-studio-common.git "$install_dir"
+cd "$install_dir" || exit 1
+git checkout "$branch"
+
+# Symlink binaries into PATH
+ln -s "$install_dir"/bin/* /usr/local/bin

@@ -18,43 +18,24 @@
 
 set -eou pipefail
 
-INSTALL_TOOL_DIR="${INSTALL_TOOL_DIR:-$HOME/ci-studio-common/tools}"
-
 function usage() {
   cat <<DOC
-Usage: ${0##*/} TOOL [VERSION]
+Usage: ${0##*/} SUBCOMMAND
 
-Install one of the pre-configured TOOLs (listed below) at the specified VERSION (if specified).
-
-AVAILABLE TOOLS:
-    chefdk [CHANNEL]
-    hab
-
-DEPRECATED TOOLS:
-    aws
-    docker-compose [VERSION]
-    terraform [VERSION]
+SUBCOMMANDS:
+    update    Update the ci-studio-common install.
 DOC
 }
 
-function install_tool() {
-  # Create the tools bin directory
-  mkdir -p "$HOME/tools/bin"
-
-  # Install the TOOL
-  tool="$1"
-  param="${2:-}"
-  tool_file="$INSTALL_TOOL_DIR/$tool/install.sh"
-
-  if [[ ! -f "$tool_file" ]]; then
-    usage
-    exit 1
-  else
-    ceval "bash $tool_file $param"
-  fi
+function update_install() {
+  cd /opt/ci-studio-common && git pull --rebase
+  ln -sf /opt/ci-studio-common/bin/* /usr/local/bin
 }
 
 case "${1:-}" in
+  "update")
+    update_install
+    ;;
   "-h"|"--help")
     usage
     ;;
@@ -63,6 +44,7 @@ case "${1:-}" in
     exit 1
     ;;
   *)
-    install_tool "$@"
-    ;;
+    echo "${0##*/}: invalid option '$1'"
+    echo "Try '${0##*/} --help' for more information."
+    exit 2
 esac

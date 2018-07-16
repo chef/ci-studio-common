@@ -8,6 +8,11 @@ habitat_packages:
 
 github:
   delete_branch_on_merge: true
+  release_branch:
+    - master:
+        version_constraint: 1.*
+    - pre-1.0:
+        version_constraint: 0.*
 
 promote:
   channels:

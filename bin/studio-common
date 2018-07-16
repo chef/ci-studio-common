@@ -28,8 +28,8 @@ DOC
   exit 1
 fi
 
-# This value is automatically updated by Expeditor to reflect .hab-version
-export SUPPORTED_HAB_VERSION="0.58.0"
+SUPPORTED_HAB_VERSION=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
+export SUPPORTED_HAB_VERSION
 
 # Ensure that the installed version of the hab toolchain is >= to the required version.
 #
@@ -156,7 +156,7 @@ function getting_started() {
 
 # Source the .secrets file (if it exists)
 if [[ -f /src/.secrets ]]; then
-  source /src/.secrets
+  echo "You are still using a .secrets file. Please switch to using HAB_STUDIO_SECRET_* instead."
 fi
 
 source_msg="Helpers from ci-studio-common"

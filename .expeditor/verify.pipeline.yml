@@ -25,5 +25,3 @@ steps:
       docker#v1.1.1:
         image: ubuntu:16.04
         workdir: /ci-studio-common
-        environment:
-          - INSTALL_TOOL_DIR=/ci-studio-common/tools

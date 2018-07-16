@@ -8,6 +8,11 @@ habitat_packages:
 
 github:
   delete_branch_on_merge: true
+  release_branch:
+    - master:
+        version_constraint: 1.*
+    - pre-1.0:
+        version_constraint: 0.*
 
 promote:
   channels:
@@ -23,21 +28,6 @@ merge_actions:
       ignore_labels:
         - "Changelog: Skip Update"
         - "Expeditor: Skip All"
-  - bash:.expeditor/update_docker-compose_version.sh:
-      ignore_labels:
-        - "Expeditor: Skip All"
-      only_if_modified:
-        - tools/docker-compose/VERSION
-  - bash:.expeditor/update_hab_version.sh:
-      ignore_labels:
-        - "Expeditor: Skip All"
-      only_if_modified:
-        - tools/hab/VERSION
-  - bash:.expeditor/update_terraform_version.sh:
-      ignore_labels:
-        - "Expeditor: Skip All"
-      only_if_modified:
-        - tools/terraform/VERSION
   - bash:.expeditor/update_readme.sh:
       ignore_labels:
         - "Expeditor: Skip All"
@@ -51,3 +41,12 @@ merge_actions:
   - bash:.expeditor/promote_hab_pkg.sh:
       post_commit: true
       only_if: built_in:trigger_habitat_package_build
+
+subscriptions:
+  - workload: artifact_published:stable:habitat:*
+    actions:
+      - bash:.expeditor/update_hab_version.sh
+      - built_in:trigger_habitat_package_build
+      - bash:.expeditor/promote_hab_pkg.sh:
+          post_commit: true
+          only_if: built_in:trigger_habitat_package_build

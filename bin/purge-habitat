@@ -15,14 +15,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#
+# This script is based off of https://gist.github.com/cosimo/3760587
+
+set -eou pipefail
 
 function usage() {
   cat <<DOC
-Usage: GLOBS=<GLOBS> WORKDIR=<WORKDIR> ${0##*/} CMD
+Usage: ${0##*/} [OPTIONS]
 
-  This command has been deprecated. If you want to control whether a command
-  executes based on changed files, please use 'did-modify'
+Uninstall Habitat from this machine.
+
+OPTIONS:
+  --all   Completely remove the Habitat installation.
 DOC
 }
 
-usage
+function uninstall_habitat() {
+  echo "--- Uninstalling Habitat"
+  rm -rf /hab
+
+  if command -v hab &>/dev/null; then
+    rm -f "$(command -v hab)"
+  fi
+}
+
+case "${1:-}" in
+  "-a"|"--all")
+    uninstall_habitat
+    ;;
+  "-h"|"--help")
+    usage
+    ;;
+  "")
+    usage
+    exit 1
+    ;;
+  *)
+    echo "${0##*/}: invalid option '$1'"
+    echo "Try '${0##*/} --help' for more information."
+    exit 2
+esac

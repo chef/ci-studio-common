@@ -19,18 +19,22 @@ This repository houses some scripts / files that are used across various Chef pr
 
 <!-- toc -->
 
-- [TravisCI](#travisci)
+- [CI Services (Travis, Buildkite, etc)](#ci-services-travis-buildkite-etc)
   * [Installation](#installation)
   * [Environment Variables](#environment-variables)
   * [Helpers](#helpers)
     + [`aws-configure`](#aws-configure)
     + [`ceval`](#ceval)
+    + [`ci-studio-common-util`](#ci-studio-common-util)
     + [`citadel`](#citadel)
     + [`configure-github-account`](#configure-github-account)
     + [`did-modify`](#did-modify)
+    + [`file-mod`](#file-mod)
     + [`hab-origin`](#hab-origin)
     + [`hab-verify`](#hab-verify)
-    + [`install-tool`](#install-tool)
+    + [`install-buildkite-agent`](#install-buildkite-agent)
+    + [`install-habitat`](#install-habitat)
+    + [`purge-habitat`](#purge-habitat)
 - [Habitat Studio](#habitat-studio)
   * [Installation](#installation-1)
   * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
@@ -41,7 +45,6 @@ This repository houses some scripts / files that are used across various Chef pr
     + [`getting_started`](#getting_started)
     + [`clone_function`](#clone_function)
   * [The `.studio` directory](#the-studio-directory)
-  * [The `.secrets` file](#the-secrets-file)
 - [Running Integration Tests](#running-integration-tests)
   * [Getting Started](#getting-started)
   * [Overwriting Integration Testing Functions](#overwriting-integration-testing-functions)
@@ -136,6 +139,12 @@ GUIDANCE:
 #### `ci-studio-common-util`
 
 <!-- stdout "./bin/ci-studio-common-util --help" -->
+```
+Usage: ci-studio-common-util SUBCOMMAND
+
+SUBCOMMANDS:
+    update    Update the ci-studio-common install.
+```
 <!-- stdout -->
 
 #### `citadel`
@@ -187,13 +196,20 @@ OPTIONS:
 #### `file-mod`
 
 <!-- stdout "./bin/file-mod --help" -->
+```
+Usage: file-mod SUBCOMMAND [PARAMETERS]
+
+SUBCOMMANDS:
+    append-if-missing STRING FILE             Append STRING to FILE if not already there.
+    find-and-replace REGEX_STR STRING FILE    Replace REGEX_STR with STRING in FILE. Supports multiline replace. Uses perl.
+```
 <!-- stdout -->
 
 #### `hab-origin`
 
 <!-- stdout "./bin/hab-origin --help" -->
 ```
-Usage: hab-origin [SUBCOMMAND]
+Usage: hab-origin SUBCOMMAND
 
 Helpers that extend functionality of the hab origin namespace.
 
@@ -206,7 +222,7 @@ SUBCOMMANDS:
 
 <!-- stdout "./bin/hab-verify --help" -->
 ```
-Usage: hab-verify [SUBCOMMAND]
+Usage: hab-verify SUBCOMMAND
 
 Helpers that perform common verification steps inside Habitat.
 
@@ -224,16 +240,55 @@ ENVIRONMENT VARIABLES:
 #### `install-buildkite-agent`
 
 <!-- stdout "./bin/install-buildkite-agent --help" -->
+```
+Usage: install-buildkite-agent [SUBCOMMAND]
+
+Helpers that help setup Buildkite Agents. If no SUBCOMMAND is given, this utility will
+install the 'buildkite-agent' utility. If that is the case, make sure to pass in the
+'TOKEN' environment variable.
+
+SUBCOMMANDS:
+  <EMPTY>            Install the Buildkite Agent.
+  hook TYPE HOOK     Install one of the supported HOOKS as an Buildkite Agent Hook.
+
+SUPPORTED HOOK TYPES:
+  https://buildkite.com/docs/agent/v3/hooks#available-hooks
+
+SUPPORTED HOOKS:
+  remove-containers               Remove all Docker containers.
+  update-utilities                Update ci-studio-common and habitat.
+  use-merge-head                  Checkout the GitHub merge HEAD instead of the branch.
+  workspace-reassign-ownership    Reassign ownership of the workspace to the buildkite-agent.
+```
 <!-- stdout -->
 
 #### `install-habitat`
 
 <!-- stdout "./bin/install-habitat -h" -->
+```
+Usage: install-habitat [-u USER] [-v HAB_VERSION] [-c HAB_CHANNEL] -h
+
+Install VERSION of habitat from CHANNEL as the USER user.
+
+OPTIONS:
+  -h            Show this message.
+  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file or 'root')
+  -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
+  -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
+```
 <!-- stdout -->
 
 #### `purge-habitat`
 
 <!-- stdout "./bin/purge-habitat --help" -->
+```
+Usage: purge-habitat [OPTIONS]
+
+Uninstall Habitat from this machine.
+
+OPTIONS:
+  --all   Completely remove the Habitat installation.
+```
 <!-- stdout -->
 
 ## Habitat Studio

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 0.1.81 -->
+<!-- latest_release unreleased -->
+## Unreleased
+
+#### Merged Pull Requests
+- 1.0.0 Functionality [#107](https://github.com/chef/ci-studio-common/pull/107) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [0.1.81](https://github.com/chef/ci-studio-common/tree/0.1.81) (2018-07-09)
 
 #### Merged Pull Requests
 - Bump Habitat to 0.58.0 [#104](https://github.com/chef/ci-studio-common/pull/104) ([schisamo](https://github.com/schisamo))
-<!-- latest_release -->
 
 ## [0.1.80](https://github.com/chef/ci-studio-common/tree/0.1.80) (2018-04-18)
 

@@ -4,6 +4,7 @@
 ## Unreleased
 
 #### Merged Pull Requests
+- Symlink binaries to /usr/bin [#109](https://github.com/chef/ci-studio-common/pull/109) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
 - 1.0.0 Functionality [#107](https://github.com/chef/ci-studio-common/pull/107) ([tduffield](https://github.com/tduffield))
 <!-- latest_release -->
 

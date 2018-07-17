@@ -28,13 +28,13 @@ Install VERSION of habitat from CHANNEL as the USER user.
 
 OPTIONS:
   -h            Show this message.
-  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file or current user)
+  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
   -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
   -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
 DOC
 }
 
-user="$USER"
+user="${USER:-root}"
 version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
 channel=stable
 
@@ -69,6 +69,17 @@ while getopts ":hcvu:" opt; do
   esac
 done
 
+# Do not attempt to install Habitat if it is up-to-date
+do_install_habitat=true
+hab_version_file="/var/opt/ci-studio-common/.hab-version"
+if [[ -s $hab_version_file ]]; then
+  current_version=$(cat $hab_version_file)
+
+  if [[ "$version" = "$current_version" ]]; then
+    do_install_habitat=false
+  fi
+fi
+
 echo "--- Installing Habitat"
 
 echo "Going to install habitat as '$user' user"
@@ -92,16 +103,20 @@ fi
 
 chmod g+rwx /hab
 
-echo "Running habitat curl|bash"
-curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$version" -c "$channel"
+if [[ $do_install_habitat ]]; then
+  echo "Running habitat curl|bash"
+  curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$version" -c "$channel"
+else
+  echo "Habitat is already up-to-date"
+fi
 
 hab_bin=$(command -v hab)
-echo "Granting $user access to $hab_bin"
+echo "Granting '$user' access to $hab_bin"
 chown -R "root:$user" "$hab_bin"
 
 if [[ "$user" != "root" ]]; then
   install_hab_bin=$(command -v install-habitat)
-  echo "Granting '$USER' sudo permissions to run $hab_bin and $install_hab_bin"
+  echo "Granting '$user' sudo permissions to run $hab_bin and $install_hab_bin"
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $hab_bin" "/etc/sudoers.d/$user"
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $install_hab_bin" "/etc/sudoers.d/$user"
   chmod 440 "/etc/sudoers.d/$user"

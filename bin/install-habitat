@@ -28,32 +28,33 @@ Install VERSION of habitat from CHANNEL as the USER user.
 
 OPTIONS:
   -h            Show this message.
-  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file or 'root')
+  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file or current user)
   -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
   -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
 DOC
 }
 
-VERSION=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
-CHANNEL=stable
+user="$USER"
+version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
+channel=stable
 
-HAB_USER_FILE="/var/opt/ci-studio-common/.hab-user"
-if [[ -f $HAB_USER_FILE ]]; then
-  USER=$(cat $HAB_USER_FILE)
-else
-  USER=$(whoami)
+# If we've specified a certain user that should own Hab, use that
+hab_user_file="/var/opt/ci-studio-common/.hab-user"
+if [[ -s $hab_user_file ]]; then
+  user=$(cat $hab_user_file)
 fi
 
+# Parse the options
 while getopts ":hcvu:" opt; do
   case "${opt}" in
     c)
-      CHANNEL="${OPTARG}"
+      channel="${OPTARG}"
       ;;
     v)
-      VERSION="${OPTARG}"
+      version="${OPTARG}"
       ;;
     u)
-      USER="${OPTARG}"
+      user="${OPTARG}"
       ;;
     h)
       usage
@@ -70,29 +71,30 @@ done
 
 echo "--- Installing Habitat"
 
-echo "Setting USER as '$USER'"
-mkdir -p "/var/opt/ci-studio-common"
-echo "$USER" > "$HAB_USER_FILE"
+echo "Going to install habitat as '$user' user"
+echo "$user" > "$hab_user_file"
 
 echo "Creating /hab directory"
 mkdir -p /hab
 
-echo "Granting $USER access to /hab"
-chown -R "root:$USER" /hab
+echo "Granting $user access to /hab"
+chown -R "root:$user" /hab/cache
+chown -R "root:$user" /hab/etc
+chown -R "root:$user" /hab/pkgs
 chmod g+rwx /hab
 
 echo "Running habitat curl|bash"
-curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$VERSION" -c "$CHANNEL"
+curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$version" -c "$channel"
 
 hab_bin=$(command -v hab)
-echo "Granging $USER access to $hab_bin"
-chown -R "root:$USER" "$hab_bin"
+echo "Granting $user access to $hab_bin"
+chown -R "root:$user" "$hab_bin"
 
-if [[ "$USER" != "root" ]]; then
+if [[ "$user" != "root" ]]; then
   install_hab_bin=$(command -v install-habitat)
   echo "Granting '$USER' sudo permissions to run $hab_bin and $install_hab_bin"
-  file-mod append-if-missing "$USER ALL=NOPASSWD:SETENV: $hab_bin" "/etc/sudoers.d/$USER"
-  file-mod append-if-missing "$USER ALL=NOPASSWD:SETENV: $install_hab_bin" "/etc/sudoers.d/$USER"
-  chmod 440 "/etc/sudoers.d/$USER"
+  file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $hab_bin" "/etc/sudoers.d/$user"
+  file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $install_hab_bin" "/etc/sudoers.d/$user"
+  chmod 440 "/etc/sudoers.d/$user"
 fi
 

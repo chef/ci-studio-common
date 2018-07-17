@@ -33,16 +33,7 @@ function allow_user() {
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: /usr/bin/ci-studio-common-util" "/etc/sudoers.d/$user"
 }
 
-function update_install() {
-  if [[ -s "/var/opt/ci-studio-common/.install-branch" ]]; then
-    branch=$(cat /var/opt/ci-studio-common/.install-branch)
-  else
-    branch="master"
-  fi
-
-  echo "Updating 'ci-studio-common' install to latest from '$branch' branch"
-  cd /opt/ci-studio-common && git pull --rebase origin "$branch"
-
+function symlink_bins() {
   if [[ -w /usr/bin ]]; then
     ln -sf /opt/ci-studio-common/bin/* /usr/bin
   else
@@ -57,6 +48,19 @@ Please make sure to add /opt/ci-studio-common/bin to your PATH.
 
 "
   fi
+}
+
+function update_install() {
+  if [[ -s "/var/opt/ci-studio-common/.install-branch" ]]; then
+    branch=$(cat /var/opt/ci-studio-common/.install-branch)
+  else
+    branch="master"
+  fi
+
+  echo "Updating 'ci-studio-common' install to latest from '$branch' branch"
+  # There is probably a better way to handle the issue where multiple agents are all trying to update ci-studio-common
+  # on a single machine at once, but this is the quickest way to unblock current pipelines.
+  cd /opt/ci-studio-common && (git pull --rebase origin "$branch" && symlink_bins) || echo "Could not update ci-studio-common -- ignoring"
 }
 
 case "${1:-}" in

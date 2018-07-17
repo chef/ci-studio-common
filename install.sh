@@ -29,7 +29,7 @@ if [ -d "$install_dir" ]; then
   rm -rf "$install_dir"
 fi
 
-if [[ -d "$settings_dir" ]]; then
+if [[ ! -d "$settings_dir" ]]; then
   mkdir -p "$settings_dir"
 fi
 

@@ -41,5 +41,5 @@ git checkout "$branch"
 # Save the branch that was used to install
 echo "$branch" > "$settings_dir/.install-branch"
 
-# Symlink binaries into PATH
-ln -s "$install_dir"/bin/* /usr/bin
+# Perform post-install operations
+/opt/ci-studio-common/bin/ci-studio-common-util update

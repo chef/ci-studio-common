@@ -22,16 +22,24 @@
 # => curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- foo
 branch=${1-master}
 install_dir="/opt/ci-studio-common"
+settings_dir="/var/opt/ci-studio-common"
 
 # Create the installation directory
 if [ -d "$install_dir" ]; then
   rm -rf "$install_dir"
 fi
 
+if [[ -d "$settings_dir" ]]; then
+  mkdir -p "$settings_dir"
+fi
+
 # Download and install ci-studio-common
 git clone https://github.com/chef/ci-studio-common.git "$install_dir"
 cd "$install_dir" || exit 1
 git checkout "$branch"
+
+# Save the branch that was used to install
+echo "$branch" > "$settings_dir/.install-branch"
 
 # Symlink binaries into PATH
 ln -s "$install_dir"/bin/* /usr/bin

@@ -34,7 +34,9 @@ function allow_user() {
 }
 
 function update_install() {
-  cd /opt/ci-studio-common && git pull --rebase
+  branch=${$(cat "/var/opt/ci-studio-common/.install-branch"):-master}
+  echo "Updating 'ci-studio-common' install to latest from '$branch' branch"
+  cd /opt/ci-studio-common && git pull --rebase origin "$branch"
   ln -sf /opt/ci-studio-common/bin/* /usr/bin
 }
 

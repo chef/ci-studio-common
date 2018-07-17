@@ -71,7 +71,6 @@ done
 echo "--- Installing Habitat"
 
 echo "Setting USER as '$USER'"
-mkdir -p "/var/opt/ci-studio-common"
 echo "$USER" > "$HAB_USER_FILE"
 
 echo "Creating /hab directory"

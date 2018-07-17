@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.8 -->
+<!-- latest_release 1.1.9 -->
+## [1.1.9](https://github.com/chef/ci-studio-common/tree/1.1.9) (2018-07-17)
+
+#### Merged Pull Requests
+- Create settings directory if missing [#119](https://github.com/chef/ci-studio-common/pull/119) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.8](https://github.com/chef/ci-studio-common/tree/1.1.8) (2018-07-17)
 
 #### Merged Pull Requests
 - file-mod: create file if it&#39;s missing [#118](https://github.com/chef/ci-studio-common/pull/118) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.7](https://github.com/chef/ci-studio-common/tree/1.1.7) (2018-07-17)
 

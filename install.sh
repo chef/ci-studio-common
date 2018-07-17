@@ -34,4 +34,4 @@ cd "$install_dir" || exit 1
 git checkout "$branch"
 
 # Symlink binaries into PATH
-ln -s "$install_dir"/bin/* /usr/local/bin
+ln -s "$install_dir"/bin/* /usr/bin

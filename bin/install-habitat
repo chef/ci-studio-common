@@ -75,7 +75,7 @@ hab_version_file="/var/opt/ci-studio-common/.hab-version"
 if [[ -s $hab_version_file ]]; then
   current_version=$(cat $hab_version_file)
 
-  if [[ $version = $current_version ]]; then
+  if [[ "$version" = "$current_version" ]]; then
     do_install_habitat=false
   fi
 fi

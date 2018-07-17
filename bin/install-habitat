@@ -78,9 +78,18 @@ echo "Creating /hab directory"
 mkdir -p /hab
 
 echo "Granting $user access to /hab"
-chown -R "root:$user" /hab/cache
-chown -R "root:$user" /hab/etc
-chown -R "root:$user" /hab/pkgs
+if [[ -d /hab/cache ]]; then
+  chown -R "root:$user" /hab/cache
+fi
+
+if [[ -d /hab/etc ]]; then
+  chown -R "root:$user" /hab/etc
+fi
+
+if [[ -d /hab/pkgs ]]; then
+  chown -R "root:$user" /hab/pkgs
+fi
+
 chmod g+rwx /hab
 
 echo "Running habitat curl|bash"

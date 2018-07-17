@@ -32,8 +32,12 @@ function append_if_missing() {
   string=${2:?missing parameter: string to append}
   file=${3:?missing parameter: file to modify}
 
-  if ! grep -q -F "$string" "$file"; then
-    echo -e "$string" >> "$file"
+  if [[ -f "$file" ]]; then
+    if ! grep -q -F "$string" "$file"; then
+      echo -e "$string" >> "$file"
+    fi
+  else
+    echo -e "$string" > "$file"
   fi
 }
 

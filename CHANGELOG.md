@@ -1,13 +1,18 @@
 # Changelog
 
-<!-- latest_release 1.1.1 -->
+<!-- latest_release 1.1.2 -->
+## [1.1.2](https://github.com/chef/ci-studio-common/tree/1.1.2) (2018-07-17)
+
+#### Merged Pull Requests
+- Set HOME in install-buildkite-agent [#111](https://github.com/chef/ci-studio-common/pull/111) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [1.1.1](https://github.com/chef/ci-studio-common/tree/1.1.1) (2018-07-17)
 
 #### Merged Pull Requests
 - Fix error with unbound variable [#110](https://github.com/chef/ci-studio-common/pull/110) ([tduffield](https://github.com/tduffield))
 - Symlink binaries to /usr/bin [#109](https://github.com/chef/ci-studio-common/pull/109) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
 - 1.0.0 Functionality [#107](https://github.com/chef/ci-studio-common/pull/107) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [0.1.81](https://github.com/chef/ci-studio-common/tree/0.1.81) (2018-07-09)
 

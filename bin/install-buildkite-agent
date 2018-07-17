@@ -20,6 +20,8 @@ set -eou pipefail
 
 INSTALL_HOOK_DIR="/opt/ci-studio-common/buildkite-agent-hooks"
 
+HOME="${HOME:-/root}"
+
 UNAME=$(uname -sm | awk '{print tolower($0)}')
 
 if [[ ($UNAME == *"mac os x"*) || ($UNAME == *darwin*) ]]; then

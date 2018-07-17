@@ -1,9 +1,10 @@
 # Changelog
 
-<!-- latest_release unreleased -->
-## Unreleased
+<!-- latest_release 1.1.1 -->
+## [1.1.1](https://github.com/chef/ci-studio-common/tree/1.1.1) (2018-07-17)
 
 #### Merged Pull Requests
+- Fix error with unbound variable [#110](https://github.com/chef/ci-studio-common/pull/110) ([tduffield](https://github.com/tduffield))
 - Symlink binaries to /usr/bin [#109](https://github.com/chef/ci-studio-common/pull/109) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
 - 1.0.0 Functionality [#107](https://github.com/chef/ci-studio-common/pull/107) ([tduffield](https://github.com/tduffield))
 <!-- latest_release -->

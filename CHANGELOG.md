@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.2 -->
+<!-- latest_release 1.1.3 -->
+## [1.1.3](https://github.com/chef/ci-studio-common/tree/1.1.3) (2018-07-17)
+
+#### Merged Pull Requests
+- Add command to grant USER permissions to run util operations with sudo [#112](https://github.com/chef/ci-studio-common/pull/112) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.2](https://github.com/chef/ci-studio-common/tree/1.1.2) (2018-07-17)
 
 #### Merged Pull Requests
 - Set HOME in install-buildkite-agent [#111](https://github.com/chef/ci-studio-common/pull/111) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [1.1.1](https://github.com/chef/ci-studio-common/tree/1.1.1) (2018-07-17)
 

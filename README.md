@@ -143,7 +143,8 @@ GUIDANCE:
 Usage: ci-studio-common-util SUBCOMMAND
 
 SUBCOMMANDS:
-    update    Update the ci-studio-common install.
+    update        Update the ci-studio-common install.
+    allow USER    Allow USER to perform ci-studio-common-util operations with sudo.
 ```
 <!-- stdout -->
 

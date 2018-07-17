@@ -63,5 +63,6 @@ Vagrant.configure("2") do |config|
   # "install" ci-studio-common using mounted source code
   config.vm.provision "shell", inline: <<-SHELL
     ln -sf /vagrant/ /opt/ci-studio-common
+    ln -sf /opt/ci-studio-common/bin/* /usr/bin
   SHELL
 end

@@ -31,6 +31,7 @@ DOC
 function allow_user() {
   user=${1:?missing parameter: user to allow to perform operations}
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: /usr/bin/ci-studio-common-util" "/etc/sudoers.d/$user"
+  chmod 440 "/etc/sudoers.d/$user"
 }
 
 function update_install() {

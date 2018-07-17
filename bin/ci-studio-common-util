@@ -23,16 +23,25 @@ function usage() {
 Usage: ${0##*/} SUBCOMMAND
 
 SUBCOMMANDS:
-    update    Update the ci-studio-common install.
+    update        Update the ci-studio-common install.
+    allow USER    Allow USER to perform ci-studio-common-util operations with sudo.
 DOC
+}
+
+function allow_user() {
+  user=${1:?missing parameter: user to allow to perform operations}
+  file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: /usr/bin/ci-studio-common-util" "/etc/sudoers.d/$user"
 }
 
 function update_install() {
   cd /opt/ci-studio-common && git pull --rebase
-  ln -sf /opt/ci-studio-common/bin/* /usr/local/bin
+  ln -sf /opt/ci-studio-common/bin/* /usr/bin
 }
 
 case "${1:-}" in
+  "allow")
+    allow_user "$2"
+    ;;
   "update")
     update_install
     ;;

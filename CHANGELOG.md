@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.6 -->
+<!-- latest_release 1.1.7 -->
+## [1.1.7](https://github.com/chef/ci-studio-common/tree/1.1.7) (2018-07-17)
+
+#### Merged Pull Requests
+- Install habitat idempotently [#117](https://github.com/chef/ci-studio-common/pull/117) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.6](https://github.com/chef/ci-studio-common/tree/1.1.6) (2018-07-17)
 
 #### Merged Pull Requests
 - Ignore failures when ci-studio-common fails to update [#116](https://github.com/chef/ci-studio-common/pull/116) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.5](https://github.com/chef/ci-studio-common/tree/1.1.5) (2018-07-17)
 

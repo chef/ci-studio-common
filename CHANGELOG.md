@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.4 -->
+<!-- latest_release 1.1.5 -->
+## [1.1.5](https://github.com/chef/ci-studio-common/tree/1.1.5) (2018-07-17)
+
+#### Merged Pull Requests
+- Only chown directories that exist [#114](https://github.com/chef/ci-studio-common/pull/114) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.4](https://github.com/chef/ci-studio-common/tree/1.1.4) (2018-07-17)
 
 #### Merged Pull Requests
 - Fix git errors when attempting to update install [#113](https://github.com/chef/ci-studio-common/pull/113) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.3](https://github.com/chef/ci-studio-common/tree/1.1.3) (2018-07-17)
 

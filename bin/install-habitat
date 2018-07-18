@@ -72,7 +72,7 @@ done
 # Do not attempt to install Habitat if it is up-to-date
 do_install_habitat=true
 hab_version_file="/var/opt/ci-studio-common/.hab-version"
-if [[ -s $hab_version_file ]]; then
+if [[ ! -s $hab_version_file ]]; then
   current_version=$(cat $hab_version_file)
 
   if [[ "$version" = "$current_version" ]]; then

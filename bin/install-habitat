@@ -34,6 +34,21 @@ OPTIONS:
 DOC
 }
 
+function lock() {
+  exec 200>/var/lock/ci-studio-common-install-habitat.lock
+
+  flock -n 200 \
+    && return 0 \
+    || return 1
+}
+
+function handle_no_lock() {
+  echo "Habitat install already in progress -- skipping"
+  exit 0
+}
+
+lock || handle_no_lock
+
 user="${USER:-root}"
 version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
 channel=stable
@@ -42,6 +57,8 @@ channel=stable
 hab_user_file="/var/opt/ci-studio-common/.hab-user"
 if [[ -s $hab_user_file ]]; then
   user=$(cat $hab_user_file)
+else
+  echo "$user" > "$hab_user_file"
 fi
 
 # Parse the options
@@ -81,25 +98,15 @@ if [[ -s $hab_version_file ]]; then
 fi
 
 echo "--- Installing Habitat"
-
 echo "Going to install habitat as '$user' user"
-echo "$user" > "$hab_user_file"
 
 echo "Creating /hab directory"
 mkdir -p /hab
 
 echo "Granting $user access to /hab"
-if [[ -d /hab/cache ]]; then
-  chown -R "root:$user" /hab/cache
-fi
-
-if [[ -d /hab/etc ]]; then
-  chown -R "root:$user" /hab/etc
-fi
-
-if [[ -d /hab/pkgs ]]; then
-  chown -R "root:$user" /hab/pkgs
-fi
+test -d /hab/cache && chown -R "root:$user" /hab/cache
+test -d /hab/etc && chown -R "root:$user" /hab/etc
+test -d /hab/pkgs && chown -R "root:$user" /hab/pkgs
 
 chmod g+rwx /hab
 
@@ -122,4 +129,3 @@ if [[ "$user" != "root" ]]; then
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $install_hab_bin" "/etc/sudoers.d/$user"
   chmod 440 "/etc/sudoers.d/$user"
 fi
-

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.11 -->
+<!-- latest_release 1.1.12 -->
+## [1.1.12](https://github.com/chef/ci-studio-common/tree/1.1.12) (2018-07-18)
+
+#### Merged Pull Requests
+- Introduce locking pattern for commands [#122](https://github.com/chef/ci-studio-common/pull/122) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.11](https://github.com/chef/ci-studio-common/tree/1.1.11) (2018-07-18)
 
 #### Merged Pull Requests
 - Actual fix to habitat install logic issue [#121](https://github.com/chef/ci-studio-common/pull/121) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.10](https://github.com/chef/ci-studio-common/tree/1.1.10) (2018-07-18)
 

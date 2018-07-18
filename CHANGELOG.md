@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.14 -->
+<!-- latest_release 1.1.15 -->
+## [1.1.15](https://github.com/chef/ci-studio-common/tree/1.1.15) (2018-07-18)
+
+#### Merged Pull Requests
+- Fix mktemp usage to include proper number of Xs [#128](https://github.com/chef/ci-studio-common/pull/128) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.14](https://github.com/chef/ci-studio-common/tree/1.1.14) (2018-07-18)
 
 #### Merged Pull Requests
 - Move .hab-user parsing until after getops [#127](https://github.com/chef/ci-studio-common/pull/127) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.13](https://github.com/chef/ci-studio-common/tree/1.1.13) (2018-07-18)
 

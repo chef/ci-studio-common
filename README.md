@@ -61,7 +61,7 @@ If you are still primarily using Travis, or are dependent on any of the utilitie
 
 ```yaml
 before_install:
-  - curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -- pre-1.0
+  - curl https://raw.githubusercontent.com/chef/ci-studio-common/pre-1.0/install.sh | bash
   - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
 ```
 

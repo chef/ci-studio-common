@@ -98,7 +98,7 @@ fi
 echo "--- Installing Habitat"
 
 echo "Going to install habitat as '$user' user"
-tmp_user_file=$(mktemp hab-user)
+tmp_user_file=$(mktemp hab-user.XXXXXX)
 echo "$user" > "$tmp_user_file"
 mv "$tmp_user_file" "$hab_user_file"
 

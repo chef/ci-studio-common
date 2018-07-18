@@ -2,19 +2,6 @@
 
 This repository houses some scripts / files that are used across various Chef projects. These are designed and intended to be used by Chef Developers who are working on some specific projects. We are keeping it public as to simplify the download process for our developers.
 
-## Dependencies
-
-* `git`
-* `perl`
-
-## Changes in 1.0.0
-
-* `ci-studio-common` now installs into `/opt/ci-studio-common` instead of `$HOME/ci-studio-common` as a git repository.
-* The `install-tool` utility has been removed. Please install Habitat and install the utilities that way.
-* The `run-if-changed` utility has been removed. Please use the `did-modify` utility instead.
-* The `hab-studio` utility, and support for the `.secrets` file, has been removed. Please use the [secrets functionality](https://www.habitat.sh/docs/using-builder/#working-with-origin-secrets) now included with Habitat.
-
-
 <!-- You don't need to modify this TOC. It will automatically update when a PR is merged using Expeditor. -->
 
 <!-- toc -->
@@ -53,6 +40,30 @@ This repository houses some scripts / files that are used across various Chef pr
   * [How do you determine a CI environment vs a non-CI environment?](#how-do-you-determine-a-ci-environment-vs-a-non-ci-environment)
 
 <!-- tocstop -->
+
+## Dependencies
+
+* `git`
+* `perl`
+
+## Announcing the 1.0 release
+
+The focus of the 1.0 release was to optimize ci-studio-common for use with Buildkite. As such, we have made the breaking following changes:
+
+* `ci-studio-common` now installs into `/opt/ci-studio-common` as a git repository instead of `$HOME/ci-studio-common` via a tarball download.
+* The `install-tool` utility has been removed. Please install Habitat using `install-habitat` and install the utilities using `hab pkg install`.
+* The `run-if-changed` utility has been removed. Please use the `did-modify` utility instead.
+* The `hab-studio` utility, and support for the `.secrets` file, has been removed. Please use the [secrets functionality](https://www.habitat.sh/docs/using-builder/#working-with-origin-secrets) now included with Habitat.
+
+### Pinning to pre-1.0
+
+If you are still primarily using Travis, or are dependent on any of the utilities or functionality that was removed in 1.0, you can pin your installation to the `pre-1.0` branch.
+
+```yaml
+before_install:
+  - curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -- pre-1.0
+  - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
+```
 
 ## CI Services (Travis, Buildkite, etc)
 

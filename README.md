@@ -6,6 +6,9 @@ This repository houses some scripts / files that are used across various Chef pr
 
 <!-- toc -->
 
+- [Dependencies](#dependencies)
+- [Announcing the 1.0 release](#announcing-the-10-release)
+  * [Pinning to pre-1.0](#pinning-to-pre-10)
 - [CI Services (Travis, Buildkite, etc)](#ci-services-travis-buildkite-etc)
   * [Installation](#installation)
   * [Environment Variables](#environment-variables)
@@ -278,6 +281,15 @@ SUPPORTED HOOKS:
 
 <!-- stdout "./bin/install-habitat -h" -->
 ```
+Usage: install-habitat [-u USER] [-v HAB_VERSION] [-c HAB_CHANNEL] -h
+
+Install VERSION of habitat from CHANNEL as the USER user.
+
+OPTIONS:
+  -h            Show this message.
+  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
+  -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
+  -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
 ```
 <!-- stdout -->
 

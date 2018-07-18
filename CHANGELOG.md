@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.13 -->
+<!-- latest_release 1.1.14 -->
+## [1.1.14](https://github.com/chef/ci-studio-common/tree/1.1.14) (2018-07-18)
+
+#### Merged Pull Requests
+- Move .hab-user parsing until after getops [#127](https://github.com/chef/ci-studio-common/pull/127) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.13](https://github.com/chef/ci-studio-common/tree/1.1.13) (2018-07-18)
 
 #### Merged Pull Requests
 - Update generate_netrc_config error message [#123](https://github.com/chef/ci-studio-common/pull/123) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [1.1.12](https://github.com/chef/ci-studio-common/tree/1.1.12) (2018-07-18)
 

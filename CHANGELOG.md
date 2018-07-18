@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.12 -->
+<!-- latest_release 1.1.13 -->
+## [1.1.13](https://github.com/chef/ci-studio-common/tree/1.1.13) (2018-07-18)
+
+#### Merged Pull Requests
+- Update generate_netrc_config error message [#123](https://github.com/chef/ci-studio-common/pull/123) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.12](https://github.com/chef/ci-studio-common/tree/1.1.12) (2018-07-18)
 
 #### Merged Pull Requests
 - Introduce locking pattern for commands [#122](https://github.com/chef/ci-studio-common/pull/122) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.11](https://github.com/chef/ci-studio-common/tree/1.1.11) (2018-07-18)
 

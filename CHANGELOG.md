@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.9 -->
+<!-- latest_release 1.1.10 -->
+## [1.1.10](https://github.com/chef/ci-studio-common/tree/1.1.10) (2018-07-18)
+
+#### Merged Pull Requests
+- Correct logic in habitat install script [#120](https://github.com/chef/ci-studio-common/pull/120) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.9](https://github.com/chef/ci-studio-common/tree/1.1.9) (2018-07-17)
 
 #### Merged Pull Requests
 - Create settings directory if missing [#119](https://github.com/chef/ci-studio-common/pull/119) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.8](https://github.com/chef/ci-studio-common/tree/1.1.8) (2018-07-17)
 

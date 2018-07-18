@@ -57,8 +57,6 @@ channel=stable
 hab_user_file="/var/opt/ci-studio-common/.hab-user"
 if [[ -s $hab_user_file ]]; then
   user=$(cat $hab_user_file)
-else
-  echo "$user" > "$hab_user_file"
 fi
 
 # Parse the options
@@ -98,7 +96,11 @@ if [[ -s $hab_version_file ]]; then
 fi
 
 echo "--- Installing Habitat"
+
 echo "Going to install habitat as '$user' user"
+tmp_user_file=$(mktemp hab-user)
+echo "$user" > "$tmp_user_file"
+mv "$tmp_user_file" "$hab_user_file"
 
 echo "Creating /hab directory"
 mkdir -p /hab

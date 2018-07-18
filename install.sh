@@ -20,7 +20,7 @@
 #
 # Example: Install from the 'foo' branch
 # => curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- foo
-branch=${1-master}
+branch=${1-pre-1.0}
 
 if [ -d $HOME/ci-studio-common ]
 then

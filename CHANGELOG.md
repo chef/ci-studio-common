@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.15 -->
+<!-- latest_release 1.1.16 -->
+## [1.1.16](https://github.com/chef/ci-studio-common/tree/1.1.16) (2018-08-07)
+
+#### Merged Pull Requests
+- Revert &quot;Executed `.expeditor/update_hab_version.sh`&quot; [#129](https://github.com/chef/ci-studio-common/pull/129) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.15](https://github.com/chef/ci-studio-common/tree/1.1.15) (2018-07-18)
 
 #### Merged Pull Requests
 - Fix mktemp usage to include proper number of Xs [#128](https://github.com/chef/ci-studio-common/pull/128) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.14](https://github.com/chef/ci-studio-common/tree/1.1.14) (2018-07-18)
 

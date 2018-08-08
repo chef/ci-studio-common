@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.16 -->
+<!-- latest_release 1.1.17 -->
+## [1.1.17](https://github.com/chef/ci-studio-common/tree/1.1.17) (2018-08-08)
+
+#### Merged Pull Requests
+- Enforce correct permissions on netrc [#130](https://github.com/chef/ci-studio-common/pull/130) ([danielsdeleo](https://github.com/danielsdeleo))
+<!-- latest_release -->
+
 ## [1.1.16](https://github.com/chef/ci-studio-common/tree/1.1.16) (2018-08-07)
 
 #### Merged Pull Requests
 - Revert &quot;Executed `.expeditor/update_hab_version.sh`&quot; [#129](https://github.com/chef/ci-studio-common/pull/129) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.15](https://github.com/chef/ci-studio-common/tree/1.1.15) (2018-07-18)
 

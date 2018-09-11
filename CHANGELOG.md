@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.18 -->
+<!-- latest_release 1.1.19 -->
+## [1.1.19](https://github.com/chef/ci-studio-common/tree/1.1.19) (2018-09-11)
+
+#### Merged Pull Requests
+- Fix bug in getopts logic for &#39;install-habitat&#39; [#133](https://github.com/chef/ci-studio-common/pull/133) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.18](https://github.com/chef/ci-studio-common/tree/1.1.18) (2018-08-16)
 
 #### Merged Pull Requests
 - Revert &quot;Executed `.expeditor/update_hab_version.sh`&quot; [#131](https://github.com/chef/ci-studio-common/pull/131) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.17](https://github.com/chef/ci-studio-common/tree/1.1.17) (2018-08-08)
 

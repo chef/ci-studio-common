@@ -281,15 +281,37 @@ SUPPORTED HOOKS:
 
 <!-- stdout "./bin/install-habitat -h" -->
 ```
-Usage: install-habitat [-u USER] [-v HAB_VERSION] [-c HAB_CHANNEL] -h
-
-Install VERSION of habitat from CHANNEL as the USER user.
-
-OPTIONS:
-  -h            Show this message.
-  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
-  -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
-  -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
+--- Installing Habitat
+Going to install habitat '0.59.0' as 'root' user
+Creating /hab directory
+Granting root access to /hab
+Running habitat curl|bash
+--> hab-install: Installing Habitat 'hab' program
+--> hab-install: Determining fully qualified version of package for `0.59.0'
+--> hab-install: Downloading via wget: https://api.bintray.com/packages/habitat/stable/hab-x86_64-linux
+--> hab-install: Using fully qualified Bintray version string of: 0.59.0-20180712155441
+--> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux
+--> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum?bt_package=hab-x86_64-linux
+--> hab-install: Renaming downloaded archive files
+'/var/tmp/tmp.btTJF02Ujp/hab-latest.tar.gz' -> '/var/tmp/tmp.btTJF02Ujp/hab-0.59.0-20180712155441-x86_64-linux.tar.gz'
+'/var/tmp/tmp.btTJF02Ujp/hab-latest.tar.gz.sha256sum' -> '/var/tmp/tmp.btTJF02Ujp/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum'
+--> hab-install: GnuPG tooling found, verifying the shasum digest is properly signed
+--> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum.asc?bt_package=hab-x86_64-linux
+--> hab-install: Downloading via wget: https://bintray.com/user/downloadSubjectPublicKey?username=habitat
+--> hab-install: Verifying the shasum digest matches the downloaded archive
+hab-0.59.0-20180712155441-x86_64-linux.tar.gz: OK
+--> hab-install: Extracting /var/tmp/tmp.btTJF02Ujp/hab-0.59.0-20180712155441-x86_64-linux.tar.gz
+--> hab-install: Installing Habitat package using temporarily downloaded hab
+» Installing core/hab/0.59.0
+☁ Determining latest version of core/hab/0.59.0 in the 'stable' channel
+→ Using core/hab/0.59.0/20180712155441
+★ Install of core/hab/0.59.0/20180712155441 complete with 0 new packages installed.
+» Binlinking hab from core/hab/0.59.0 into /usr/local/bin
+★ Binlinked hab from core/hab/0.59.0/20180712155441 to /usr/local/bin/hab
+--> hab-install: Checking installed hab version
+hab 0.59.0/20180712155441
+--> hab-install: Installation of Habitat 'hab' program complete.
+Granting 'root' access to /usr/local/bin/hab
 ```
 <!-- stdout -->
 

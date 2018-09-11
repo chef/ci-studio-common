@@ -60,16 +60,16 @@ if [[ -s $hab_user_file ]]; then
 fi
 
 # Parse the options
-while getopts ":hcvu:" opt; do
+while getopts ":c:v:u:h:" opt; do
   case "${opt}" in
     c)
-      channel="${OPTARG}"
+      channel="$OPTARG"
       ;;
     v)
-      version="${OPTARG}"
+      version="$OPTARG"
       ;;
     u)
-      user="${OPTARG}"
+      user="$OPTARG"
       ;;
     h)
       usage
@@ -83,6 +83,7 @@ while getopts ":hcvu:" opt; do
       ;;
   esac
 done
+shift $((OPTIND -1))
 
 # Do not attempt to install Habitat if it is up-to-date
 do_install_habitat=true
@@ -97,7 +98,7 @@ fi
 
 echo "--- Installing Habitat"
 
-echo "Going to install habitat as '$user' user"
+echo "Going to install habitat '$version' as '$user' user"
 tmp_user_file=$(mktemp hab-user.XXXXXX)
 echo "$user" > "$tmp_user_file"
 mv "$tmp_user_file" "$hab_user_file"

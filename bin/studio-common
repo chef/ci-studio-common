@@ -28,6 +28,8 @@ DOC
   exit 1
 fi
 
+# Install curl silently (we can't use `install_if_missing` because it is not yet loaded)
+hab pkg install -b core/curl >/dev/null
 SUPPORTED_HAB_VERSION=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
 export SUPPORTED_HAB_VERSION
 

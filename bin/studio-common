@@ -28,7 +28,8 @@ DOC
   exit 1
 fi
 
-SUPPORTED_HAB_VERSION=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
+CURL="$(hab pkg path core/curl)/bin/curl"
+SUPPORTED_HAB_VERSION=$($CURL -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
 export SUPPORTED_HAB_VERSION
 
 # Ensure that the installed version of the hab toolchain is >= to the required version.

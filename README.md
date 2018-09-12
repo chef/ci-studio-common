@@ -293,14 +293,14 @@ Running habitat curl|bash
 --> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux
 --> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum?bt_package=hab-x86_64-linux
 --> hab-install: Renaming downloaded archive files
-'/var/tmp/tmp.btTJF02Ujp/hab-latest.tar.gz' -> '/var/tmp/tmp.btTJF02Ujp/hab-0.59.0-20180712155441-x86_64-linux.tar.gz'
-'/var/tmp/tmp.btTJF02Ujp/hab-latest.tar.gz.sha256sum' -> '/var/tmp/tmp.btTJF02Ujp/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum'
+'/var/tmp/tmp.HUNPY3NbHz/hab-latest.tar.gz' -> '/var/tmp/tmp.HUNPY3NbHz/hab-0.59.0-20180712155441-x86_64-linux.tar.gz'
+'/var/tmp/tmp.HUNPY3NbHz/hab-latest.tar.gz.sha256sum' -> '/var/tmp/tmp.HUNPY3NbHz/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum'
 --> hab-install: GnuPG tooling found, verifying the shasum digest is properly signed
 --> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum.asc?bt_package=hab-x86_64-linux
 --> hab-install: Downloading via wget: https://bintray.com/user/downloadSubjectPublicKey?username=habitat
 --> hab-install: Verifying the shasum digest matches the downloaded archive
 hab-0.59.0-20180712155441-x86_64-linux.tar.gz: OK
---> hab-install: Extracting /var/tmp/tmp.btTJF02Ujp/hab-0.59.0-20180712155441-x86_64-linux.tar.gz
+--> hab-install: Extracting /var/tmp/tmp.HUNPY3NbHz/hab-0.59.0-20180712155441-x86_64-linux.tar.gz
 --> hab-install: Installing Habitat package using temporarily downloaded hab
 » Installing core/hab/0.59.0
 ☁ Determining latest version of core/hab/0.59.0 in the 'stable' channel

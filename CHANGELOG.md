@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.19 -->
+<!-- latest_release 1.1.20 -->
+## [1.1.20](https://github.com/chef/ci-studio-common/tree/1.1.20) (2018-09-12)
+
+#### Merged Pull Requests
+- Install curl command before using it [#134](https://github.com/chef/ci-studio-common/pull/134) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.19](https://github.com/chef/ci-studio-common/tree/1.1.19) (2018-09-11)
 
 #### Merged Pull Requests
 - Fix bug in getopts logic for &#39;install-habitat&#39; [#133](https://github.com/chef/ci-studio-common/pull/133) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.18](https://github.com/chef/ci-studio-common/tree/1.1.18) (2018-08-16)
 

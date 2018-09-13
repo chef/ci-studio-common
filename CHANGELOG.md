@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.20 -->
+<!-- latest_release 1.1.21 -->
+## [1.1.21](https://github.com/chef/ci-studio-common/tree/1.1.21) (2018-09-13)
+
+#### Merged Pull Requests
+- New wait_or_fail_for_svc_to_load helper [#135](https://github.com/chef/ci-studio-common/pull/135) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.20](https://github.com/chef/ci-studio-common/tree/1.1.20) (2018-09-12)
 
 #### Merged Pull Requests
 - Install curl command before using it [#134](https://github.com/chef/ci-studio-common/pull/134) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [1.1.19](https://github.com/chef/ci-studio-common/tree/1.1.19) (2018-09-11)
 

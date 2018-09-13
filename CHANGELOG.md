@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.21 -->
+<!-- latest_release 1.1.22 -->
+## [1.1.22](https://github.com/chef/ci-studio-common/tree/1.1.22) (2018-09-13)
+
+#### Merged Pull Requests
+- New svc_running helper [#136](https://github.com/chef/ci-studio-common/pull/136) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.21](https://github.com/chef/ci-studio-common/tree/1.1.21) (2018-09-13)
 
 #### Merged Pull Requests
 - New wait_or_fail_for_svc_to_load helper [#135](https://github.com/chef/ci-studio-common/pull/135) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [1.1.20](https://github.com/chef/ci-studio-common/tree/1.1.20) (2018-09-12)
 

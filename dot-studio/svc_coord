@@ -52,15 +52,40 @@ function wait_for_success() {
 document "wait_for_svc_to_load" <<DOC
   Helper function to wait for a Habitat service (hab svc) to be loaded by the Habitat Supervisor.
 
+  DEPRECATED: Use 'wait_or_fail_for_svc_to_load' instead
+
   @(arg:1) PKG_IDENT A Habitat package identifier (ex: core/redis)
   @(arg:2) Wheter or not this process runs silently
 DOC
 function wait_for_svc_to_load() {
-  while [[ $(hab sup status "$1" | awk -F, '{gsub(/ /, "", $2); print $2}') != "state:up" ]]; do
+  echo " => DEPRECATED: Use 'wait_or_fail_for_svc_to_load' instead"
+}
+
+document "wait_or_fail_for_svc_to_load" <<DOC
+  Helper function to wait for a Habitat service (hab svc) to be loaded by the Habitat Supervisor.
+
+  @(arg:1) PKG_IDENT A Habitat package identifier (ex: core/redis)
+  @(arg:2) Number of seconds to wait before returning 1. (default: 60 seconds)
+  @(arg:3) Wheter or not this process runs silently
+DOC
+function wait_or_fail_for_svc_to_load() {
+  local SECONDS_WAITING=${2:-60}
+  local COUNTER=0
+
+  while [[ $(hab svc status "$1" | tail -1 | awk '{print $3}') != "up" ]]; do
     sleep 1
-    [[ "$2" != "silent" ]] && echo " => Waiting to load svc $1"
+
+    if [[ $COUNTER -ge "$SECONDS_WAITING" ]]; then
+      echo " => Habitat service '$1' failed to load."
+      return 1
+    fi
+
+    (( COUNTER=COUNTER+1 ))
+
+    [[ "${3:-}" != "silent" ]] && echo " => Waiting to load svc '$1'. ($COUNTER of $SECONDS_WAITING)";
   done
 }
+
 
 document "wait_for_port_to_listen" <<DOC
   Wait for a port to be listening.

@@ -49,6 +49,27 @@ function wait_for_success() {
   done
 }
 
+document "svc_running" <<DOC
+  Helper function to ask the Habitat supervisor if a service is running or not.
+
+  @(arg:1) PKG_IDENT A Habitat package identifier (ex: core/redis)
+DOC
+function svc_running() {
+  local rc=0
+  local svc_status=""
+  svc_status=$(hab svc status "$1" 2>/dev/null)
+  rc=$?
+  if [[ $rc != 0 ]]; then
+    return $rc
+  fi
+
+  if [[ $(echo "$svc_status" | tail -1 | awk '{print $3}') == "up" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 document "wait_for_svc_to_load" <<DOC
   Helper function to wait for a Habitat service (hab svc) to be loaded by the Habitat Supervisor.
 

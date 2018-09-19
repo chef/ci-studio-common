@@ -118,14 +118,15 @@ function install_go_tool() {
   fi
 
   ( cd "$GOPATH" || exit
-    for i in "$@"; do
-      go_tool=$(basename "$i")
+    for tool in "$@"; do
+      go_tool=$(basename "$tool")
       if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
         echo "=> Installing Go Tool '${go_tool}'"
         if [[ "$GO_TOOL_METHOD" == "install" ]]; then
-          eval "$go_cmd $scaffolding_go_base_path/$pkg_name/vendor/$i"
+          go_import_path=${scaffolding_go_import_path:-$scaffolding_go_base_path/$pkg_name}
+          eval "$go_cmd $go_import_path/vendor/$tool"
         else
-          eval "$go_cmd $i"
+          eval "$go_cmd $tool"
         fi
       fi
     done

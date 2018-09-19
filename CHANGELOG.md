@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.23 -->
+<!-- latest_release 1.1.24 -->
+## [1.1.24](https://github.com/chef/ci-studio-common/tree/1.1.24) (2018-09-19)
+
+#### Merged Pull Requests
+- Fix for protobuf and golang helpers [#138](https://github.com/chef/ci-studio-common/pull/138) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.23](https://github.com/chef/ci-studio-common/tree/1.1.23) (2018-09-19)
 
 #### Merged Pull Requests
 - Update Habitat from 0.59.0 to 0.63.0 [#137](https://github.com/chef/ci-studio-common/pull/137) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.22](https://github.com/chef/ci-studio-common/tree/1.1.22) (2018-09-13)
 

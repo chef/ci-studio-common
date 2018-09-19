@@ -36,6 +36,7 @@ document "compile_go_protobuf" <<DOC
 
 DOC
 function compile_go_protobuf() {
+  local rc
   proto_script="${1:-scripts/grpc.sh}"
   OLD_CC=$CC
   unset CC
@@ -70,6 +71,7 @@ function compile_go_protobuf() {
     fi
 
     eval "$proto_script";
+    rc=$?
   else
     echo "ERROR: '$proto_script' doesn't exist or is not executable."
     echo "Try 'describe ${FUNCNAME[0]}'."
@@ -78,5 +80,6 @@ function compile_go_protobuf() {
   fi
 
   CC=$OLD_CC
+  return $rc
 }
 add_alias "compile_go_protobuf" "co"

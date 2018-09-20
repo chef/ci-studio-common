@@ -87,28 +87,32 @@ document "install_go_tool" <<DOC
 
   @(arg:*) The array of packages you wish to install.
 
-  The default behavior is to install go tools with 'go get -u' but you can override
-  this by specifying the \$GO_TOOL_METHOD="install" so that it uses 'go install -v'
+  The default behavior is to install go tools with 'go install -v' but you can
+  override this by specifying the \$GO_TOOL_METHOD="get" so that it uses 'go get -u'
   instead, be aware that you have to have a vendor/ directory with the tools.
 
   Example 1 :: Install the listed go tool generating a static linked binary
   ---------------------------------------------------------------------------------
   GO_STATIC_BIN=true install_go_tool github.com/golang/dep/cmd/dep
 
-  Example 2 :: Install a go tool that you in your local vendor/ directory
+  Example 2 :: Install a number of go tools from your vendor/ directory
   --------------------------------------------------------------------------
   local proto_go_tools=(
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
     github.com/golang/protobuf/protoc-gen-go
   )
-  GO_TOOL_METHOD="install" install_go_tool \${proto_go_tools[@]}
+  GO_TOOL_VENDOR=true install_go_tool "\${proto_go_tools[@]}"
+
+  Example 3 :: Install a go tool from the internet. (No version control)
+  --------------------------------------------------------------------------
+  GO_TOOL_METHOD="get" install_go_tool "\${proto_go_tools[@]}"
 DOC
 function install_go_tool() {
   setup_go_workspace
-  local go_cmd="go get -u"
-  if [[ "$GO_TOOL_METHOD" == "install" ]]; then
-   go_cmd="go install -v"
+  local go_cmd="go install -v"
+  if [[ "$GO_TOOL_METHOD" == "get" ]]; then
+    go_cmd="go get -u"
   fi
 
   # Add static linked flags if needed
@@ -122,7 +126,7 @@ function install_go_tool() {
       go_tool=$(basename "$tool")
       if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
         echo "=> Installing Go Tool '${go_tool}'"
-        if [[ "$GO_TOOL_METHOD" == "install" ]]; then
+        if [ "$GO_TOOL_VENDOR" == true ]; then
           go_import_path=${scaffolding_go_import_path:-$scaffolding_go_base_path/$pkg_name}
           eval "$go_cmd $go_import_path/vendor/$tool"
         else

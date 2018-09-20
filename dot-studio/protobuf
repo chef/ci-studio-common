@@ -44,7 +44,7 @@ function compile_go_protobuf() {
   # Verify that the script exist ans it is an executable
   if [[ -x $proto_script ]]; then
     install_if_missing core/protobuf-cpp protoc
-    GO_TOOL_METHOD="install" install_go_tool github.com/golang/protobuf/protoc-gen-go
+    GO_TOOL_METHOD="install" GO_TOOL_VENDOR=true install_go_tool github.com/golang/protobuf/protoc-gen-go
 
     # Install grpc-gateway
     # only_if the script has an entry like: '--grpc-gateway_out'
@@ -54,11 +54,7 @@ function compile_go_protobuf() {
         github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
       )
 
-      # BUG: protoc-gen-grpc-gateway depends on github.com/golang/glog
-      #      so we have to install it first via 'go get'
-      install_go_tool github.com/golang/glog >/dev/null
-      # shellcheck disable=SC2068
-      GO_TOOL_METHOD="install" install_go_tool ${grpc_gateway_proto_tools[@]}
+      GO_TOOL_METHOD="install" GO_TOOL_VENDOR=true install_go_tool "${grpc_gateway_proto_tools[@]}"
     fi
 
     # Install protoc-gen-lint from the internet instead of

@@ -95,14 +95,14 @@ document "install_go_tool" <<DOC
   ---------------------------------------------------------------------------------
   GO_STATIC_BIN=true install_go_tool github.com/golang/dep/cmd/dep
 
-  Example 2 :: Install a go tool that you in your local vendor/ directory
+  Example 2 :: Install a number of go tools from your vendor/ directory
   --------------------------------------------------------------------------
   local proto_go_tools=(
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
     github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
     github.com/golang/protobuf/protoc-gen-go
   )
-  GO_TOOL_METHOD="install" install_go_tool \${proto_go_tools[@]}
+  GO_TOOL_METHOD="install" GO_TOOL_VENDOR=true install_go_tool "\${proto_go_tools[@]}"
 DOC
 function install_go_tool() {
   setup_go_workspace
@@ -120,9 +120,9 @@ function install_go_tool() {
   ( cd "$GOPATH" || exit
     for tool in "$@"; do
       go_tool=$(basename "$tool")
-      if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
+      if [ ! -f "${GOPATH}/bin/${go_tool}" ]; then
         echo "=> Installing Go Tool '${go_tool}'"
-        if [[ "$GO_TOOL_METHOD" == "install" ]]; then
+        if [ "$GO_TOOL_VENDOR" == true ]; then
           go_import_path=${scaffolding_go_import_path:-$scaffolding_go_base_path/$pkg_name}
           eval "$go_cmd $go_import_path/vendor/$tool"
         else

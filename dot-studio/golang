@@ -124,7 +124,7 @@ function install_go_tool() {
   ( cd "$GOPATH" || exit
     for tool in "$@"; do
       go_tool=$(basename "$tool")
-      if [ ! -f "${GOPATH}/bin/${go_tool}" ]; then
+      if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
         echo "=> Installing Go Tool '${go_tool}'"
         if [ "$GO_TOOL_VENDOR" == true ]; then
           go_import_path=${scaffolding_go_import_path:-$scaffolding_go_base_path/$pkg_name}

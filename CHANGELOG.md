@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.25 -->
+<!-- latest_release 1.1.26 -->
+## [1.1.26](https://github.com/chef/ci-studio-common/tree/1.1.26) (2018-09-20)
+
+#### Merged Pull Requests
+- Adds ability to install go tools NOT from vendor/ [#140](https://github.com/chef/ci-studio-common/pull/140) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.25](https://github.com/chef/ci-studio-common/tree/1.1.25) (2018-09-19)
 
 #### Merged Pull Requests
 - Revert &quot;Update Habitat from 0.59.0 to 0.63.0 (#137)&quot; [#139](https://github.com/chef/ci-studio-common/pull/139) ([schisamo](https://github.com/schisamo))
-<!-- latest_release -->
 
 ## [1.1.24](https://github.com/chef/ci-studio-common/tree/1.1.24) (2018-09-19)
 

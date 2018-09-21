@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# Copyright:: Copyright 2018 Chef Software, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+# ANSI Escape Codes:
+#
+# Just so you can be pretty in your messages :smile:
+#
+# Example:
+# => echo -e "I $(red love) $(blue chef) $(yellow friends)!"
+#
+NC='\033[0m' # No Color
+RED='\033[0;91m'
+GREEN='\033[0;92m'
+YELLOW='\033[0;93m'
+BLUE='\033[96m'
+
+function yellow(){
+  echo -e "${YELLOW}$1${NC}"
+}
+
+function red() {
+  echo -e "${RED}$1${NC}"
+}
+
+function green() {
+  echo -e "${GREEN}$1${NC}"
+}
+
+function blue() {
+  echo -e "${BLUE}$1${NC}"
+}
+# Wrapping build_line function to be called as `log_line` inside the studio
+# (prefered logging functions since it is just like inside a plan.sh)
+#
+# When used like:
+#
+# log_line "Doing something cool!"
+#
+# You will see the following output:
+#
+#     hag-studio: Doing something cool!
+#
+function log_line() {
+  build_line "$@"
+}
+
+function warn() {
+  echo -e "  $(yellow WARN:) $1"
+}
+
+function error() {
+  echo -e "  $(red ERROR:) $1"
+}

@@ -29,44 +29,40 @@ DOC
 function setup_go_workspace() {
   # Verify that we are using the Go Scaffolding
   if [[ ! "$pkg_scaffolding" =~ "scaffolding-go" ]]; then
-    echo "ERROR: Unable to setup Go Workspace."
-    echo "${FUNCNAME[0]}: requires the 'pkg_scaffolding' variable to exist in your plan.sh"
+    error "Unable to setup Go Workspace."
+    error "${FUNCNAME[0]}: requires the '$(yellow pkg_scaffolding)' variable to exist in your plan.sh"
     return 2
-  fi
+  fi;
 
   # Verify if the Go Workspace has been already configured
-  if [[ $scaffolding_go_workspace_src  ]]; then
+  if [[ -n $scaffolding_go_workspace_src ]]; then
     return 0
   fi
 
   # Currently the scaffolding-go has all the logic to setup the
   # Go Workspace, lets leverage all its functionality
-  echo "=> Configuring Go Workspace. [please wait]"
-  export scaffolding_go_gopath="${scaffolding_go_gopath:-/hab/cache/src/go}"
-  install "$pkg_scaffolding" >/dev/null
-  source "$(hab pkg path "$pkg_scaffolding")/lib/"*
-  export PATH="$PATH:${scaffolding_go_gopath}/bin"
+  log_line "${YELLOW}Configuring Go Workspace${NC}"
 
-  # Verify if we have the go_before callback
-  # If not lets setup the workspace ourself
-  go_before_callback=scaffolding_go_before
-  if [[ "$(type -t $go_before_callback)" = function ]]; then
-    eval "$go_before_callback"
-  else
-    mkdir -p "${scaffolding_go_workspace_src}/${scaffolding_go_base_path}" || return
-    if [[ ! -e "$scaffolding_go_pkg_path" ]]; then
-      ln -s /src "$scaffolding_go_pkg_path"
-    fi
-  fi
+  export scaffolding_go_gopath="${scaffolding_go_gopath:-/hab/cache/src/scaffolding-go-gopath}"
+  install "$pkg_scaffolding" >/dev/null
+
+  source "$(pkg_path_for "$pkg_scaffolding")/lib/scaffolding.sh"
+  if [[ "$(type -t scaffolding_load)" = "function" ]]; then
+    scaffolding_load
+  fi;
+
+  if [[ "$(type -t scaffolding_go_before)" = "function" ]]; then
+    scaffolding_go_before
+  fi;
 
   # Install go & git
   install_if_missing core/go go
   install_if_missing core/git git
+  log_line "$(green "Available scaffolding variables:")"
+  log_line "  \$scaffolding_go_gopath        - $scaffolding_go_gopath"
+  log_line "  \$scaffolding_go_workspace_src - $scaffolding_go_workspace_src"
+  log_line "  \$scaffolding_go_pkg_path      - $scaffolding_go_pkg_path"
 
-  echo "=> Available scaffolding variables:"
-  echo "\$scaffolding_go_gopath        - $scaffolding_go_gopath"
-  echo "\$scaffolding_go_workspace_src - $scaffolding_go_workspace_src"
-  echo "\$scaffolding_go_pkg_path      - $scaffolding_go_pkg_path"
   return 0
 }
 
@@ -125,7 +121,7 @@ function install_go_tool() {
     for tool in "$@"; do
       go_tool=$(basename "$tool")
       if [[ ! -f "${GOPATH}/bin/${go_tool}" ]]; then
-        echo "=> Installing Go Tool '${go_tool}'"
+        log_line "Installing Go Tool '${go_tool}'"
         if [ "$GO_TOOL_VENDOR" == true ]; then
           go_import_path=${scaffolding_go_import_path:-$scaffolding_go_base_path/$pkg_name}
           eval "$go_cmd $go_import_path/vendor/$tool"
@@ -183,15 +179,15 @@ function go_build() {
 
   ( cd "$scaffolding_go_pkg_path" || exit
     if [[ $RUN_GO_GENERATE == true ]]; then
-      echo "=> Executing Go generate"
+      log_line "Executing Go generate"
       go generate
     fi
 
     if [[ $RUN_GO_DEP == true ]]; then
-      echo "=> Executing dep ensure"
+      log_line "Executing dep ensure"
       dep_ensure
     fi
-    echo "=> Executing Go build"
+    log_line "Executing Go build: $go_cmd $go_main"
     eval "$go_cmd $go_main"
   )
 }
@@ -209,7 +205,7 @@ function dep_ensure() {
     # Run dep ensure only if vendor/ directory is missing
     if [[ ! -d vendor ]]; then
       install_go_tool github.com/golang/dep/cmd/dep
-      echo "=> Executing Go dependency solver ($go_cmd)"
+      log_line "Executing Go dependency solver ($go_cmd)"
       eval "$go_cmd"
     fi
   )
@@ -258,8 +254,8 @@ function go_debug_mode() {
   local go_cmd="dlv debug"
   local -r pid=$(grep_service_pid)
   if [[ ${pid} ]]; then
-    echo "There is a $pkg_name running. (${pid})"
-    echo "Stop the service with 'stop_service' then re-run '${FUNCNAME[0]}'"
+    error "There is a $pkg_name running. (${pid})"
+    error "Stop the service with 'stop_service' then re-run '${FUNCNAME[0]}'"
     return 1
   fi
 
@@ -292,7 +288,7 @@ function go_debug_mode() {
 
   ( cd "$scaffolding_go_pkg_path" || exit
     if [[ $go_cmd != *"headless"* ]]; then
-      echo "=> Starting debug console:"
+      log_line "Starting debug console:"
     fi
     eval "$go_cmd"
   )
@@ -313,7 +309,7 @@ document "go_debug_server" <<DOC
 DOC
 function go_debug_server() {
   local port=${1:-2345}
-  echo "=> Starting headless Delve Server in port '*:$port'"
+  log_line "Starting headless Delve Server in port '*:$port'"
   # shellcheck disable=2119
   GO_DEBUG_OPTS="--headless --listen=:$port --log" go_debug_mode
 }
@@ -328,7 +324,7 @@ function go_debug_attach_running_service() {
   if [[ ${pid} ]]; then
     go_debug_attach_to_pid "$pid"
   else
-    echo "There is no $pkg_name running."
+    error "There is no '$pkg_name' running."
     return 1
   fi
 }
@@ -343,8 +339,8 @@ document "go_debug_attach_to_pid" <<DOC
 DOC
 function go_debug_attach_to_pid() {
   if [[ -z $1 ]]; then
-    echo "You have to provide a PID to attach to"
-    echo "Run 'describe ${FUNCNAME[0]}' for more information"
+    error "You have to provide a PID to attach to"
+    error "Run 'describe ${FUNCNAME[0]}' for more information"
     return 1
   fi
 
@@ -357,7 +353,7 @@ function go_debug_attach_to_pid() {
 
   install_go_tool github.com/derekparker/delve/cmd/dlv
   ( cd "$scaffolding_go_pkg_path" || exit
-    echo "=> Connection to PID '${1}':"
+    log_line "Connection to PID '${1}':"
     eval "$go_cmd"
   )
 }

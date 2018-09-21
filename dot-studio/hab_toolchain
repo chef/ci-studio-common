@@ -39,11 +39,6 @@ document "sup-log" <<DOC
 DOC
 add_alias "sup-log" "sl"
 
-function enforce_hab_version() {
-  echo "DEPRECATED: (enforce_hab_version) This functionality is now automatically executed when the studio starts."
-  return 0
-}
-
 document "install" <<DOC
   Install the specified Habitat packages (defaults to $HAB_ORIGIN/$pkg_name).
 
@@ -85,7 +80,7 @@ function install() {
   else
     for pkg in "$@"
     do
-      echo "Installing $pkg"
+      log_line "Installing $pkg"
       eval "hab pkg $install_cmd $pkg >/dev/null"
     done
   fi
@@ -100,24 +95,24 @@ DOC
 function export_docker_image() {
   cd /src || return
   if [[ ! -f results/last_build.env ]]; then
-    echo "=> No Habitat build found - building now. [please wait]"
+    log_line "No Habitat build found - building now. [please wait]"
     build >/dev/null && return 1
   fi
   source results/last_build.env
-  echo "=> Latest build: $pkg_artifact"
-  echo "=> Exporting Habitat package into a Docker image. [please wait]"
+  log_line "Latest build: $pkg_artifact"
+  log_line "Exporting Habitat package into a Docker image. [please wait]"
   if ! hab pkg export docker "results/${pkg_artifact}" >/dev/null; then
     # If something went wrong here is because the pkg export cmd failed
-    echo "Unable to export package as a Docker Image."
-    echo "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose."
+    error "Unable to export package as a Docker Image."
+    error "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose."
     cd ../ || return
     return 1
   fi
   export DOCKER_TAG="${pkg_version}-${pkg_release}"
   export DOCKER_REPO="${pkg_origin}/${pkg_name}"
   export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}"
-  echo "=> Docker image successfully built: $DOCKER_IMAGE"
-  echo "=> Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
+  log_line "Docker image successfully built: $DOCKER_IMAGE"
+  log_line "Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
   cd ../ || return
 }
 
@@ -130,7 +125,7 @@ document "install_if_missing" <<DOC
 DOC
 function install_if_missing() {
   if [ "$#" -ne 2 ]; then
-    echo "ERROR: Wrong number of arguments to ${FUNCNAME[0]}"
+    error "Wrong number of arguments to ${FUNCNAME[0]}"
     describe "${FUNCNAME[0]}"
     return 1
   fi

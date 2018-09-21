@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.26 -->
+<!-- latest_release 1.1.27 -->
+## [1.1.27](https://github.com/chef/ci-studio-common/tree/1.1.27) (2018-09-21)
+
+#### Merged Pull Requests
+- Fix go_build studio helper [#141](https://github.com/chef/ci-studio-common/pull/141) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.26](https://github.com/chef/ci-studio-common/tree/1.1.26) (2018-09-20)
 
 #### Merged Pull Requests
 - Adds ability to install go tools NOT from vendor/ [#140](https://github.com/chef/ci-studio-common/pull/140) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [1.1.25](https://github.com/chef/ci-studio-common/tree/1.1.25) (2018-09-19)
 

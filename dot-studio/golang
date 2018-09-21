@@ -188,10 +188,11 @@ function go_build() {
     fi
 
     if [[ $RUN_GO_DEP == true ]]; then
+      echo "=> Executing dep ensure"
       dep_ensure
-      echo "=> Executing Go build"
-      eval "$go_cmd $go_main"
     fi
+    echo "=> Executing Go build"
+    eval "$go_cmd $go_main"
   )
 }
 add_alias "go_build" "gb"

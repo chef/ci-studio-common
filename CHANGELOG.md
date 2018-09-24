@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.28 -->
+<!-- latest_release 1.1.29 -->
+## [1.1.29](https://github.com/chef/ci-studio-common/tree/1.1.29) (2018-09-24)
+
+#### Merged Pull Requests
+- Adopt new logging helpers [#143](https://github.com/chef/ci-studio-common/pull/143) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [1.1.28](https://github.com/chef/ci-studio-common/tree/1.1.28) (2018-09-21)
 
 #### Merged Pull Requests
 - Adds colors and logging helpers to studio [#142](https://github.com/chef/ci-studio-common/pull/142) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [1.1.27](https://github.com/chef/ci-studio-common/tree/1.1.27) (2018-09-21)
 

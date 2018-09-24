@@ -39,10 +39,10 @@ function wait_for_success() {
   until "$@" &> /dev/null; do
     sleep 1
 
-    echo " => Waiting for '$*' to succeed. ($COUNTER of $SECONDS_WAITING)"
+    log_line "Waiting for '$*' to succeed. ($(yellow "$COUNTER of $SECONDS_WAITING"))"
 
     if [[ $COUNTER -ge "$SECONDS_WAITING" ]]; then
-      echo " => ERROR: Command '$*' never succeeded in $SECONDS_WAITING seconds."
+      error "Command '$*' never succeeded in $(red "$SECONDS_WAITING") seconds."
       return 1
     fi
     (( COUNTER=COUNTER+1 ))
@@ -97,16 +97,15 @@ function wait_or_fail_for_svc_to_load() {
     sleep 1
 
     if [[ $COUNTER -ge "$SECONDS_WAITING" ]]; then
-      echo " => Habitat service '$1' failed to load."
+      error "Habitat service '$(red "$1")' failed to load."
       return 1
     fi
 
     (( COUNTER=COUNTER+1 ))
 
-    [[ "${3:-}" != "silent" ]] && echo " => Waiting to load svc '$1'. ($COUNTER of $SECONDS_WAITING)";
+    [[ "${3:-}" != "silent" ]] && log_line "Waiting to load svc '$(yellow "$1")'. ($(yellow "$COUNTER of $SECONDS_WAITING"))";
   done
 }
-
 
 document "wait_for_port_to_listen" <<DOC
   Wait for a port to be listening.
@@ -144,12 +143,12 @@ function wait_or_fail_for_port_to_listen() {
     sleep 1
 
     if [[ $COUNTER -ge "$SECONDS_WAITING" ]]; then
-      echo " => Failed listening for port $1"
+      error "Failed listening for port '$1'"
       return 1
     fi
 
     (( COUNTER=COUNTER+1 ))
-    [[ "${3:-}" != "silent" ]] && echo " => Waiting for port $1 to be listening ($COUNTER of $SECONDS_WAITING)"
+    [[ "${3:-}" != "silent" ]] && log_line "Waiting for port '$(yellow "$1")' to be listening ($(yellow "$COUNTER of $SECONDS_WAITING"))";
   done
 }
 
@@ -183,7 +182,7 @@ function wait_for_ok_response() {
     if [[ $response -eq $code ]]; then
       break
     else
-      echo " => Waiting for '$url' to response OK ($code). [Got:$response] ($COUNTER of $SECONDS_TO_WAIT)"
+      log_line "Waiting for '$url' to response OK ($code). [Got:$response] ($(yellow "$COUNTER of $SECONDS_TO_WAIT"))"
       sleep 1
       (( COUNTER=COUNTER+1 ))
     fi

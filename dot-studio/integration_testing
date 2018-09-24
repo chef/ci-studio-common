@@ -26,10 +26,8 @@ function enforce_integration_testing() {
   do
     if ! type "$command" &> /dev/null
     then
-      echo ""
-      echo "  ERROR: Your .studiorc file, or a file in the .studio direcotry, must declare the '$command' function."
-      echo "         Please see https://github.com/chef/ci-studio-common#running-integration-tests for more information."
-      echo ""
+      error "Your .studiorc file, or a file in the .studio direcotry, must declare the '$command' function."
+      error "Please see https://github.com/chef/ci-studio-common#running-integration-tests for more information."
       return 1
     fi
   done

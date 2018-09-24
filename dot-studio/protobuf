@@ -69,8 +69,8 @@ function compile_go_protobuf() {
     eval "$proto_script";
     rc=$?
   else
-    echo "ERROR: '$proto_script' doesn't exist or is not executable."
-    echo "Try 'describe ${FUNCNAME[0]}'."
+    error "File '$proto_script' doesn't exist or is not executable."
+    error "Try 'describe ${FUNCNAME[0]}'."
     CC=$OLD_CC
     return 1
   fi

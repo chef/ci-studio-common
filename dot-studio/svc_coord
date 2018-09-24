@@ -70,6 +70,18 @@ function svc_running() {
   fi
 }
 
+document "wait_for_svc_to_load" <<DOC
+  Helper function to wait for a Habitat service (hab svc) to be loaded by the Habitat Supervisor.
+
+  DEPRECATED: Use 'wait_or_fail_for_svc_to_load' instead
+
+  @(arg:1) PKG_IDENT A Habitat package identifier (ex: core/redis)
+  @(arg:2) Wheter or not this process runs silently
+DOC
+function wait_for_svc_to_load() {
+  echo " => DEPRECATED: Use 'wait_or_fail_for_svc_to_load' instead"
+}
+
 document "wait_or_fail_for_svc_to_load" <<DOC
   Helper function to wait for a Habitat service (hab svc) to be loaded by the Habitat Supervisor.
 
@@ -95,6 +107,17 @@ function wait_or_fail_for_svc_to_load() {
   done
 }
 
+document "wait_for_port_to_listen" <<DOC
+  Wait for a port to be listening.
+
+  DEPRECATED: Use 'wait_or_fail_for_port_to_listen' instead
+
+  @(arg:1) Port to wait for to be listening
+  @(arg:2) Wheter or not this process runs silently
+DOC
+function wait_for_port_to_listen() {
+  echo " => DEPRECATED: Use 'wait_or_fail_for_port_to_listen' instead"
+}
 
 document "wait_or_fail_for_port_to_listen" <<DOC
   Wait for a port to be listening. If the port is not found in the set amount of time this helper returns 1.

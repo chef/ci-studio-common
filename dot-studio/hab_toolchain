@@ -39,6 +39,11 @@ document "sup-log" <<DOC
 DOC
 add_alias "sup-log" "sl"
 
+function enforce_hab_version() {
+  echo "DEPRECATED: (enforce_hab_version) This functionality is now automatically executed when the studio starts."
+  return 0
+}
+
 document "install" <<DOC
   Install the specified Habitat packages (defaults to $HAB_ORIGIN/$pkg_name).
 

@@ -106,10 +106,6 @@ mv "$tmp_user_file" "$hab_user_file"
 echo "Creating /hab directory"
 mkdir -p /hab
 
-echo "Granting $user access to /hab"
-chmod g+rwx /hab
-chown -R "root:$user" /hab
-
 if [[ $do_install_habitat ]]; then
   echo "Running habitat curl|bash"
   curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$version" -c "$channel"
@@ -129,3 +125,7 @@ if [[ "$user" != "root" ]]; then
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $install_hab_bin" "/etc/sudoers.d/$user"
   chmod 440 "/etc/sudoers.d/$user"
 fi
+
+echo "Granting $user access to /hab"
+chmod -R g+rwx /hab
+chown -R "root:$user" /hab

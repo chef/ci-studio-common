@@ -284,7 +284,6 @@ SUPPORTED HOOKS:
 --- Installing Habitat
 Going to install habitat '0.59.0' as 'root' user
 Creating /hab directory
-Granting root access to /hab
 Running habitat curl|bash
 --> hab-install: Installing Habitat 'hab' program
 --> hab-install: Determining fully qualified version of package for `0.59.0'
@@ -293,14 +292,14 @@ Running habitat curl|bash
 --> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz?bt_package=hab-x86_64-linux
 --> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum?bt_package=hab-x86_64-linux
 --> hab-install: Renaming downloaded archive files
-renamed '/var/tmp/tmp.4VhjaOfQgn/hab-latest.tar.gz' -> '/var/tmp/tmp.4VhjaOfQgn/hab-0.59.0-20180712155441-x86_64-linux.tar.gz'
-renamed '/var/tmp/tmp.4VhjaOfQgn/hab-latest.tar.gz.sha256sum' -> '/var/tmp/tmp.4VhjaOfQgn/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum'
+renamed '/var/tmp/tmp.AXV6v0Pg4t/hab-latest.tar.gz' -> '/var/tmp/tmp.AXV6v0Pg4t/hab-0.59.0-20180712155441-x86_64-linux.tar.gz'
+renamed '/var/tmp/tmp.AXV6v0Pg4t/hab-latest.tar.gz.sha256sum' -> '/var/tmp/tmp.AXV6v0Pg4t/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum'
 --> hab-install: GnuPG tooling found, verifying the shasum digest is properly signed
 --> hab-install: Downloading via wget: https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-0.59.0-20180712155441-x86_64-linux.tar.gz.sha256sum.asc?bt_package=hab-x86_64-linux
 --> hab-install: Downloading via wget: https://bintray.com/user/downloadSubjectPublicKey?username=habitat
 --> hab-install: Verifying the shasum digest matches the downloaded archive
 hab-0.59.0-20180712155441-x86_64-linux.tar.gz: OK
---> hab-install: Extracting /var/tmp/tmp.4VhjaOfQgn/hab-0.59.0-20180712155441-x86_64-linux.tar.gz
+--> hab-install: Extracting /var/tmp/tmp.AXV6v0Pg4t/hab-0.59.0-20180712155441-x86_64-linux.tar.gz
 --> hab-install: Installing Habitat package using temporarily downloaded hab
 » Installing core/hab/0.59.0
 ☁ Determining latest version of core/hab/0.59.0 in the 'stable' channel
@@ -312,6 +311,7 @@ hab-0.59.0-20180712155441-x86_64-linux.tar.gz: OK
 hab 0.59.0/20180712155441
 --> hab-install: Installation of Habitat 'hab' program complete.
 Granting 'root' access to /usr/local/bin/hab
+Granting root access to /hab
 ```
 <!-- stdout -->
 

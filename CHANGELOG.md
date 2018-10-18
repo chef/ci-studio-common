@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.30 -->
+<!-- latest_release 1.1.31 -->
+## [1.1.31](https://github.com/chef/ci-studio-common/tree/1.1.31) (2018-10-18)
+
+#### Merged Pull Requests
+- Ensure &#39;user&#39; has access to /hab directory [#145](https://github.com/chef/ci-studio-common/pull/145) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.30](https://github.com/chef/ci-studio-common/tree/1.1.30) (2018-10-18)
 
 #### Merged Pull Requests
 - Make sure &#39;user&#39; has access to root `/hab` directory [#144](https://github.com/chef/ci-studio-common/pull/144) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.29](https://github.com/chef/ci-studio-common/tree/1.1.29) (2018-09-24)
 

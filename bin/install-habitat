@@ -107,11 +107,8 @@ echo "Creating /hab directory"
 mkdir -p /hab
 
 echo "Granting $user access to /hab"
-test -d /hab/cache && chown -R "root:$user" /hab/cache
-test -d /hab/etc && chown -R "root:$user" /hab/etc
-test -d /hab/pkgs && chown -R "root:$user" /hab/pkgs
-
 chmod g+rwx /hab
+chown -R "root:$user" /hab
 
 if [[ $do_install_habitat ]]; then
   echo "Running habitat curl|bash"

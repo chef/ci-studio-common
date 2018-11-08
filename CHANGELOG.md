@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.31 -->
+<!-- latest_release 1.1.32 -->
+## [1.1.32](https://github.com/chef/ci-studio-common/tree/1.1.32) (2018-11-08)
+
+#### Merged Pull Requests
+- Install/upgrade Expeditor CLI as part of normal routine [#146](https://github.com/chef/ci-studio-common/pull/146) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.31](https://github.com/chef/ci-studio-common/tree/1.1.31) (2018-10-18)
 
 #### Merged Pull Requests
 - Ensure &#39;user&#39; has access to /hab directory [#145](https://github.com/chef/ci-studio-common/pull/145) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.30](https://github.com/chef/ci-studio-common/tree/1.1.30) (2018-10-18)
 

@@ -38,8 +38,7 @@ merge_actions:
       ignore_labels:
         - "Habitat: Skip Build"
         - "Expeditor: Skip All"
-  - bash:.expeditor/promote_hab_pkg.sh:
-      post_commit: true
+  - built_in:promote_habitat_packages:
       only_if: built_in:trigger_habitat_package_build
 
 # Habitat releases are consistently breaking the A2 pipeline. We are disabling

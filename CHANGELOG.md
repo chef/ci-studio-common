@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.32 -->
+<!-- latest_release 1.1.33 -->
+## [1.1.33](https://github.com/chef/ci-studio-common/tree/1.1.33) (2018-11-14)
+
+#### Merged Pull Requests
+- Minor Fixes: expeditor config and getopts for install-habitat [#148](https://github.com/chef/ci-studio-common/pull/148) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.32](https://github.com/chef/ci-studio-common/tree/1.1.32) (2018-11-08)
 
 #### Merged Pull Requests
 - Install/upgrade Expeditor CLI as part of normal routine [#146](https://github.com/chef/ci-studio-common/pull/146) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.31](https://github.com/chef/ci-studio-common/tree/1.1.31) (2018-10-18)
 

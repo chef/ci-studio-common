@@ -7,4 +7,3 @@ sudo install-habitat
 
 echo "Updating 'expeditor' CLI"
 hab pkg install chef-es/expeditor-ruby
-hab pkg binlink --force chef-es/expeditor-ruby expeditor

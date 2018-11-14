@@ -47,8 +47,6 @@ function handle_no_lock() {
   exit 0
 }
 
-lock || handle_no_lock
-
 user="${USER:-root}"
 version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
 channel=stable
@@ -60,7 +58,7 @@ if [[ -s $hab_user_file ]]; then
 fi
 
 # Parse the options
-while getopts ":c:v:u:h:" opt; do
+while getopts ":c:v:u:h" opt; do
   case "${opt}" in
     c)
       channel="$OPTARG"
@@ -84,6 +82,8 @@ while getopts ":c:v:u:h:" opt; do
   esac
 done
 shift $((OPTIND -1))
+
+lock || handle_no_lock
 
 # Do not attempt to install Habitat if it is up-to-date
 do_install_habitat=true

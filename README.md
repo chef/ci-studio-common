@@ -15,6 +15,7 @@ This repository houses some scripts / files that are used across various Chef pr
   * [Helpers](#helpers)
     + [`aws-configure`](#aws-configure)
     + [`ceval`](#ceval)
+    + [`check-rpm-signed`](#check-rpm-signed)
     + [`ci-studio-common-util`](#ci-studio-common-util)
     + [`citadel`](#citadel)
     + [`configure-github-account`](#configure-github-account)
@@ -24,6 +25,7 @@ This repository houses some scripts / files that are used across various Chef pr
     + [`hab-verify`](#hab-verify)
     + [`install-buildkite-agent`](#install-buildkite-agent)
     + [`install-habitat`](#install-habitat)
+    + [`install-omnibus-product`](#install-omnibus-product)
     + [`purge-habitat`](#purge-habitat)
 - [Habitat Studio](#habitat-studio)
   * [Installation](#installation-1)
@@ -147,6 +149,16 @@ GUIDANCE:
   2. If you're command requires double quotes, make sure to escape them.
 
         ceval "echo \"I'm a little tea pot\""
+```
+<!-- stdout -->
+
+#### `check-rpm-signed`
+
+<!-- stdout "./bin/check-rpm-signed --help" -->
+```
+Usage: check-rpm-signed RPM_FILE_NAME
+
+Verify that an rpm package has been signed.
 ```
 <!-- stdout -->
 
@@ -290,6 +302,23 @@ OPTIONS:
   -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
   -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
   -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
+```
+<!-- stdout -->
+
+#### `install-omnibus-product`
+
+<!-- stdout "./bin/install-omnibus-product" -->
+```
+Usage: ${0##*/} [-P PRODUCT] [-v VERSION] [-c CHANNEL] [-d DOWNLOAD_DIR] -h
+
+Download VERSION of PRODUCT from CHANNEL to DOWNLOAD_DIR and install it.
+
+OPTIONS:
+  -h               Show this message.
+  -P PRODUCT       The name of the product you wish to install. (required)
+  -v VERSION       Which version of the product you wish to install. (default: latest)
+  -c CHANNEL       The channel from which you wish to install the product. (default: stable)
+  -d DOWNLOAD_DIR  The directory to which you wish to download the product package. (default: PWD)
 ```
 <!-- stdout -->
 

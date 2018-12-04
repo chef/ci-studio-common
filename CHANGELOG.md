@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.33 -->
+<!-- latest_release 1.1.34 -->
+## [1.1.34](https://github.com/chef/ci-studio-common/tree/1.1.34) (2018-12-04)
+
+#### Merged Pull Requests
+- Add check-rpm-signed and install-omnibus-product scripts [#149](https://github.com/chef/ci-studio-common/pull/149) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [1.1.33](https://github.com/chef/ci-studio-common/tree/1.1.33) (2018-11-14)
 
 #### Merged Pull Requests
 - Minor Fixes: expeditor config and getopts for install-habitat [#148](https://github.com/chef/ci-studio-common/pull/148) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.32](https://github.com/chef/ci-studio-common/tree/1.1.32) (2018-11-08)
 

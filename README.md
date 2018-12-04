@@ -309,16 +309,6 @@ OPTIONS:
 
 <!-- stdout "./bin/install-omnibus-product" -->
 ```
-Usage: ${0##*/} [-P PRODUCT] [-v VERSION] [-c CHANNEL] [-d DOWNLOAD_DIR] -h
-
-Download VERSION of PRODUCT from CHANNEL to DOWNLOAD_DIR and install it.
-
-OPTIONS:
-  -h               Show this message.
-  -P PRODUCT       The name of the product you wish to install. (required)
-  -v VERSION       Which version of the product you wish to install. (default: latest)
-  -c CHANNEL       The channel from which you wish to install the product. (default: stable)
-  -d DOWNLOAD_DIR  The directory to which you wish to download the product package. (default: PWD)
 ```
 <!-- stdout -->
 

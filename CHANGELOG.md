@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.37 -->
+<!-- latest_release 1.1.38 -->
+## [1.1.38](https://github.com/chef/ci-studio-common/tree/1.1.38) (2018-12-13)
+
+#### Merged Pull Requests
+- Temporarily removing the Expeditor CLI [#154](https://github.com/chef/ci-studio-common/pull/154) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.37](https://github.com/chef/ci-studio-common/tree/1.1.37) (2018-12-13)
 
 #### Merged Pull Requests
 - Only install habitat and run habitat commands on supported architectures [#153](https://github.com/chef/ci-studio-common/pull/153) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [1.1.36](https://github.com/chef/ci-studio-common/tree/1.1.36) (2018-12-13)
 

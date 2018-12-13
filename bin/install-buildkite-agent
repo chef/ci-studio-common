@@ -101,7 +101,7 @@ function install_agent_hook() {
   fi
 
   header="echo \"--- executing hook: $hook\""
-  content=$(cat "$source_file")
+  content="source $source_file"
   footer="echo \"hook complete: $hook\""
   full_content="$header\\n$content\\n$footer"
 

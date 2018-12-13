@@ -21,6 +21,7 @@ if habitat_supported_platform; then
   echo "Updating 'hab'"
   sudo install-habitat
 
-  echo "Updating 'expeditor' CLI"
-  hab pkg install chef-es/expeditor-ruby
+  # Temporarily removing the expeditor-cli
+  # echo "Updating 'expeditor' CLI"
+  # hab pkg install chef-es/expeditor-ruby
 fi

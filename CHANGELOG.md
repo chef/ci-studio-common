@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.35 -->
+<!-- latest_release 1.1.36 -->
+## [1.1.36](https://github.com/chef/ci-studio-common/tree/1.1.36) (2018-12-13)
+
+#### Merged Pull Requests
+- Source the hook files rather than including them in the hook file [#151](https://github.com/chef/ci-studio-common/pull/151) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.35](https://github.com/chef/ci-studio-common/tree/1.1.35) (2018-12-04)
 
 #### Merged Pull Requests
 - url encode product_version in install-omnibus-product [#150](https://github.com/chef/ci-studio-common/pull/150) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [1.1.34](https://github.com/chef/ci-studio-common/tree/1.1.34) (2018-12-04)
 

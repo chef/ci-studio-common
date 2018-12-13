@@ -18,6 +18,8 @@ promote:
   channels:
     - dev
     - stable
+  actions:
+    - built_in:promote_habitat_packages
 
 merge_actions:
   - built_in:bump_version:
@@ -38,8 +40,6 @@ merge_actions:
       ignore_labels:
         - "Habitat: Skip Build"
         - "Expeditor: Skip All"
-  - built_in:promote_habitat_packages:
-      only_if: built_in:trigger_habitat_package_build
 
 # Habitat releases are consistently breaking the A2 pipeline. We are disabling
 # the auto-update until we can safely auto-update.

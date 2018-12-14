@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.42 -->
+<!-- latest_release 1.1.43 -->
+## [1.1.43](https://github.com/chef/ci-studio-common/tree/1.1.43) (2018-12-14)
+
+#### Merged Pull Requests
+- Do not throw an error if AWS_PROFILE is missing [#159](https://github.com/chef/ci-studio-common/pull/159) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.42](https://github.com/chef/ci-studio-common/tree/1.1.42) (2018-12-14)
 
 #### Merged Pull Requests
 - hab svc status changes fallout [#158](https://github.com/chef/ci-studio-common/pull/158) ([jaym](https://github.com/jaym))
-<!-- latest_release -->
 
 ## [1.1.41](https://github.com/chef/ci-studio-common/tree/1.1.41) (2018-12-14)
 

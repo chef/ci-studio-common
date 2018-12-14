@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.39 -->
+<!-- latest_release 1.1.40 -->
+## [1.1.40](https://github.com/chef/ci-studio-common/tree/1.1.40) (2018-12-14)
+
+#### Merged Pull Requests
+- Make ERROR a WARNING if studio is out of date [#156](https://github.com/chef/ci-studio-common/pull/156) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.39](https://github.com/chef/ci-studio-common/tree/1.1.39) (2018-12-14)
 
 #### Merged Pull Requests
 - Fix install-habitat script and update to hab 0.70.0 [#155](https://github.com/chef/ci-studio-common/pull/155) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.38](https://github.com/chef/ci-studio-common/tree/1.1.38) (2018-12-13)
 

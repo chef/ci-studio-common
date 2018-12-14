@@ -30,6 +30,7 @@ This repository houses some scripts / files that are used across various Chef pr
 - [Habitat Studio](#habitat-studio)
   * [Installation](#installation-1)
   * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
+  * [Setting a Habitat Version](#setting-a-habitat-version)
   * [`.studiorc` Helpers](#studiorc-helpers)
     + [`document`](#document)
     + [`add_alias`](#add_alias)

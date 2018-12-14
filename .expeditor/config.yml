@@ -41,14 +41,7 @@ merge_actions:
         - "Habitat: Skip Build"
         - "Expeditor: Skip All"
 
-# Habitat releases are consistently breaking the A2 pipeline. We are disabling
-# the auto-update until we can safely auto-update.
-#
-# subscriptions:
-#   - workload: artifact_published:stable:habitat:*
-#     actions:
-#       - bash:.expeditor/update_hab_version.sh
-#       - built_in:trigger_habitat_package_build
-#       - bash:.expeditor/promote_hab_pkg.sh:
-#           post_commit: true
-#           only_if: built_in:trigger_habitat_package_build
+subscriptions:
+  - workload: artifact_published:stable:habitat:*
+    actions:
+      - bash:.expeditor/update_hab_version.sh

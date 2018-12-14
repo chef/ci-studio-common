@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.40 -->
+<!-- latest_release 1.1.41 -->
+## [1.1.41](https://github.com/chef/ci-studio-common/tree/1.1.41) (2018-12-14)
+
+#### Merged Pull Requests
+- Be able to install the expeditor-cli from various channels [#157](https://github.com/chef/ci-studio-common/pull/157) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.40](https://github.com/chef/ci-studio-common/tree/1.1.40) (2018-12-14)
 
 #### Merged Pull Requests
 - Make ERROR a WARNING if studio is out of date [#156](https://github.com/chef/ci-studio-common/pull/156) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.39](https://github.com/chef/ci-studio-common/tree/1.1.39) (2018-12-14)
 

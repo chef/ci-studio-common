@@ -42,7 +42,7 @@ DOC
 }
 
 function get_file() {
-  export CITADEL_PROFILE="${CITADEL_PROFILE:-$AWS_PROFILE}"
+  export CITADEL_PROFILE="${CITADEL_PROFILE:-${AWS_PROFILE?You must set CITADEL_PROFILE}}"
   export CITADEL_BUCKET="${CITADEL_BUCKET:-${CITADEL_PROFILE}-citadel}"
 
   enforce_requirements

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.38 -->
+<!-- latest_release 1.1.39 -->
+## [1.1.39](https://github.com/chef/ci-studio-common/tree/1.1.39) (2018-12-14)
+
+#### Merged Pull Requests
+- Fix install-habitat script and update to hab 0.70.0 [#155](https://github.com/chef/ci-studio-common/pull/155) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.38](https://github.com/chef/ci-studio-common/tree/1.1.38) (2018-12-13)
 
 #### Merged Pull Requests
 - Temporarily removing the Expeditor CLI [#154](https://github.com/chef/ci-studio-common/pull/154) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.37](https://github.com/chef/ci-studio-common/tree/1.1.37) (2018-12-13)
 

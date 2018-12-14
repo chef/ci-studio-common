@@ -29,7 +29,8 @@ DOC
 fi
 
 CURL="$(hab pkg path core/curl)/bin/curl"
-SUPPORTED_HAB_VERSION=$($CURL -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
+DEFAULT_SUPPORTED_HAB_VERSION=$($CURL -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
+SUPPORTED_HAB_VERSION="${RECOMMENDED_HAB_VERSION:-$DEFAULT_SUPPORTED_HAB_VERSION}"
 export SUPPORTED_HAB_VERSION
 
 # Ensure that the installed version of the hab toolchain is >= to the required version.
@@ -63,16 +64,15 @@ if [[ $MAJOR -ne $R_MAJOR ]]; then
 fi
 
 if $need_upgrade; then
-  echo "ERROR: Habitat needs to be upgraded to version '$SUPPORTED_HAB_VERSION'"
-  echo "       Run:"
-  echo "       => hab studio rm"
-  echo "       to remove the studio, and then"
-  echo "       => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION"
-  exit 1
+  echo "WARNING: This project suggests that you upgrade your Habitat installation to '$SUPPORTED_HAB_VERSION'"
+  echo "         Run:"
+  echo "         => hab studio rm"
+  echo "         to remove the studio, and then"
+  echo "         => curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash -s -- -v $SUPPORTED_HAB_VERSION"
 fi;
 
 if $is_newer; then
-  echo "WARNING: Version '$installed_version' of Habitat has not been fully tested for compatibility with ci-studio-common."
+  echo "WARNING: Habitat version '$installed_version' is newer than the version of Habitat recommended for this project."
   echo "         Please consider exiting the studio, running:"
   echo "         => hab studio rm"
   echo "         to remove the studio, and then"

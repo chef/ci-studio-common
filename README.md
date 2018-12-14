@@ -350,6 +350,16 @@ Technically only the `else` body is necessary to _use_ `ci-studio-common`, but t
 2. Source any helpers defined in files in your `.studio` directory.
 2. Source your `/src/.secrets` file (if it exists).
 
+### Setting a Habitat Version
+
+`ci-studio-common` allows you to let your users know when they are running a version of Habitat that is either newer or older than the recommended version. By default, we recommend the version stored in the `.hab-version` file. However, you can set your own recommended version by setting the `RECOMMENDED_HAB_VERSION` variable before sourcing the studio code.
+
+```bash
+RECOMMENDED_HAB_VERSION="0.69.0"
+hab pkg install chef/ci-studio-common
+source "$(hab pkg path chef/ci-studio-common)/bin/studio-common"
+```
+
 ### `.studiorc` Helpers
 
 #### `document`

@@ -63,7 +63,7 @@ function svc_running() {
     return $rc
   fi
 
-  if [[ $(echo "$svc_status" | tail -1 | awk '{print $3}') == "up" ]]; then
+  if [[ $(echo "$svc_status" | tail -1 | awk '{print $4}') == "up" ]]; then
     return 0
   else
     return 1
@@ -93,7 +93,7 @@ function wait_or_fail_for_svc_to_load() {
   local SECONDS_WAITING=${2:-60}
   local COUNTER=0
 
-  while [[ $(hab svc status "$1" | tail -1 | awk '{print $3}') != "up" ]]; do
+  while [[ $(hab svc status "$1" | tail -1 | awk '{print $4}') != "up" ]]; do
     sleep 1
 
     if [[ $COUNTER -ge "$SECONDS_WAITING" ]]; then

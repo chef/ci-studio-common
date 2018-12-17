@@ -26,5 +26,5 @@ if habitat_supported_platform; then
     echo "Installing Expeditor CLI with exclusive lock (timeout 120s)..."
     flock --exclusive --wait 120 201
     hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
-  ) 201>/var/lock/hab-pkg-install-expeditor-cli.lock
+  ) 201>/tmp/hab-pkg-install-expeditor-cli.lock
 fi

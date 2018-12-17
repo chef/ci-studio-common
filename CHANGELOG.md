@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.44 -->
+<!-- latest_release 1.1.45 -->
+## [1.1.45](https://github.com/chef/ci-studio-common/tree/1.1.45) (2018-12-17)
+
+#### Merged Pull Requests
+- Write lock to directory buildkite-agent has permission to [#161](https://github.com/chef/ci-studio-common/pull/161) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.44](https://github.com/chef/ci-studio-common/tree/1.1.44) (2018-12-17)
 
 #### Merged Pull Requests
 - Add flock around Expeditor CLI install [#160](https://github.com/chef/ci-studio-common/pull/160) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.43](https://github.com/chef/ci-studio-common/tree/1.1.43) (2018-12-14)
 

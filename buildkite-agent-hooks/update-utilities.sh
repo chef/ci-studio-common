@@ -22,5 +22,9 @@ if habitat_supported_platform; then
   sudo install-habitat
 
   echo "Updating 'expeditor-cli'"
-  hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
+  (
+    echo "Installing Expeditor CLI with exclusive lock (timeout 120s)..."
+    flock --exclusive --wait 120 201
+    hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
+  ) 201>/var/lock/hab-pkg-install-expeditor-cli.lock
 fi

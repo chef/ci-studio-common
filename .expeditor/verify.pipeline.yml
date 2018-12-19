@@ -1,8 +1,6 @@
 steps:
   - label: bats
     command: bats /ci-studio-common/tests
-    agents:
-      queue: 'docker-privileged'
     plugins:
       docker#v1.1.1:
         image: "buildkite/plugin-tester"
@@ -11,8 +9,6 @@ steps:
   - label: in-studio
     env:
       STUDIO_OPTS: "-D"
-    agents:
-      queue: 'docker-privileged'
     command:
       - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:$PATH"
       - aws-configure chef-cd
@@ -27,8 +23,6 @@ steps:
       - aws-configure chef-cd
       - hab-verify lint
       - hab-verify syntax
-    agents:
-      queue: 'docker-privileged'
     plugins:
       docker#v1.1.1:
         image: ubuntu:16.04

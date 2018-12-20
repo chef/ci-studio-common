@@ -10,14 +10,14 @@ steps:
     env:
       STUDIO_OPTS: "-D"
     command:
-      - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:$PATH"
+      - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:\${PATH}"
       - aws-configure chef-cd
       - hab-verify in-studio ci_lint
       - hab-verify in-studio ci_syntax
 
   - label: habitat
     command:
-      - export PATH="/ci-studio-common/bin:$PATH"
+      - export PATH="/ci-studio-common/bin:\${PATH}"
       - apt-get update
       - apt-get install -y shellcheck
       - aws-configure chef-cd

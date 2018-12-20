@@ -52,11 +52,14 @@ function setup_profile() {
   secret_access_key="${profile_env}_AWS_SECRET_ACCESS_KEY"
   region="${profile_env}_AWS_DEFAULT_REGION"
 
+  # We want to allow the error handling here to work, so we temporarily disable unbound variable exceptions
+  set +u
   if [[ -z "${!access_key_id}" || -z "${!secret_access_key}" ]]; then
     echo "${0##*/}: Unable to find the required environment variables: $access_key_id and $secret_access_key."
     echo "Make sure that both are specified."
     exit 2
   fi
+  set -u
 
   if is_configured "$profile"; then
     echo "${0##*/}: $profile has already been configured."

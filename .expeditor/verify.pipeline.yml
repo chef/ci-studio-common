@@ -2,7 +2,7 @@ steps:
   - label: bats
     command: bats /ci-studio-common/tests
     plugins:
-      docker#v1.1.1:
+      docker#v2.1.0:
         image: "buildkite/plugin-tester"
         workdir: /ci-studio-common
 
@@ -24,6 +24,6 @@ steps:
       - hab-verify lint
       - hab-verify syntax
     plugins:
-      docker#v1.1.1:
+      docker#v2.1.0:
         image: ubuntu:16.04
         workdir: /ci-studio-common

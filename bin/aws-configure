@@ -41,8 +41,10 @@ function setup_profile() {
   profile_env="$(echo "$profile" | awk '{ print toupper($0) }' | tr '-' '_')"
 
   if [[ -z "$profile" ]]; then
+    echo
     echo -e "${0##*/}: No profile specified. You must specify an AWS profile to configure.\\n"
     usage
+    echo
     exit 2
   fi
 
@@ -55,8 +57,10 @@ function setup_profile() {
   # We want to allow the error handling here to work, so we temporarily disable unbound variable exceptions
   set +u
   if [[ -z "${!access_key_id}" || -z "${!secret_access_key}" ]]; then
+    echo
     echo "${0##*/}: Unable to find the required environment variables: $access_key_id and $secret_access_key."
     echo "Make sure that both are specified."
+    echo
     exit 2
   fi
   set -u

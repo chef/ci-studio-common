@@ -8,8 +8,6 @@ steps:
           workdir: /ci-studio-common
 
   - label: in-studio
-    env:
-      STUDIO_OPTS: "-D"
     command:
       - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:\${PATH}"
       - hab-verify in-studio ci_lint

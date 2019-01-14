@@ -51,8 +51,8 @@ DOC
 # in_studio integration
 #
 function in_studio() {
-  origin="${HAB_ORIGIN:-chef}"
-  export HAB_ORIGIN="$origin"
+  suffix="${BUILDKITE_BUILD_ID:-ephemeral}"
+  export HAB_ORIGIN="buildkite-${suffix}"
 
   # shellcheck disable=2048,2086
   if [ -z $* ]; then
@@ -61,7 +61,7 @@ function in_studio() {
     exit 2
   fi;
 
-  hab-origin download-sig-key "$origin"
+  hab origin key generate "$HAB_ORIGIN"
 
   # New version of Habitat doesn't source the .studiorc
   # shellcheck disable=2086

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.45 -->
+<!-- latest_release 1.1.46 -->
+## [1.1.46](https://github.com/chef/ci-studio-common/tree/1.1.46) (2019-01-14)
+
+#### Merged Pull Requests
+- Update to habitat 0.72.0 [#163](https://github.com/chef/ci-studio-common/pull/163) ([chef-ci](https://github.com/chef-ci))
+<!-- latest_release -->
+
 ## [1.1.45](https://github.com/chef/ci-studio-common/tree/1.1.45) (2018-12-17)
 
 #### Merged Pull Requests
 - Write lock to directory buildkite-agent has permission to [#161](https://github.com/chef/ci-studio-common/pull/161) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.44](https://github.com/chef/ci-studio-common/tree/1.1.44) (2018-12-17)
 

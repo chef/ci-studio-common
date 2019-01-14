@@ -4,6 +4,7 @@ steps:
     expeditor:
       executor:
         docker:
+          image: "buildkite/plugin-tester"
           workdir: /ci-studio-common
 
   - label: in-studio

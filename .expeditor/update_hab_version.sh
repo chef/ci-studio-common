@@ -9,7 +9,7 @@ if [[ -z $VERSION ]]; then
   exit 1
 fi
 
-branch="expeditor/upgrade-hab-${VERSION}"
+branch="expeditor/upgrade-hab"
 git checkout -b ${branch}
 
 echo "$VERSION" > .hab-version

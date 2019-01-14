@@ -1,29 +1,42 @@
 steps:
   - label: bats
     command: bats /ci-studio-common/tests
-    plugins:
-      docker#v2.1.0:
-        image: "buildkite/plugin-tester"
-        workdir: /ci-studio-common
+    expeditor:
+      executor:
+        docker:
+          workdir: /ci-studio-common
+    # plugins:
+    #   docker#v2.1.0:
+    #     image: "buildkite/plugin-tester"
+    #     workdir: /ci-studio-common
 
   - label: in-studio
-    env:
-      STUDIO_OPTS: "-D"
+    # env:
+    #   STUDIO_OPTS: "-D"
     command:
       - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:\${PATH}"
-      - aws-configure public-cd
-      - hab-verify in-studio ci_lint
-      - hab-verify in-studio ci_syntax
+      # - aws-configure public-cd
+      # - hab-verify in-studio ci_lint
+      # - hab-verify in-studio ci_syntax
+      - ci_lint
+      - ci_syntax
+    expeditor:
+      executor:
+        hab-studio:
 
   - label: habitat
     command:
       - export PATH="/ci-studio-common/bin:\${PATH}"
-      - apt-get update
-      - apt-get install -y shellcheck
-      - aws-configure public-cd
+      # - apt-get update
+      # - apt-get install -y shellcheck
+      # - aws-configure public-cd
       - hab-verify lint
       - hab-verify syntax
-    plugins:
-      docker#v2.1.0:
-        image: ubuntu:16.04
-        workdir: /ci-studio-common
+    expeditor:
+      executor:
+        docker:
+          workdir: /ci-studio-common
+    # plugins:
+    #   docker#v2.1.0:
+    #     image: ubuntu:16.04
+    #     workdir: /ci-studio-common

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.46 -->
+<!-- latest_release 1.1.47 -->
+## [1.1.47](https://github.com/chef/ci-studio-common/tree/1.1.47) (2019-01-17)
+
+#### Merged Pull Requests
+- Update to habitat 0.73.0 [#164](https://github.com/chef/ci-studio-common/pull/164) ([chef-ci](https://github.com/chef-ci))
+<!-- latest_release -->
+
 ## [1.1.46](https://github.com/chef/ci-studio-common/tree/1.1.46) (2019-01-14)
 
 #### Merged Pull Requests
 - Update to habitat 0.72.0 [#163](https://github.com/chef/ci-studio-common/pull/163) ([chef-ci](https://github.com/chef-ci))
-<!-- latest_release -->
 
 ## [1.1.45](https://github.com/chef/ci-studio-common/tree/1.1.45) (2018-12-17)
 

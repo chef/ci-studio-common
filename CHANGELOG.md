@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.47 -->
+<!-- latest_release 1.1.48 -->
+## [1.1.48](https://github.com/chef/ci-studio-common/tree/1.1.48) (2019-01-23)
+
+#### Merged Pull Requests
+- Don&#39;t fail on missing GITHUB_TOKEN [#165](https://github.com/chef/ci-studio-common/pull/165) ([stevendanna](https://github.com/stevendanna))
+<!-- latest_release -->
+
 ## [1.1.47](https://github.com/chef/ci-studio-common/tree/1.1.47) (2019-01-17)
 
 #### Merged Pull Requests
 - Update to habitat 0.73.0 [#164](https://github.com/chef/ci-studio-common/pull/164) ([chef-ci](https://github.com/chef-ci))
-<!-- latest_release -->
 
 ## [1.1.46](https://github.com/chef/ci-studio-common/tree/1.1.46) (2019-01-14)
 

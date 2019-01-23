@@ -33,10 +33,13 @@ document "generate_netrc_config" <<DOC
 DOC
 function generate_netrc_config() {
   if [[ -z "$GITHUB_TOKEN" ]]; then
-    error "\\nError: Unable to configure ~/.netrc in the studio."
-    error "Missing the environment variable: HAB_STUDIO_SECRET_GITHUB_TOKEN"
-    error "\\nVerify that you have this variable exported before entering the studio:"
-    exit_with "export HAB_STUDIO_SECRET_GITHUB_TOKEN=[your-secret-token]" 1
+    warn "Unable to configure ~/.netrc in the studio."
+    warn ""
+    warn "Missing the environment variable: HAB_STUDIO_SECRET_GITHUB_TOKEN"
+    warn "Without this variable, you will be unable to access private GitHub repositories."
+    warn ""
+    warn "Verify that you have this variable exported before entering the studio:"
+    warn "export HAB_STUDIO_SECRET_GITHUB_TOKEN=[your-secret-token]"
   else
     echo -e "machine github.com\\n  login $GITHUB_TOKEN" >> ~/.netrc
     chmod 0600 ~/.netrc

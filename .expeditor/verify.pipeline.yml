@@ -3,7 +3,7 @@ steps:
     command: bats /ci-studio-common/tests
     plugins:
       - docker#v3.0.0:
-          image: "buildkite/plugin-tester"
+          image: chefes/buildkite
           workdir: /ci-studio-common
 
   - label: in-studio
@@ -22,12 +22,13 @@ steps:
       queue: default-privileged
     command:
       - export PATH="/ci-studio-common/bin:\$PATH"
-      - apt-get update
-      - apt-get install -y shellcheck
       - aws-configure chef-cd
       - hab-verify lint
       - hab-verify syntax
     plugins:
       - docker#v3.0.0:
-          image: ubuntu:18.04
+          image: chefes/buildkite
           workdir: /ci-studio-common
+          environment:
+            - CHEF_CD_AWS_ACCESS_KEY_ID
+            - CHEF_CD_AWS_SECRET_ACCESS_KEY

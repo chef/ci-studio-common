@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-set -eou pipefail
+set -eo pipefail
 
 function usage() {
   cat <<DOC

@@ -1,35 +1,33 @@
 steps:
   - label: bats
     command: bats /ci-studio-common/tests
-    agents:
-      queue: 'docker-privileged'
     plugins:
-      docker#v1.1.1:
-        image: "buildkite/plugin-tester"
-        workdir: /ci-studio-common
+      - docker#v3.0.0:
+          image: "buildkite/plugin-tester"
+          workdir: /ci-studio-common
 
   - label: in-studio
     env:
       STUDIO_OPTS: "-D"
     agents:
-      queue: 'docker-privileged'
+      queue: default-privileged
     command:
-      - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:$PATH"
+      - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:\$PATH"
       - aws-configure chef-cd
       - hab-verify in-studio ci_lint
       - hab-verify in-studio ci_syntax
 
   - label: habitat
+    agents:
+      queue: default-privileged
     command:
-      - export PATH="/ci-studio-common/bin:$PATH"
+      - export PATH="/ci-studio-common/bin:\$PATH"
       - apt-get update
       - apt-get install -y shellcheck
       - aws-configure chef-cd
       - hab-verify lint
       - hab-verify syntax
-    agents:
-      queue: 'docker-privileged'
     plugins:
-      docker#v1.1.1:
-        image: ubuntu:16.04
-        workdir: /ci-studio-common
+      - docker#v3.0.0:
+          image: ubuntu:18.04
+          workdir: /ci-studio-common

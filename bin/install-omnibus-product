@@ -74,7 +74,7 @@ product_name=${product_name:?A product name must be specified}
 
 echo "--- Installing $channel $product_name $product_version"
 # url encode product_version in case it includes '+' from an appended timestamp
-download_url="$(mixlib-install download --url --channel "$channel" "$product_name" --version "${product_version//+/%2B}")"
+download_url="$(mixlib-install download --url --channel "$channel" "$product_name" --version "$product_version")"
 
 mixlib-install install-script | sudo bash -s -- -d "$download_dir" -l "$download_url" 2>&1
 

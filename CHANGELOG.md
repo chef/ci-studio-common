@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.48 -->
+<!-- latest_release 1.1.49 -->
+## [1.1.49](https://github.com/chef/ci-studio-common/tree/1.1.49) (2019-02-12)
+
+#### Merged Pull Requests
+- Remove url encoding of &quot;+&quot; in version in install-omnibus-product [#169](https://github.com/chef/ci-studio-common/pull/169) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [1.1.48](https://github.com/chef/ci-studio-common/tree/1.1.48) (2019-01-23)
 
 #### Merged Pull Requests
 - Don&#39;t fail on missing GITHUB_TOKEN [#165](https://github.com/chef/ci-studio-common/pull/165) ([stevendanna](https://github.com/stevendanna))
-<!-- latest_release -->
 
 ## [1.1.47](https://github.com/chef/ci-studio-common/tree/1.1.47) (2019-01-17)
 

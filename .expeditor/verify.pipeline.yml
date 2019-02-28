@@ -1,34 +1,27 @@
 steps:
   - label: bats
     command: bats /ci-studio-common/tests
-    plugins:
-      - docker#v3.0.0:
-          image: chefes/buildkite
+    expeditor:
+      executor:
+        docker:
           workdir: /ci-studio-common
 
-  - label: in-studio
-    env:
-      STUDIO_OPTS: "-D"
-    agents:
-      queue: default-privileged
-    command:
-      - export PATH="\${BUILDKITE_BUILD_CHECKOUT_PATH}/bin:\$PATH"
-      - aws-configure chef-cd
-      - hab-verify in-studio ci_lint
-      - hab-verify in-studio ci_syntax
-
-  - label: habitat
-    agents:
-      queue: default-privileged
+  - label: ":habicat: x86_64-linux"
     command:
       - export PATH="/ci-studio-common/bin:\$PATH"
-      - aws-configure chef-cd
-      - hab-verify lint
-      - hab-verify syntax
-    plugins:
-      - docker#v3.0.0:
-          image: chefes/buildkite
+      - install-habitat
+    expeditor:
+      executor:
+        docker:
+          privileged: true
           workdir: /ci-studio-common
-          environment:
-            - CHEF_CD_AWS_ACCESS_KEY_ID
-            - CHEF_CD_AWS_SECRET_ACCESS_KEY
+
+  - label: ":habicat: x86_64-linux-kernel2"
+    command:
+      - export PATH="/ci-studio-common/bin:\$PATH"
+      - install-habitat -t x86_64-linux-kernel2
+    expeditor:
+      executor:
+        docker:
+          privileged: true
+          workdir: /ci-studio-common

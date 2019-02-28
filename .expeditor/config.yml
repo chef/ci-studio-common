@@ -1,3 +1,6 @@
+project:
+  alias: ci-studio-common
+
 slack:
   notify_channel:
     - releng-notify

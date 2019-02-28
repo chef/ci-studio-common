@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.49 -->
+<!-- latest_release 1.1.50 -->
+## [1.1.50](https://github.com/chef/ci-studio-common/tree/1.1.50) (2019-02-28)
+
+#### Merged Pull Requests
+- Require &#39;sudo&#39; be used with &#39;hab&#39; binary [#168](https://github.com/chef/ci-studio-common/pull/168) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.49](https://github.com/chef/ci-studio-common/tree/1.1.49) (2019-02-12)
 
 #### Merged Pull Requests
 - Remove url encoding of &quot;+&quot; in version in install-omnibus-product [#169](https://github.com/chef/ci-studio-common/pull/169) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [1.1.48](https://github.com/chef/ci-studio-common/tree/1.1.48) (2019-01-23)
 

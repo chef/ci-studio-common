@@ -114,18 +114,12 @@ else
   echo "Habitat is already up-to-date"
 fi
 
-hab_bin=$(command -v hab)
-echo "Granting '$user' access to $hab_bin"
-chown -R "root:$user" "$hab_bin"
-
 if [[ "$user" != "root" ]]; then
+  hab_bin=$(command -v hab)
   install_hab_bin=$(command -v install-habitat)
+
   echo "Granting '$user' sudo permissions to run $hab_bin and $install_hab_bin"
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $hab_bin" "/etc/sudoers.d/$user"
   file-mod append-if-missing "$user ALL=NOPASSWD:SETENV: $install_hab_bin" "/etc/sudoers.d/$user"
   chmod 440 "/etc/sudoers.d/$user"
 fi
-
-echo "Granting $user access to /hab"
-chmod -R g+rwx /hab
-chown -R "root:$user" /hab

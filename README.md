@@ -303,6 +303,7 @@ OPTIONS:
   -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
   -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
   -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
+  -t TARGET     The kernel target for this installation. (default: target in '/var/opt/ci-studio-common/.hab-target' file or x86_64-linux)
 ```
 <!-- stdout -->
 

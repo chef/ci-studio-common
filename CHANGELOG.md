@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.51 -->
+<!-- latest_release 1.1.52 -->
+## [1.1.52](https://github.com/chef/ci-studio-common/tree/1.1.52) (2019-03-01)
+
+#### Merged Pull Requests
+- Add matching parameter support for install-habitat [#173](https://github.com/chef/ci-studio-common/pull/173) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.51](https://github.com/chef/ci-studio-common/tree/1.1.51) (2019-02-28)
 
 #### Merged Pull Requests
 - Install the CLI using sudo [#171](https://github.com/chef/ci-studio-common/pull/171) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.50](https://github.com/chef/ci-studio-common/tree/1.1.50) (2019-02-28)
 

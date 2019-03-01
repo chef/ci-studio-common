@@ -34,10 +34,10 @@ if habitat_supported_platform; then
   ) 201>/tmp/hab-pkg-install-expeditor-cli.lock
 fi
 
-if [[ -n "$EXPEDITOR_ACCOUNTS" ]]; then
+if [[ -n "${EXPEDITOR_ACCOUNTS:-}" ]]; then
   hab pkg exec chef-es/expeditor-cli expeditor buildkite configure-job
 fi
 
-if [[ -n "$EXPEDITOR_SECRETS" ]]; then
+if [[ -n "${EXPEDITOR_SECRETS:-}" ]]; then
   . $(hab pkg path chef-es/expeditor-cli)/bin/load-secrets
 fi

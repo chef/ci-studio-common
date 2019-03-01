@@ -1,5 +1,7 @@
 #!/bin/bash
-# This script has been deprecated in favor of the expeditor environment hook.
+# This script can be used to run the expeditor CLI commands in the environment hook
+
+set -eou pipefail
 
 habitat_supported_platform() {
   local habitat_supported_archs_regex='.*x86_64|amd64.*'
@@ -28,4 +30,12 @@ if habitat_supported_platform; then
     flock --exclusive --wait 120 201
     sudo hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
   ) 201>/tmp/hab-pkg-install-expeditor-cli.lock
+fi
+
+if [[ -n "$EXPEDITOR_ACCOUNTS" ]]; then
+  hab pkg exec chef-es/expeditor-cli expeditor buildkite configure-job
+fi
+
+if [[ -n "$EXPEDITOR_SECRETS" ]]; then
+  . $(hab pkg path chef-es/expeditor-cli)/bin/load-secrets
 fi

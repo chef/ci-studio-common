@@ -3,6 +3,8 @@
 
 set -eou pipefail
 
+export HAB_NONINTERACTIVE=true
+
 habitat_supported_platform() {
   local habitat_supported_archs_regex='.*x86_64|amd64.*'
   local platform="linux"

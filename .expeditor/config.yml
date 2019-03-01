@@ -1,3 +1,6 @@
+project:
+  alias: ci-studio-common
+
 slack:
   notify_channel:
     - releng-notify
@@ -24,11 +27,11 @@ promote:
 merge_actions:
   - built_in:bump_version:
       ignore_labels:
-        - "Version: Skip Bump"
+        - "Expeditor: Skip Version Bump"
         - "Expeditor: Skip All"
   - built_in:update_changelog:
       ignore_labels:
-        - "Changelog: Skip Update"
+        - "Expeditor: Skip Changelog"
         - "Expeditor: Skip All"
   - bash:.expeditor/update_readme.sh:
       ignore_labels:
@@ -38,7 +41,7 @@ merge_actions:
         - bin/*
   - built_in:trigger_habitat_package_build:
       ignore_labels:
-        - "Habitat: Skip Build"
+        - "Expeditor: Skip Habitat"
         - "Expeditor: Skip All"
 
 subscriptions:

@@ -31,6 +31,7 @@ OPTIONS:
   -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
   -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
   -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
+  -t TARGET     The kernel target for this installation. (default: target in '/var/opt/ci-studio-common/.hab-target' file or x86_64-linux)
 DOC
 }
 
@@ -50,6 +51,7 @@ function handle_no_lock() {
 user="${USER:-root}"
 version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
 channel=stable
+target=x86_64-linux
 
 # If we've specified a certain user that should own Hab, use that
 hab_user_file="/var/opt/ci-studio-common/.hab-user"
@@ -57,8 +59,14 @@ if [[ -s $hab_user_file ]]; then
   user=$(cat $hab_user_file)
 fi
 
+# If we've specifed a certain target for Hab, use that
+hab_target_file="/var/opt/ci-studio-common/.hab-target"
+if [[ -s $hab_target_file ]]; then
+  target=$(cat $hab_target_file)
+fi
+
 # Parse the options
-while getopts ":c:v:u:h" opt; do
+while getopts ":c:v:u:t:h" opt; do
   case "${opt}" in
     c)
       channel="$OPTARG"
@@ -68,6 +76,9 @@ while getopts ":c:v:u:h" opt; do
       ;;
     u)
       user="$OPTARG"
+      ;;
+    t)
+      target="$OPTARG"
       ;;
     h)
       usage
@@ -97,18 +108,20 @@ if [[ -s $hab_version_file ]]; then
 fi
 
 echo "--- Installing Habitat"
+mkdir -p /var/opt/ci-studio-common
 
-echo "Going to install habitat '$version' as '$user' user"
+echo "Going to install the '$target' build of habitat '$version' as '$user' user"
 tmp_user_file=$(mktemp hab-user.XXXXXX)
 echo "$user" > "$tmp_user_file"
 mv "$tmp_user_file" "$hab_user_file"
 
-echo "Creating /hab directory"
-mkdir -p /hab
+tmp_target_file=$(mktemp hab-target.XXXXXX)
+echo "$target" > "$tmp_target_file"
+mv "$tmp_target_file" "$hab_target_file"
 
 if [[ "$do_install_habitat" = "true" ]]; then
   echo "Running habitat curl|bash"
-  curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$version" -c "$channel"
+  curl -sL https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | bash -s -- -v "$version" -c "$channel" -t "$target"
   echo "$version" > "$hab_version_file"
 else
   echo "Habitat is already up-to-date"

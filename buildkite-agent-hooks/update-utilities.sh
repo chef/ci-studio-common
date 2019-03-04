@@ -1,6 +1,9 @@
 #!/bin/bash
 # This script has been deprecated in favor of the expeditor environment hook.
 
+export HAB_NONINTERACTIVE=true
+export HAB_NOCOLORING=true
+
 habitat_supported_platform() {
   local habitat_supported_archs_regex='.*x86_64|amd64.*'
   local platform="linux"

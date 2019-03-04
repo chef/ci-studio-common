@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.54 -->
+<!-- latest_release 1.1.55 -->
+## [1.1.55](https://github.com/chef/ci-studio-common/tree/1.1.55) (2019-03-04)
+
+#### Merged Pull Requests
+- Set HAB_NONINTERACTIVE and HAB_NOCOLORING [#177](https://github.com/chef/ci-studio-common/pull/177) ([stevendanna](https://github.com/stevendanna))
+<!-- latest_release -->
+
 ## [1.1.54](https://github.com/chef/ci-studio-common/tree/1.1.54) (2019-03-01)
 
 #### Merged Pull Requests
 - Fix minor issues in Expeditor Hook [#175](https://github.com/chef/ci-studio-common/pull/175) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.53](https://github.com/chef/ci-studio-common/tree/1.1.53) (2019-03-01)
 

@@ -31,14 +31,15 @@ if habitat_supported_platform; then
   (
     echo "Installing Expeditor CLI with exclusive lock (timeout 120s)..."
     flock --exclusive --wait 120 201
+
     sudo hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
+
+    if [[ -n "${EXPEDITOR_ACCOUNTS:-}" ]]; then
+      hab pkg exec chef-es/expeditor-cli expeditor buildkite configure-job
+    fi
+
+    if [[ -n "${EXPEDITOR_SECRETS:-}" ]]; then
+      . $(hab pkg path chef-es/expeditor-cli)/bin/load-secrets
+    fi
   ) 201>/tmp/hab-pkg-install-expeditor-cli.lock
-fi
-
-if [[ -n "${EXPEDITOR_ACCOUNTS:-}" ]]; then
-  hab pkg exec chef-es/expeditor-cli expeditor buildkite configure-job
-fi
-
-if [[ -n "${EXPEDITOR_SECRETS:-}" ]]; then
-  . $(hab pkg path chef-es/expeditor-cli)/bin/load-secrets
 fi

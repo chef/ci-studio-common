@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.56 -->
+<!-- latest_release 1.1.57 -->
+## [1.1.57](https://github.com/chef/ci-studio-common/tree/1.1.57) (2019-03-08)
+
+#### Merged Pull Requests
+- Do not source environment variables in subshell [#179](https://github.com/chef/ci-studio-common/pull/179) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.56](https://github.com/chef/ci-studio-common/tree/1.1.56) (2019-03-08)
 
 #### Merged Pull Requests
 - Move all Expeditor actions under the flock [#178](https://github.com/chef/ci-studio-common/pull/178) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.55](https://github.com/chef/ci-studio-common/tree/1.1.55) (2019-03-04)
 

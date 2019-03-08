@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.55 -->
+<!-- latest_release 1.1.56 -->
+## [1.1.56](https://github.com/chef/ci-studio-common/tree/1.1.56) (2019-03-08)
+
+#### Merged Pull Requests
+- Move all Expeditor actions under the flock [#178](https://github.com/chef/ci-studio-common/pull/178) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.55](https://github.com/chef/ci-studio-common/tree/1.1.55) (2019-03-04)
 
 #### Merged Pull Requests
 - Set HAB_NONINTERACTIVE and HAB_NOCOLORING [#177](https://github.com/chef/ci-studio-common/pull/177) ([stevendanna](https://github.com/stevendanna))
-<!-- latest_release -->
 
 ## [1.1.54](https://github.com/chef/ci-studio-common/tree/1.1.54) (2019-03-01)
 

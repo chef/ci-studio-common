@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.57 -->
+<!-- latest_release 1.1.58 -->
+## [1.1.58](https://github.com/chef/ci-studio-common/tree/1.1.58) (2019-03-13)
+
+#### Merged Pull Requests
+- Update hab to 0.77.0 [#180](https://github.com/chef/ci-studio-common/pull/180) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.57](https://github.com/chef/ci-studio-common/tree/1.1.57) (2019-03-08)
 
 #### Merged Pull Requests
 - Do not source environment variables in subshell [#179](https://github.com/chef/ci-studio-common/pull/179) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.56](https://github.com/chef/ci-studio-common/tree/1.1.56) (2019-03-08)
 

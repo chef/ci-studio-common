@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.58 -->
+<!-- latest_release 1.1.59 -->
+## [1.1.59](https://github.com/chef/ci-studio-common/tree/1.1.59) (2019-03-29)
+
+#### Merged Pull Requests
+- Install gofmt when we install go. [#183](https://github.com/chef/ci-studio-common/pull/183) ([danielsdeleo](https://github.com/danielsdeleo))
+<!-- latest_release -->
+
 ## [1.1.58](https://github.com/chef/ci-studio-common/tree/1.1.58) (2019-03-13)
 
 #### Merged Pull Requests
 - Update hab to 0.77.0 [#180](https://github.com/chef/ci-studio-common/pull/180) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.57](https://github.com/chef/ci-studio-common/tree/1.1.57) (2019-03-08)
 

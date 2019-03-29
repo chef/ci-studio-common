@@ -57,6 +57,7 @@ function setup_go_workspace() {
 
   # Install go & git
   install_if_missing core/go go
+  install_if_missing core/go gofmt
   install_if_missing core/git git
   log_line "$(green "Available scaffolding variables:")"
   log_line "  \$scaffolding_go_gopath        - $scaffolding_go_gopath"

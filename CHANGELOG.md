@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.60 -->
+<!-- latest_release 1.1.61 -->
+## [1.1.61](https://github.com/chef/ci-studio-common/tree/1.1.61) (2019-04-01)
+
+#### Merged Pull Requests
+- Do not prefix output with &#39;---&#39; [#184](https://github.com/chef/ci-studio-common/pull/184) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.60](https://github.com/chef/ci-studio-common/tree/1.1.60) (2019-04-01)
 
 #### Merged Pull Requests
 - Add check-omnibus-package-signed utility [#186](https://github.com/chef/ci-studio-common/pull/186) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
-<!-- latest_release -->
 
 ## [1.1.59](https://github.com/chef/ci-studio-common/tree/1.1.59) (2019-03-29)
 

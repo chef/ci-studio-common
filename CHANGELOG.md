@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.59 -->
+<!-- latest_release 1.1.60 -->
+## [1.1.60](https://github.com/chef/ci-studio-common/tree/1.1.60) (2019-04-01)
+
+#### Merged Pull Requests
+- Add check-omnibus-package-signed utility [#186](https://github.com/chef/ci-studio-common/pull/186) ([jeremiahsnapp](https://github.com/jeremiahsnapp))
+<!-- latest_release -->
+
 ## [1.1.59](https://github.com/chef/ci-studio-common/tree/1.1.59) (2019-03-29)
 
 #### Merged Pull Requests
 - Install gofmt when we install go. [#183](https://github.com/chef/ci-studio-common/pull/183) ([danielsdeleo](https://github.com/danielsdeleo))
-<!-- latest_release -->
 
 ## [1.1.58](https://github.com/chef/ci-studio-common/tree/1.1.58) (2019-03-13)
 

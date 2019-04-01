@@ -15,6 +15,7 @@ This repository houses some scripts / files that are used across various Chef pr
   * [Helpers](#helpers)
     + [`aws-configure`](#aws-configure)
     + [`ceval`](#ceval)
+    + [`check-omnibus-package-signed`](#check-omnibus-package-signed)
     + [`check-rpm-signed`](#check-rpm-signed)
     + [`ci-studio-common-util`](#ci-studio-common-util)
     + [`citadel`](#citadel)
@@ -153,7 +154,19 @@ GUIDANCE:
 ```
 <!-- stdout -->
 
+#### `check-omnibus-package-signed`
+
+<!-- stdout "./bin/check-omnibus-package-signed --help" -->
+```
+Usage: check-omnibus-package-signed [DMG_FILE_NAME | RPM_FILE_NAME]
+
+Verify that an rpm is signed or that a dmg contains a signed package.
+```
+<!-- stdout -->
+
 #### `check-rpm-signed`
+
+**Deprecated in favor of check-omnibus-package-signed**
 
 <!-- stdout "./bin/check-rpm-signed --help" -->
 ```

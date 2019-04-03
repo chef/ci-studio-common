@@ -6,8 +6,8 @@ slack:
     - releng-notify
     - ci-studio-discuss
 
-habitat_packages:
-  - ci-studio-common
+pipelines:
+  - habitat/build
 
 github:
   delete_branch_on_merge: true
@@ -39,7 +39,7 @@ merge_actions:
       only_if_modified:
         - README.md
         - bin/*
-  - built_in:trigger_habitat_package_build:
+  - trigger_pipeline:habitat/build:
       ignore_labels:
         - "Expeditor: Skip Habitat"
         - "Expeditor: Skip All"

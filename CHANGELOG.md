@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.61 -->
+<!-- latest_release 1.1.62 -->
+## [1.1.62](https://github.com/chef/ci-studio-common/tree/1.1.62) (2019-04-03)
+
+#### Merged Pull Requests
+- Leverage the new buildkite-based Habitat builds [#187](https://github.com/chef/ci-studio-common/pull/187) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.61](https://github.com/chef/ci-studio-common/tree/1.1.61) (2019-04-01)
 
 #### Merged Pull Requests
 - Do not prefix output with &#39;---&#39; [#184](https://github.com/chef/ci-studio-common/pull/184) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.60](https://github.com/chef/ci-studio-common/tree/1.1.60) (2019-04-01)
 

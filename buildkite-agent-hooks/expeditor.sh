@@ -32,7 +32,7 @@ if habitat_supported_platform; then
     echo "Installing Expeditor CLI with exclusive lock (timeout 120s)..."
     flock --exclusive --wait 120 201
 
-    sudo hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
+    sudo -E hab pkg install --channel "${EXPEDITOR_CHANNEL:-stable}" chef-es/expeditor-cli
 
     if [[ -n "${EXPEDITOR_ACCOUNTS:-}" ]]; then
       hab pkg exec chef-es/expeditor-cli expeditor buildkite configure-job

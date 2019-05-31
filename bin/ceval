@@ -22,6 +22,8 @@ function usage() {
   cat <<DOC
 Usage: ${0##*/} COMMAND
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 Conditionally evaluate the given COMMAND.
 
     If the DEBUG environment variable is unset, ${0##*/} will evaluate the COMMAND using 'eval'.

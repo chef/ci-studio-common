@@ -22,6 +22,8 @@ function usage() {
   cat <<DOC
 Usage: ${0##*/} ACCOUNT
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 Configure GitHub credentials for ACCOUNT.
 
 Requires you have the following environment variables set:

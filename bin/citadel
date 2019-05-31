@@ -31,6 +31,8 @@ function usage() {
   cat <<DOC
 Usage: ${0##*/} FILE
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
 
 Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.

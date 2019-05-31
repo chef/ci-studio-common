@@ -22,6 +22,8 @@ function usage() {
   cat <<DOC
 Usage: ${0##*/} [PROFILE]
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 A non-interactive version of 'aws configure' that allows you to configure AWS CLI profiles.
 
 To add a new profile, you MUST specify following environment variables:

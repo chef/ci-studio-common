@@ -22,6 +22,8 @@ function usage() {
   cat <<DOC
 Usage: ${0##*/} SUBCOMMAND
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 Helpers that extend functionality of the hab origin namespace.
 
 SUBCOMMANDS:

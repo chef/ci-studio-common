@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.63 -->
+<!-- latest_release 1.1.64 -->
+## [1.1.64](https://github.com/chef/ci-studio-common/tree/1.1.64) (2019-06-11)
+
+#### Merged Pull Requests
+- Mark subset of tooling as deprecated [#193](https://github.com/chef/ci-studio-common/pull/193) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.63](https://github.com/chef/ci-studio-common/tree/1.1.63) (2019-04-15)
 
 #### Merged Pull Requests
 - Use `sudo -E` when calling `hab pkg install` [#190](https://github.com/chef/ci-studio-common/pull/190) ([stevendanna](https://github.com/stevendanna))
-<!-- latest_release -->
 
 ## [1.1.62](https://github.com/chef/ci-studio-common/tree/1.1.62) (2019-04-03)
 

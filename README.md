@@ -116,6 +116,8 @@ where:
 ```
 Usage: aws-configure [PROFILE]
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 A non-interactive version of 'aws configure' that allows you to configure AWS CLI profiles.
 
 To add a new profile, you MUST specify following environment variables:
@@ -135,6 +137,8 @@ SUBCOMMANDS:
 <!-- stdout "./bin/ceval --help" -->
 ```
 Usage: ceval COMMAND
+
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
 
 Conditionally evaluate the given COMMAND.
 
@@ -194,6 +198,8 @@ SUBCOMMANDS:
 ```
 Usage: citadel FILE
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
 
 Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.
@@ -209,6 +215,8 @@ ENVIRONMENT VARIABLES:
 <!-- stdout "./bin/configure-github-account --help" -->
 ```
 Usage: configure-github-account ACCOUNT
+
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
 
 Configure GitHub credentials for ACCOUNT.
 
@@ -252,6 +260,8 @@ SUBCOMMANDS:
 ```
 Usage: hab-origin SUBCOMMAND
 
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
+
 Helpers that extend functionality of the hab origin namespace.
 
 SUBCOMMANDS:
@@ -264,6 +274,8 @@ SUBCOMMANDS:
 <!-- stdout "./bin/hab-verify --help" -->
 ```
 Usage: hab-verify SUBCOMMAND
+
+DEPRECATED: This utility has been deprecated and will be removed in the next major version.
 
 Helpers that perform common verification steps inside Habitat.
 

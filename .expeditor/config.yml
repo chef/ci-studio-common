@@ -7,12 +7,16 @@ slack:
     - ci-studio-discuss
 
 pipelines:
+  - verify:
+      public: true
   - habitat/build
 
 github:
   delete_branch_on_merge: true
   release_branch:
     - master:
+        version_constraint: 2.*
+    - 1-stable:
         version_constraint: 1.*
     - pre-1.0:
         version_constraint: 0.*
@@ -36,10 +40,13 @@ merge_actions:
   - bash:.expeditor/update_readme.sh:
       ignore_labels:
         - "Expeditor: Skip All"
-      only_if_modified:
-        - README.md
-        - bin/*
+  - bash:.expeditor/build.sh:
+      post_commit: true
+      ignore_labels:
+        - "Expeditor: Skip All"
   - trigger_pipeline:habitat/build:
+      only_if_modified:
+        - studio-common/*
       ignore_labels:
         - "Expeditor: Skip Habitat"
         - "Expeditor: Skip All"

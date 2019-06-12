@@ -6,28 +6,19 @@ This repository houses some scripts / files that are used across various Chef pr
 
 <!-- toc -->
 
-- [Dependencies](#dependencies)
-- [Announcing the 1.0 release](#announcing-the-10-release)
+- [Announcing the 2.0 release](#announcing-the-20-release)
   * [Pinning to pre-1.0](#pinning-to-pre-10)
 - [CI Services (Travis, Buildkite, etc)](#ci-services-travis-buildkite-etc)
   * [Installation](#installation)
-  * [Environment Variables](#environment-variables)
+    + [Linux & macOS](#linux--macos)
+    + [Windows (Powershell)](#windows-powershell)
+    + [Windows (cmd.exe)](#windows-cmdexe)
   * [Helpers](#helpers)
-    + [`aws-configure`](#aws-configure)
-    + [`ceval`](#ceval)
-    + [`check-omnibus-package-signed`](#check-omnibus-package-signed)
-    + [`check-rpm-signed`](#check-rpm-signed)
     + [`ci-studio-common-util`](#ci-studio-common-util)
-    + [`citadel`](#citadel)
-    + [`configure-github-account`](#configure-github-account)
     + [`did-modify`](#did-modify)
     + [`file-mod`](#file-mod)
-    + [`hab-origin`](#hab-origin)
-    + [`hab-verify`](#hab-verify)
     + [`install-buildkite-agent`](#install-buildkite-agent)
     + [`install-habitat`](#install-habitat)
-    + [`install-omnibus-product`](#install-omnibus-product)
-    + [`purge-habitat`](#purge-habitat)
 - [Habitat Studio](#habitat-studio)
   * [Installation](#installation-1)
   * [What happens when you source studio-common?](#what-happens-when-you-source-studio-common)
@@ -48,19 +39,13 @@ This repository houses some scripts / files that are used across various Chef pr
 
 <!-- tocstop -->
 
-## Dependencies
+## Announcing the 2.0 release
 
-* `git`
-* `perl`
+The focus of the 2.0 release is to optimize ci-studio-common for use with multiple Buildkite platform. As such, we have made the breaking following changes:
 
-## Announcing the 1.0 release
-
-The focus of the 1.0 release was to optimize ci-studio-common for use with Buildkite. As such, we have made the breaking following changes:
-
-* `ci-studio-common` now installs into `/opt/ci-studio-common` as a git repository instead of `$HOME/ci-studio-common` via a tarball download.
-* The `install-tool` utility has been removed. Please install Habitat using `install-habitat` and install the utilities using `hab pkg install`.
-* The `run-if-changed` utility has been removed. Please use the `did-modify` utility instead.
-* The `hab-studio` utility, and support for the `.secrets` file, has been removed. Please use the [secrets functionality](https://www.habitat.sh/docs/using-builder/#working-with-origin-secrets) now included with Habitat.
+* Utilities are now being written in Go to ensure consistency and availability across supported platforms. 
+* Some deprecated utilities have been removed, or are in the process of being removed. 
+* We no longer ship as a Habitat Package
 
 ### Pinning to pre-1.0
 
@@ -76,32 +61,35 @@ before_install:
 
 ### Installation
 
-```yaml
-before_install:
-  - curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash
+#### Linux & macOS
+
+```bash
+curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash
 ```
 
-If you would like to make an installation from a branch that is under
-development, you can add `-s -- BRANCH_NAME` at the end of the `curl` command.
-```
+If you would like to make an installation from a branch that is under development, you can add `-s -- BRANCH_NAME` at the end of the `curl` command.
+
+```bash
 curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- BRANCH_NAME
 ```
 
-### Environment Variables
+#### Windows (Powershell)
 
-Various helpers and other operations assume the presence of certain environment variables. Here are the list of environment variables that should be present:
+```powershell
+. { iwr -useb https://raw.githubusercontent.com/chef/ci-studio-common/master/install.ps1 } | iex; install
+```
 
-* `<AWS_PROFILE>_AWS_ACCESS_KEY_ID`
-* `<AWS_PROFILE>_AWS_SECRET_ACCESS_KEY`
-* `<AWS_PROFILE>_AWS_DEFAULT_REGION`
-* `<GITHUB_USER>_GITHUB_TOKEN`
+If you would like to make an installation from a branch that is under development, you can add it to the command.
 
-where:
+```powershell
+. { iwr -useb https://raw.githubusercontent.com/chef/ci-studio-common/master/install.ps1 } | iex; install -branch BRANCH_NAME
+```
 
-* `<AWS_PROFILE>` is the profile you specify in `aws-configure` (e.g. `CHEF_CD`)
-* `<GITHUB_USER>` is the GitHub user associated with the token (e.g. `CHEF_CI`)
+#### Windows (cmd.exe)
 
-> For Chef Software, these values are automatically applied to TravisCI and Buildkite by Release Engineering
+```
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ". { iwr -useb https://raw.githubusercontent.com/chef/ci-studio-common/master/install.ps1 } | iex; install"
+```
 
 ### Helpers
 <!--
@@ -110,245 +98,105 @@ where:
   there is that you do not need to manually update those docs.
 -->
 
-#### `aws-configure`
-
-<!-- stdout "./bin/aws-configure --help" -->
-```
-Usage: aws-configure [PROFILE]
-
-DEPRECATED: This utility has been deprecated and will be removed in the next major version.
-
-A non-interactive version of 'aws configure' that allows you to configure AWS CLI profiles.
-
-To add a new profile, you MUST specify following environment variables:
-
-    * <PROFILE>_AWS_ACCESS_KEY_ID
-    * <PROFILE>_AWS_SECRET_ACCESS_KEY
-
-You can optionally specify '<PROFILE>_AWS_DEFAULT_REGION' to determine the default region for this profile.
-
-SUBCOMMANDS:
-    is-configured PROFILE     Returns '0' if the profile is configured. Otherwise, it returns '1'.
-```
-<!-- stdout -->
-
-#### `ceval`
-
-<!-- stdout "./bin/ceval --help" -->
-```
-Usage: ceval COMMAND
-
-DEPRECATED: This utility has been deprecated and will be removed in the next major version.
-
-Conditionally evaluate the given COMMAND.
-
-    If the DEBUG environment variable is unset, ceval will evaluate the COMMAND using 'eval'.
-    If the DEBUG environment variable is set (to any value), ceval will simply echo the given COMMAND.
-
-GUIDANCE:
-
-  1. This command is intended to wrap desctructive or permanent commands that you do not want executed
-     when debugging the parent script.
-
-        ceval "s3 cp myfile s3://my-bucket/my-file"
-
-  2. If you're command requires double quotes, make sure to escape them.
-
-        ceval "echo \"I'm a little tea pot\""
-```
-<!-- stdout -->
-
-#### `check-omnibus-package-signed`
-
-<!-- stdout "./bin/check-omnibus-package-signed --help" -->
-```
-Usage: check-omnibus-package-signed [DMG_FILE_NAME | RPM_FILE_NAME]
-
-Verify that an rpm is signed or that a dmg contains a signed package.
-```
-<!-- stdout -->
-
-#### `check-rpm-signed`
-
-**Deprecated in favor of check-omnibus-package-signed**
-
-<!-- stdout "./bin/check-rpm-signed --help" -->
-```
-Usage: check-rpm-signed RPM_FILE_NAME
-
-Verify that an rpm package has been signed.
-```
-<!-- stdout -->
-
 #### `ci-studio-common-util`
 
-<!-- stdout "./bin/ci-studio-common-util --help" -->
+<!-- stdout "./build/linux/ci-studio-common-util --help" -->
 ```
-Usage: ci-studio-common-util SUBCOMMAND
+Utility operations to manage the installation of ci-studio-common
 
-SUBCOMMANDS:
-    update        Update the ci-studio-common install.
-    allow USER    Allow USER to perform ci-studio-common-util operations with sudo.
-```
-<!-- stdout -->
+Usage:
+  ci-studio-common-util [command]
 
-#### `citadel`
+Available Commands:
+  allow       Allow USER to perform certain necessary operations with sudo.
+  help        Help about any command
+  update      Update the ci-studio-common install
 
-<!-- stdout "./bin/citadel --help" -->
-```
-Usage: citadel FILE
+Flags:
+  -h, --help   help for ci-studio-common-util
 
-DEPRECATED: This utility has been deprecated and will be removed in the next major version.
-
-A Bash utility that prints the contents of the given FILE from the CITADEL_BUCKET in S3 to STDOUT.
-
-Requires that you have an AWS profile configured. To configure an AWS profile, you can use 'aws-configure [PROFILE]'.
-
-ENVIRONMENT VARIABLES:
-    CITADEL_BUCKET        The name of the S3 bucket where citadel files are kept. (default: $CITADEL_PROFILE-citadel)
-    CITADEL_PROFILE       The name of the AWS CLI profile with access to citadel. (default: $AWS_PROFILE)
-```
-<!-- stdout -->
-
-#### `configure-github-account`
-
-<!-- stdout "./bin/configure-github-account --help" -->
-```
-Usage: configure-github-account ACCOUNT
-
-DEPRECATED: This utility has been deprecated and will be removed in the next major version.
-
-Configure GitHub credentials for ACCOUNT.
-
-Requires you have the following environment variables set:
-    * <ACCOUNT>_GITHUB_TOKEN
-
-When executed, it will do the following:
-    * Add ~/.netrc entry for ACCOUNT that leverages <ACCOUNT>_GITHUB_TOKEN.
+Use "ci-studio-common-util [command] --help" for more information about a command.
 ```
 <!-- stdout -->
 
 #### `did-modify`
 
-<!-- stdout "./bin/did-modify --help" -->
+<!-- stdout "./build/linux/did-modify --help" -->
 ```
-Usage: did-modify [OPTIONS]
-
 Prints "true" to STDOUT if any files matching GLOBS were modified between HEAD and GITREF. Otherwise, prints "false".
 
-OPTIONS:
-    --git-ref=HEAD          A valid Git reference (e.g. HEAD, master, origin/master, etc). Defaults to "HEAD~1"
-    --globs=GLOB1,GLOB2     A list of glob patterns to inspect to determine if there are changes. Defaults to "*"
+Usage:
+  did-modify [flags]
+
+Flags:
+      --git-ref string   A valid Git reference (e.g. HEAD, master, origin/master, etc). (default "HEAD~1")
+      --globs strings    Comma-separated list of glob patterns to inspect to determine if there are changes. (default [*])
+  -h, --help             help for did-modify
 ```
 <!-- stdout -->
 
 #### `file-mod`
 
-<!-- stdout "./bin/file-mod --help" -->
+<!-- stdout "./build/linux/file-mod --help" -->
 ```
-Usage: file-mod SUBCOMMAND [PARAMETERS]
+Command line utility to modify files.
 
-SUBCOMMANDS:
-    append-if-missing STRING FILE             Append STRING to FILE if not already there.
-    find-and-replace REGEX_STR STRING FILE    Replace REGEX_STR with STRING in FILE. Supports multiline replace. Uses perl.
-```
-<!-- stdout -->
+Usage:
+  file-mod [command]
 
-#### `hab-origin`
+Available Commands:
+  append-if-missing Append STRING to FILE if not already there.
+  find-and-replace  Replace REGEX_STR with STRING in FILE. Supports multiline replace.
+  help              Help about any command
 
-<!-- stdout "./bin/hab-origin --help" -->
-```
-Usage: hab-origin SUBCOMMAND
+Flags:
+  -h, --help   help for file-mod
 
-DEPRECATED: This utility has been deprecated and will be removed in the next major version.
-
-Helpers that extend functionality of the hab origin namespace.
-
-SUBCOMMANDS:
-    download-sig-key ORIGIN     Download the private signing key for ORIGIN stored in the citadel S3 bucket.
-```
-<!-- stdout -->
-
-#### `hab-verify`
-
-<!-- stdout "./bin/hab-verify --help" -->
-```
-Usage: hab-verify SUBCOMMAND
-
-DEPRECATED: This utility has been deprecated and will be removed in the next major version.
-
-Helpers that perform common verification steps inside Habitat.
-
-SUBCOMMANDS:
-    lint              Perform some simple linting against plan.sh files.
-    syntax            Perform some simple syntax checks against plan.sh files.
-    in-studio CMD     Run CMD in the contexts of a hab-studio started in the root of the project repository.
-
-ENVIRONMENT VARIABLES:
-    STUDIO_OPTS       Optional options to pass to the hab-studio.
-    HAB_ORIGIN        The Habitat origin associated with the hab-studio.
+Use "file-mod [command] --help" for more information about a command.
 ```
 <!-- stdout -->
 
 #### `install-buildkite-agent`
 
-<!-- stdout "./bin/install-buildkite-agent --help" -->
+<!-- stdout "./build/linux/install-buildkite-agent --help" -->
 ```
-Usage: install-buildkite-agent [SUBCOMMAND]
+Manage the Buildkite Agent installation
 
-Helpers that help setup Buildkite Agents. If no SUBCOMMAND is given, this utility will
-install the 'buildkite-agent' utility. If that is the case, make sure to pass in the
-'TOKEN' environment variable.
+Usage:
+  install-buildkite-agent [command]
 
-SUBCOMMANDS:
-  <EMPTY>            Install the Buildkite Agent.
-  hook TYPE HOOK     Install one of the supported HOOKS as an Buildkite Agent Hook.
+Available Commands:
+  help        Help about any command
+  hook        Install one of the supported HOOKS as an Buildkite Agent Hook.
 
-SUPPORTED HOOK TYPES:
-  https://buildkite.com/docs/agent/v3/hooks#available-hooks
+Flags:
+  -h, --help   help for install-buildkite-agent
 
-SUPPORTED HOOKS:
-  remove-containers               Remove all Docker containers.
-  update-utilities                Update ci-studio-common and habitat.
-  use-merge-head                  Checkout the GitHub merge HEAD instead of the branch.
-  workspace-reassign-ownership    Reassign ownership of the workspace to the buildkite-agent.
+Use "install-buildkite-agent [command] --help" for more information about a command.
 ```
 <!-- stdout -->
 
 #### `install-habitat`
 
-<!-- stdout "./bin/install-habitat -h" -->
+<!-- stdout "./build/linux/install-habitat --help" -->
 ```
-Usage: install-habitat [-u USER] [-v HAB_VERSION] [-c HAB_CHANNEL] -h
+Install VERSION of Chef Habitat from CHANNEL.
 
-Install VERSION of habitat from CHANNEL as the USER user.
+Usage:
+  install-habitat [flags]
+  install-habitat [command]
 
-OPTIONS:
-  -h            Show this message.
-  -u USER       The user you want to run hab commands as. (default: user in '/var/opt/ci-studio-common/.hab-user' file, current user, or root)
-  -v VERSION    Which version of Habitat you wish to install. (default: version in '.hab-version' file)
-  -c CHANNEL    The channel from which you wish to install Habitat. (default: stable)
-  -t TARGET     The kernel target for this installation. (default: target in '/var/opt/ci-studio-common/.hab-target' file or x86_64-linux)
-```
-<!-- stdout -->
+Available Commands:
+  help        Help about any command
+  remove      Completely uninstall Chef Habitat from the system.
 
-#### `install-omnibus-product`
+Flags:
+  -c, --channel string   The channel from which you wish to install Habitat. (default "stable")
+  -h, --help             help for install-habitat
+  -t, --target string    The kernel target for this installation. (default "x86_64-linux")
+  -v, --version string   Which version of Habitat you wish to install. (default "0.77.0")
 
-<!-- stdout "./bin/install-omnibus-product" -->
-```
-```
-<!-- stdout -->
-
-#### `purge-habitat`
-
-<!-- stdout "./bin/purge-habitat --help" -->
-```
-Usage: purge-habitat [OPTIONS]
-
-Uninstall Habitat from this machine.
-
-OPTIONS:
-  --all   Completely remove the Habitat installation.
+Use "install-habitat [command] --help" for more information about a command.
 ```
 <!-- stdout -->
 

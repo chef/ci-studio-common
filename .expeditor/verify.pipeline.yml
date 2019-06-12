@@ -1,14 +1,7 @@
 steps:
-  - label: bats
-    command: bats /ci-studio-common/tests
-    expeditor:
-      executor:
-        docker:
-          workdir: /ci-studio-common
-
   - label: ":habicat: x86_64-linux"
     command:
-      - export PATH="/ci-studio-common/bin:\$PATH"
+      - export PATH="/ci-studio-common/build/linux:\$PATH"
       - install-habitat
     expeditor:
       executor:
@@ -18,10 +11,17 @@ steps:
 
   - label: ":habicat: x86_64-linux-kernel2"
     command:
-      - export PATH="/ci-studio-common/bin:\$PATH"
+      - export PATH="/ci-studio-common/build/linux:\$PATH"
       - install-habitat -t x86_64-linux-kernel2
     expeditor:
       executor:
         docker:
           privileged: true
           workdir: /ci-studio-common
+
+  - label: ":habicat: x86_64-windows"
+    command:
+      - install-habitat --help
+    expeditor:
+      executor:
+        windows:

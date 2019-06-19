@@ -49,7 +49,7 @@ function handle_no_lock() {
 }
 
 user="${USER:-root}"
-version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/master/.hab-version)
+version=$(curl -sL https://raw.githubusercontent.com/chef/ci-studio-common/1-stable/.hab-version)
 channel=stable
 target=x86_64-linux
 

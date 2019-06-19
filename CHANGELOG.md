@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 1.1.64 -->
+<!-- latest_release unreleased -->
+## Unreleased
+
+#### Merged Pull Requests
+- Update Expeditor config for 1-stable [#194](https://github.com/chef/ci-studio-common/pull/194) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [1.1.64](https://github.com/chef/ci-studio-common/tree/1.1.64) (2019-06-11)
 
 #### Merged Pull Requests
 - Mark subset of tooling as deprecated [#193](https://github.com/chef/ci-studio-common/pull/193) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.63](https://github.com/chef/ci-studio-common/tree/1.1.63) (2019-04-15)
 

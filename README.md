@@ -78,13 +78,13 @@ before_install:
 
 ```yaml
 before_install:
-  - curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash
+  - curl https://raw.githubusercontent.com/chef/ci-studio-common/1-stable/install.sh | bash
 ```
 
 If you would like to make an installation from a branch that is under
 development, you can add `-s -- BRANCH_NAME` at the end of the `curl` command.
 ```
-curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- BRANCH_NAME
+curl https://raw.githubusercontent.com/chef/ci-studio-common/1-stable/install.sh | bash -s -- BRANCH_NAME
 ```
 
 ### Environment Variables
@@ -637,7 +637,7 @@ function start_service() {
 
 ## Development
 
-If the `CI_STUDIO_COMMON` override pattern is implemented in the `.studiorc` which sources `ci-studio-common` ([example in a2](https://github.com/chef/a2/blob/master/.studiorc#L11-L14)), local changes to can be tested by placing the `ci-studio-common` checkout inside the repo which is sourcing it. This is necessary so that it is accessible from the studio `chroot`ed environment. To set the `CI_STUDIO_COMMON` environment variable inside the studio when `.studiorc` is sourced, we can make use of the `HAB_STUDIO_SECRET` facility ([documented here](https://www.habitat.sh/docs/reference/#environment-variables)). For example, if our `ci-studio-common` is at the same level of our `.studiorc`, we can enter the studio like this:
+If the `CI_STUDIO_COMMON` override pattern is implemented in the `.studiorc` which sources `ci-studio-common` ([example in automate](https://github.com/chef/automate/blob/master/.studiorc#L11-L14)), local changes to can be tested by placing the `ci-studio-common` checkout inside the repo which is sourcing it. This is necessary so that it is accessible from the studio `chroot`ed environment. To set the `CI_STUDIO_COMMON` environment variable inside the studio when `.studiorc` is sourced, we can make use of the `HAB_STUDIO_SECRET` facility ([documented here](https://www.habitat.sh/docs/reference/#environment-variables)). For example, if our `ci-studio-common` is at the same level of our `.studiorc`, we can enter the studio like this:
 
 ```
 $ env HAB_STUDIO_SECRET_CI_STUDIO_COMMON=/src/ci-studio-common hab studio enter

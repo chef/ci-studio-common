@@ -21,5 +21,6 @@ func appendIfMissing(cmd *cobra.Command, args []string) {
 	stringToAppend := args[0]
 	fileToModify := args[1]
 
-	lib.AppendIfMissing(fileToModify, stringToAppend)
+	err := lib.AppendIfMissing(fileToModify, stringToAppend)
+	lib.Check(err)
 }

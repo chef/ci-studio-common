@@ -1,6 +1,6 @@
 package lib
 
-import(
+import (
 	"fmt"
 	"os"
 )
@@ -20,5 +20,6 @@ func AddSudoPermission(command string, user string) {
 	err := AppendIfMissing(sudoersFilePath, newLine)
 	Check(err)
 
-	os.Chmod(sudoersFilePath, 0440)
+	err = os.Chmod(sudoersFilePath, 0440)
+	Check(err)
 }

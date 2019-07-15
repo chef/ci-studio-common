@@ -20,10 +20,12 @@ var (
 		Run:   printSecrets,
 	}
 
+	fetchSecretsOpts = struct {
+		format string
+	}{}
+
 	vaultClient *vault.Client
 	secretsJSON map[string]interface{}
-
-	format string
 )
 
 func init() {
@@ -34,7 +36,7 @@ func init() {
 
 	rootCmd.AddCommand(fetchSecretsCmd)
 
-	fetchSecretsCmd.Flags().StringVar(&format, "format", "sh", "Which format to use when exporting environment variables.")
+	fetchSecretsCmd.Flags().StringVar(&fetchSecretsOpts.format, "format", "sh", "Which format to use when exporting environment variables.")
 }
 
 func printSecrets(cmd *cobra.Command, args []string) {
@@ -50,15 +52,15 @@ func printSecrets(cmd *cobra.Command, args []string) {
 	for k, v := range secretsJSON {
 		value := fetchSecret(v.(map[string]interface{}))
 
-		switch format {
+		switch fetchSecretsOpts.format {
 		case "sh":
 			fmt.Printf("export %s=%q\n", k, value)
 		case "ps1":
 			fmt.Printf("$env:%s=%q\n", k, value)
 		case "batch":
-			fmt.Printf("%s=%q\n", k, value)
+			fmt.Printf("\"%s=%s\"\n", k, value)
 		default:
-			log.Fatal(fmt.Errorf("'%s' is not a supported format", format))
+			log.Fatalf("'%s' is not a supported format", fetchSecretsOpts.format)
 		}
 	}
 }

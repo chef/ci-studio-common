@@ -18,13 +18,15 @@ var (
 		Run:   detectModifiedFiles,
 	}
 
-	gitref string
-	globs  []string
+	rootOps = struct {
+		gitref string
+		globs  []string
+	}{}
 )
 
 func init() {
-	rootCmd.Flags().StringVar(&gitref, "git-ref", "HEAD~1", "A valid Git reference (e.g. HEAD, master, origin/master, etc).")
-	rootCmd.Flags().StringSliceVar(&globs, "globs", []string{"*"}, "Comma-separated list of glob patterns to inspect to determine if there are changes.")
+	rootCmd.Flags().StringVar(&rootOps.gitref, "git-ref", "HEAD~1", "A valid Git reference (e.g. HEAD, master, origin/master, etc).")
+	rootCmd.Flags().StringSliceVar(&rootOps.globs, "globs", []string{"*"}, "Comma-separated list of glob patterns to inspect to determine if there are changes.")
 }
 
 // Execute runs the command
@@ -42,9 +44,11 @@ func detectModifiedFiles(cmd *cobra.Command, args []string) {
 
 	head, err := repo.Head()
 	lib.Check(err)
-	headCommit, err := repo.CommitObject(head.Hash())
 
-	gitRefRev, err := repo.ResolveRevision(plumbing.Revision(gitref))
+	headCommit, err := repo.CommitObject(head.Hash())
+	lib.Check(err)
+
+	gitRefRev, err := repo.ResolveRevision(plumbing.Revision(rootOps.gitref))
 	lib.Check(err)
 
 	gitRefCommit, err := repo.CommitObject(*gitRefRev)
@@ -54,7 +58,7 @@ func detectModifiedFiles(cmd *cobra.Command, args []string) {
 	lib.Check(err)
 
 	for _, fileStat := range patch.Stats() {
-		for _, globPattern := range globs {
+		for _, globPattern := range rootOps.globs {
 			if glob.Glob(globPattern, fileStat.Name) {
 				fmt.Print("true")
 			}

@@ -35,11 +35,13 @@ func installHook(cmd *cobra.Command, args []string) {
 	hookType := args[0]
 	hookName := args[1]
 
-	os.MkdirAll(lib.BuildkiteAgentHooksDir(), 0755)
+	err := os.MkdirAll(lib.BuildkiteAgentHooksDir, 0755)
+	lib.Check(err)
 
 	hookFile := lib.CiStudioCommonAgentHook(hookName)
 	if lib.FileExists(hookFile) {
-		installShellHook(hookType, hookName)
+		err = installShellHook(hookType, hookName)
+		lib.Check(err)
 	} else {
 		log.Fatalf("Could not find the hook %s", hookName)
 	}

@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -21,11 +22,13 @@ var (
 		Run:   maybeUpdateInstall,
 	}
 
-	phase  int
-	force  bool
-	suffix string
+	updateOpts = struct {
+		phase  int
+		force  bool
+		suffix string
+	}{}
 
-	assetOnDisk = filepath.Join(lib.InstallDirParent(), "ci-studio-common.tar.gz")
+	assetOnDisk = filepath.Join(lib.InstallDirParent, "ci-studio-common.tar.gz")
 
 	upgradeStatusFile = lib.SettingsPath("upgrade-in-progress")
 )
@@ -33,13 +36,16 @@ var (
 func init() {
 	rootCmd.AddCommand(updateCommand)
 
-	updateCommand.Flags().IntVar(&phase, "phase", 1, "The phase of the update to complete")
-	updateCommand.Flags().BoolVar(&force, "force", false, "Perform the installation even if no updates are available")
-	updateCommand.Flags().StringVar(&suffix, "suffix", "rc", "The suffix to use when downloading the asset")
+	updateCommand.Flags().IntVar(&updateOpts.phase, "phase", 1, "The phase of the update to complete")
+	updateCommand.Flags().BoolVar(&updateOpts.force, "force", false, "Perform the installation even if no updates are available")
+	updateCommand.Flags().StringVar(&updateOpts.suffix, "suffix", "rc", "The suffix to use when downloading the asset")
 }
 
+// When we run these phases, each phase triggers the next using cmd.Start(). We use Start() because it does
+// not wait for the command to finish, which is what we want for this sequence to work. We do it this way
+// because of limitations on Windows for binaries modifying themselves.
 func maybeUpdateInstall(cmd *cobra.Command, args []string) {
-	switch phase {
+	switch updateOpts.phase {
 	case 1:
 		lock := fslock.New(lib.LockPath("upgrade-ci-studio-common"))
 		lockErr := lock.TryLock()
@@ -47,15 +53,14 @@ func maybeUpdateInstall(cmd *cobra.Command, args []string) {
 		if lockErr == nil {
 			performPhaseOne()
 		} else {
-			fmt.Println("ci-studio-common upgrade already in progress -- waiting")
+			fmt.Println("ci-studio-common upgrade already in progress -- skipping")
 		}
 	case 2:
 		performPhaseTwo()
 	case 3:
 		performPhaseThree()
 	default:
-		fmt.Println("Unsupported phase")
-		os.Exit(1)
+		log.Fatal("Unsupported phase")
 	}
 }
 
@@ -65,17 +70,18 @@ func maybeUpdateInstall(cmd *cobra.Command, args []string) {
 //   3. copy the existing directory into a backup directory
 //   4. begin phase two from the backup directory
 func performPhaseOne() {
-	assetURL := fmt.Sprintf("https://chef-cd-artifacts.s3-us-west-2.amazonaws.com/ci-studio-common/ci-studio-common-2.0.0-%s-%s.tar.gz", runtime.GOOS, suffix)
+	assetURL := fmt.Sprintf("https://chef-cd-artifacts.s3-us-west-2.amazonaws.com/ci-studio-common/ci-studio-common-2.0.0-%s-%s.tar.gz", runtime.GOOS, updateOpts.suffix)
 
 	localEtag := lib.SettingWithDefault("etag", "none")
 	remoteEtag := lib.GetURLHeaderByKey(assetURL, "ETag")
 
-	if (remoteEtag != localEtag) || force {
+	if (remoteEtag != localEtag) || updateOpts.force {
 		fmt.Println("--> {1} Upgrade available")
-		os.Chdir(lib.InstallDirParent())
+		err := os.Chdir(lib.InstallDirParent)
+		lib.Check(err)
 
 		// Mark that an upgrade is in progress
-		err := ioutil.WriteFile(upgradeStatusFile, []byte(""), 0644)
+		err = ioutil.WriteFile(upgradeStatusFile, []byte(""), 0644)
 		lib.Check(err)
 
 		// Save new etag to disk
@@ -96,7 +102,8 @@ func performPhaseOne() {
 		cmd := lib.ShellOut(lib.InstallBackupBinPath("ci-studio-common-util"), "update", "--phase", "2")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		cmd.Start()
+		err = cmd.Start()
+		lib.Check(err)
 	} else {
 		fmt.Println("ci-studio-common is up-to-date")
 	}
@@ -107,37 +114,41 @@ func performPhaseOne() {
 //   2. move the new install into place
 //   3. begin phase three from the new install
 func performPhaseTwo() {
-	os.Chdir(lib.InstallDirParent())
+	err := os.Chdir(lib.InstallDirParent)
+	lib.Check(err)
 
 	// Remove the previous installation
 	fmt.Println("--> {2} Removing current installation")
-	err := os.RemoveAll(lib.InstallDir())
+	err = os.RemoveAll(lib.InstallDir())
 	lib.Check(err)
 
 	// Untar the new install into place
 	fmt.Println("--> {2} Moving new installation into place")
-	err = archiver.Unarchive(assetOnDisk, lib.InstallDirParent())
+	err = archiver.Unarchive(assetOnDisk, lib.InstallDirParent)
 	lib.Check(err)
 
 	// Begin phase three
 	cmd := lib.ShellOut(lib.InstallBinPath("ci-studio-common-util"), "update", "--phase", "3")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Start()
+	err = cmd.Start()
+	lib.Check(err)
 }
 
 // In phase three of the upgrade, we:
 //   1. remove the backup directory
 func performPhaseThree() {
-	os.Chdir(lib.InstallDirParent())
+	err := os.Chdir(lib.InstallDirParent)
+	lib.Check(err)
 
 	fmt.Println("--> {3} Upgrade complete -- cleaning up")
 
 	// Move the new etag into place
-	err := os.RemoveAll(lib.SettingsPath("etag"))
+	err = os.RemoveAll(lib.SettingsPath("etag"))
 	lib.Check(err)
 
-	lib.RenameFile(lib.SettingsPath("etag-new"), lib.SettingsPath("etag"))
+	err = lib.RenameFile(lib.SettingsPath("etag-new"), lib.SettingsPath("etag"))
+	lib.Check(err)
 
 	// Cleanup the backup directory
 	err = os.RemoveAll(lib.InstallBackupDir())
@@ -147,5 +158,6 @@ func performPhaseThree() {
 	err = os.RemoveAll(assetOnDisk)
 	lib.Check(err)
 
-	os.RemoveAll(upgradeStatusFile)
+	err = os.RemoveAll(upgradeStatusFile)
+	lib.Check(err)
 }

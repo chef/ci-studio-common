@@ -33,7 +33,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// global config
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("configuration file (default is %s/vault-util.toml)", lib.SettingsDir()))
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("configuration file (default is %s/vault-util.toml)", lib.SettingsDir))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -41,7 +41,7 @@ func initConfig() {
 	account.InitConfig()
 
 	viper.SetConfigName("vault-util")      // name of config file (without extension)
-	viper.AddConfigPath(lib.SettingsDir()) // adding settings directory as first search path
+	viper.AddConfigPath(lib.SettingsDir) // adding settings directory as first search path
 	viper.AddConfigPath(".")               // adding cwd directory as first search path
 
 	// Set environment variable prefix, eg: AUTOMATE_CONFIG_MGMT_PORT

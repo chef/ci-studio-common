@@ -11,9 +11,9 @@ import (
 /*
 GetURLHeaders returns a map array of all available headers.
 @param string - URL given
-@return map[string]interface{}
+@return map[string]string
 */
-func GetURLHeaders(url string) map[string]interface{} {
+func GetURLHeaders(url string) map[string]string {
 	response, err := http.Head(url)
 	if err != nil {
 		log.Fatal("Error: Unable to download URL (", url, ") with error: ", err)
@@ -23,7 +23,7 @@ func GetURLHeaders(url string) map[string]interface{} {
 		log.Fatal("Error: HTTP Status = ", response.Status)
 	}
 
-	headers := make(map[string]interface{})
+	headers := make(map[string]string, len(response.Header))
 
 	for k, v := range response.Header {
 		headers[strings.ToLower(k)] = string(v[0])
@@ -43,7 +43,7 @@ func GetURLHeaderByKey(url string, key string) string {
 	key = strings.ToLower(key)
 
 	if value, ok := headers[key]; ok {
-		return value.(string)
+		return value
 	}
 
 	return ""

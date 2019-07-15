@@ -20,13 +20,11 @@ var (
 		Run:   maybeInstallHabitat,
 	}
 
-	version string
-	channel string
-	target  string
-
-	habBin         string
-	installHabBin  string
-	defaultVersion []byte
+	rootOpts = struct {
+		version string
+		channel string
+		target  string
+	}{}
 
 	globalHabValue = "0.82.0"
 )
@@ -35,9 +33,9 @@ func init() {
 	defaultVersion := lib.SettingWithDefault("hab-version", globalHabValue)
 	defaultTarget := lib.SettingWithDefault("hab-target", fmt.Sprintf("x86_64-%s", runtime.GOOS))
 
-	rootCmd.Flags().StringVarP(&version, "version", "v", defaultVersion, "Which version of Habitat you wish to install.")
-	rootCmd.Flags().StringVarP(&channel, "channel", "c", "stable", "The channel from which you wish to install Habitat.")
-	rootCmd.Flags().StringVarP(&target, "target", "t", defaultTarget, "The kernel target for this installation.")
+	rootCmd.Flags().StringVarP(&rootOpts.version, "version", "v", defaultVersion, "Which version of Habitat you wish to install.")
+	rootCmd.Flags().StringVarP(&rootOpts.channel, "channel", "c", "stable", "The channel from which you wish to install Habitat.")
+	rootCmd.Flags().StringVarP(&rootOpts.target, "target", "t", defaultTarget, "The kernel target for this installation.")
 }
 
 // Execute runs the command
@@ -60,13 +58,14 @@ func maybeInstallHabitat(cmd *cobra.Command, args []string) {
 			currentVersion = r.FindStringSubmatch(string(output))[1]
 		}
 
-		if currentVersion == version {
+		if currentVersion == rootOpts.version {
 			fmt.Println("Chef Habitat is already up-to-date")
 		} else {
 			doInstallHabitat()
 		}
 
-		lock.Unlock()
+		err = lock.Unlock()
+		lib.Check(err)
 	} else {
 		fmt.Println("Chef Habitat install already in progress -- skipping")
 	}
@@ -74,7 +73,7 @@ func maybeInstallHabitat(cmd *cobra.Command, args []string) {
 }
 
 func doInstallHabitat() {
-	fmt.Printf("Going to install the %s build of Chef Habitat %s\n", target, version)
+	fmt.Printf("Going to install the %s build of Chef Habitat %s\n", rootOpts.target, rootOpts.version)
 
 	writeOutUserFiles()
 
@@ -86,10 +85,10 @@ func doInstallHabitat() {
 }
 
 func writeOutUserFiles() {
-	err := ioutil.WriteFile(lib.SettingsPath("hab-version"), []byte(version), 0644)
+	err := ioutil.WriteFile(lib.SettingsPath("hab-version"), []byte(rootOpts.version), 0644)
 	lib.Check(err)
 
-	err = ioutil.WriteFile(lib.SettingsPath("hab-target"), []byte(target), 0644)
+	err = ioutil.WriteFile(lib.SettingsPath("hab-target"), []byte(rootOpts.target), 0644)
 	lib.Check(err)
 }
 
@@ -106,7 +105,7 @@ func installHabitatScript() {
 	lib.Check(err)
 	installFile.Close()
 
-	installCmd := lib.ShellOut(installFile.Name(), "-v", string(version), "-c", string(channel), "-t", string(target))
+	installCmd := lib.ShellOut(installFile.Name(), "-v", rootOpts.version, "-c", rootOpts.channel, "-t", rootOpts.target)
 	installCmd.Stdout = os.Stdout
 	installCmd.Stderr = os.Stderr
 
@@ -115,7 +114,7 @@ func installHabitatScript() {
 }
 
 func installHabitatChocolatey() {
-	installCmd := lib.ShellOut("choco", "install", "habitat", "--allow-downgrade", "-y", "--version", version)
+	installCmd := lib.ShellOut("choco", "install", "habitat", "--allow-downgrade", "-y", "--version", rootOpts.version)
 	installCmd.Stdout = os.Stdout
 	installCmd.Stderr = os.Stderr
 

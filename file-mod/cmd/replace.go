@@ -22,5 +22,6 @@ func findAndReplace(cmd *cobra.Command, args []string) {
 	stringToWrite := args[1]
 	fileToModify := args[2]
 
-	lib.FindAndReplace(fileToModify, regexStr, stringToWrite)
+	err := lib.FindAndReplace(fileToModify, regexStr, stringToWrite)
+	lib.Check(err)
 }

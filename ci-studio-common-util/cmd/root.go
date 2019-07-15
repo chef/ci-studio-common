@@ -7,11 +7,12 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use: "ci-studio-common-util",
-	Short: "Utility operations to manage the installation of ci-studio-common",
+	Use:          "ci-studio-common-util",
+	Short:        "Utility operations to manage the installation of ci-studio-common",
 	SilenceUsage: true,
 }
 
+// Execute does something?
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(-1)

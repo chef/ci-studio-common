@@ -17,8 +17,6 @@ var (
 		Short: "Configure the accounts specified in the VAULT_UTIL_ACCOUNTS environment variable.",
 		Run:   tryToConfigureAccounts,
 	}
-
-	accountsJSON map[string]interface{}
 )
 
 func init() {
@@ -37,13 +35,16 @@ func tryToConfigureAccounts(cmd *cobra.Command, args []string) {
 
 	lock := fslock.New(lib.LockPath("configure-accounts"))
 
-	retry.Do(
+	err := retry.Do(
 		func() error {
 			lockErr := lock.TryLock()
 
 			if lockErr == nil {
 				configureAccounts(accountsEnv)
-				lock.Unlock()
+
+				unlockErr := lock.Unlock()
+				lib.Check(unlockErr)
+
 				return nil
 			}
 
@@ -51,9 +52,12 @@ func tryToConfigureAccounts(cmd *cobra.Command, args []string) {
 			return lockErr
 		},
 	)
+	lib.Check(err)
 }
 
 func configureAccounts(accountsEnv string) {
+	var accountsJSON map[string]interface{}
+
 	err := json.Unmarshal([]byte(accountsEnv), &accountsJSON)
 	lib.Check(err)
 

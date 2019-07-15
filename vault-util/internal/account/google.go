@@ -58,23 +58,23 @@ func NewGoogleAccount(name string) (*GoogleAccount, error) {
 	}, nil
 }
 
-func (c *Cache) fetchOrInitGoogleAccount(name string) (*GoogleAccount, error) {
-	var acct *GoogleAccount
-	var cached bool
-	var err error
+// func (c *Cache) fetchOrInitGoogleAccount(name string) (*GoogleAccount, error) {
+// 	var acct *GoogleAccount
+// 	var cached bool
+// 	var err error
 
-	if acct, cached = c.GoogleAccounts[name]; !cached {
-		acct, err = NewGoogleAccount(name)
+// 	if acct, cached = c.GoogleAccounts[name]; !cached {
+// 		acct, err = NewGoogleAccount(name)
 
-		if err != nil {
-			return nil, err
-		}
+// 		if err != nil {
+// 			return nil, err
+// 		}
 
-		c.GoogleAccounts[name] = acct
-	}
+// 		c.GoogleAccounts[name] = acct
+// 	}
 
-	return acct, nil
-}
+// 	return acct, nil
+// }
 
 // ConfigureGoogle runs commands to configure the given account
 func (c *Cache) ConfigureGoogle(name string) error {

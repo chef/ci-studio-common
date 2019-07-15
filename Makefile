@@ -25,7 +25,7 @@ build-darwin: $(addprefix build/darwin/,$(UTILITIES))
 
 build/darwin/%:
 	mkdir -p build/darwin
-	GOOS=darwin GOARCH=amd64 go build -o build/darwin/$* -ldflags="$(LD_FLAGS)" ./$*
+	GOOS=darwin GOARCH=amd64 go build -o build/darwin/$* -ldflags="$(LD_FLAGS)" ./cmd/$*
 
 #
 # Linux
@@ -35,7 +35,7 @@ build-linux: $(addprefix build/linux/,$(UTILITIES))
 
 build/linux/%:
 	mkdir -p build/linux
-	GOOS=linux GOARCH=amd64 go build -o build/linux/$* -ldflags="$(LD_FLAGS)" ./$*
+	GOOS=linux GOARCH=amd64 go build -o build/linux/$* -ldflags="$(LD_FLAGS)" ./cmd/$*
 
 #
 # Windows
@@ -45,4 +45,4 @@ build-windows: $(addsuffix .exe, $(addprefix build/windows/,$(UTILITIES)))
 
 build/windows/%.exe:
 	mkdir -p build/windows
-	GOOS=windows GOARCH=amd64 go build -o build/windows/$*.exe -ldflags="$(LD_FLAGS)" ./$*
+	GOOS=windows GOARCH=amd64 go build -o build/windows/$*.exe -ldflags="$(LD_FLAGS)" ./cmd/$*

@@ -43,19 +43,10 @@ This repository houses some scripts / files that are used across various Chef pr
 
 The focus of the 2.0 release is to optimize ci-studio-common for use with multiple Buildkite platform. As such, we have made the breaking following changes:
 
-* Utilities are now being written in Go to ensure consistency and availability across supported platforms. 
-* Some deprecated utilities have been removed, or are in the process of being removed. 
-* We no longer ship as a Habitat Package
+* Utilities are now being written in Go to ensure consistency and availability across supported platforms.
+* Some deprecated utilities have been removed, or are in the process of being removed.
+* We no longer ship the CI binaries as part of the Chef Habitat Package
 
-### Pinning to pre-1.0
-
-If you are still primarily using Travis, or are dependent on any of the utilities or functionality that was removed in 1.0, you can pin your installation to the `pre-1.0` branch.
-
-```yaml
-before_install:
-  - curl https://raw.githubusercontent.com/chef/ci-studio-common/pre-1.0/install.sh | bash
-  - export PATH="$PATH:$HOME/ci-studio-common/bin:$HOME/tools/bin"
-```
 
 ## CI Services (Travis, Buildkite, etc)
 
@@ -91,7 +82,7 @@ If you would like to make an installation from a branch that is under developmen
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ". { iwr -useb https://raw.githubusercontent.com/chef/ci-studio-common/master/install.ps1 } | iex; install"
 ```
 
-### Helpers
+### Commands
 <!--
   Many of the Helpers are self-documenting. If you see the stdout comment tags, that means that documentation block
   is automatically updated everytime a PR is merged by executing the .expeditor/update_readme.sh script. The implication
@@ -197,6 +188,12 @@ Flags:
   -v, --version string   Which version of Habitat you wish to install. (default "0.77.0")
 
 Use "install-habitat [command] --help" for more information about a command.
+```
+<!-- stdout -->
+
+#### `vault-util`
+<!-- stdout "./build/linux/vault-util --help" -->
+```
 ```
 <!-- stdout -->
 

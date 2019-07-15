@@ -4,7 +4,7 @@ set -eou pipefail
 
 function usage() {
   cat <<DOC
-Usage: ${0##*/} 
+Usage: ${0##*/}
 
 Build and release a version of ci-studio-common.
 
@@ -40,8 +40,6 @@ while getopts ":u:v:s:t:h" opt; do
 done
 shift $((OPTIND -1))
 
-version=$(cat VERSION)
-
 function clean_all() {
   make clean-all
 }
@@ -60,7 +58,7 @@ function build_tarball() {
 
   cd build
   tar -czvf "ci-studio-common-$version-$platform-$suffix.tar.gz" ci-studio-common
-  
+
   cd -
   make "clean-$platform"
   rm -rf "$staging_dir"

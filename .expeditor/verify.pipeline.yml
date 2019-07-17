@@ -1,27 +1,20 @@
 steps:
-  - label: ":habicat: x86_64-linux"
-    command:
-      - export PATH="/ci-studio-common/build/linux:\$PATH"
-      - install-habitat
+  - label: ":go: lint"
+    command: golangci-lint run
     expeditor:
       executor:
         docker:
-          privileged: true
-          workdir: /ci-studio-common
+          image: golangci/golangci-lint:latest
 
-  - label: ":habicat: x86_64-linux-kernel2"
-    command:
-      - export PATH="/ci-studio-common/build/linux:\$PATH"
-      - install-habitat -t x86_64-linux-kernel2
+  - label: ":go: linux"
+    command: go test ./...
     expeditor:
       executor:
         docker:
-          privileged: true
-          workdir: /ci-studio-common
 
-  - label: ":habicat: x86_64-windows"
-    command:
-      - install-habitat --help
+  - label: ":go: windows"
+    command: go test ./...
     expeditor:
       executor:
-        windows:
+        docker:
+          host_os: windows

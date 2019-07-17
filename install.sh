@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright:: Copyright 2017 Chef Software, Inc.
+# Copyright:: Copyright 2019 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,24 +16,20 @@
 # limitations under the License.
 #
 
-# The branch we will install the source code from
-#
-# Example: Install from the 'foo' branch
-# => curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- foo
-install_dir="/opt/ci-studio-common"
-settings_dir="/var/opt/ci-studio-common"
+install_dir="/opt/ci-utils"
+settings_dir="/var/opt/ci-utils"
+
+CI_UTILS_CHANNEL="${CI_UTILS_CHANNEL:-stable}"
 
 UNAME=$(uname -sm | awk '{print tolower($0)}')
 
 if [[ ($UNAME == *"mac os x"*) || ($UNAME == *darwin*) ]]; then
   PLATFORM="darwin"
-elif [[ ($UNAME == *"freebsd"*) ]]; then
-  PLATFORM="freebsd"
 else
   PLATFORM="linux"
 fi
 
-REMOTE_ASSET="https://chef-cd-artifacts.s3-us-west-2.amazonaws.com/ci-studio-common/ci-studio-common-2.0.0-$PLATFORM-rc.tar.gz"
+REMOTE_ASSET="https://packages.chef.io/files/${CI_UTILS_CHANNEL}/ci-utils/latest/ci-utils-${PLATFORM}.tar.gz"
 
 NEW_ETAG=$(curl -sI $REMOTE_ASSET | grep -Fi Etag | awk '{ print $2 }')
 
@@ -51,23 +47,23 @@ function make_directories() {
 }
 
 function download_and_install_asset() {
-  echo "Downloading ci-studio-common for $PLATFORM"
-  curl -sL "$REMOTE_ASSET" -o /tmp/ci-studio-common.tar.gz
-  tar -xzvf /tmp/ci-studio-common.tar.gz -C /opt
+  echo "Downloading ci-utils for $PLATFORM"
+  curl -sL "$REMOTE_ASSET" -o /tmp/ci-utils.tar.gz
+  tar -xzvf /tmp/ci-utils.tar.gz -C /opt
 }
 
 function make_symlinks() {
   if [[ -w /usr/bin ]]; then
-    ln -sf /opt/ci-studio-common/bin/* /usr/bin
+    ln -sf /opt/ci-utils/bin/* /usr/bin
   else
     echo "\
 
 === WARNING ===
 
-ci-studio-common does not have permission to install binaries into /usr/bin.
-Please make sure to add /opt/ci-studio-common/bin to your PATH.
+ci-utils does not have permission to install binaries into /usr/bin.
+Please make sure to add /opt/ci-utils/bin to your PATH.
 
-export PATH=$PATH:/opt/ci-studio-common/bin
+export PATH=$PATH:/opt/ci-utils/bin
 
 "
   fi
@@ -80,5 +76,5 @@ if [[ $NEW_ETAG != $OLD_ETAG ]]; then
 
   echo -n $NEW_ETAG > $ETAG_PATH
 else
-  echo "ci-studio-common is up-to-date"
+  echo "ci-utils is up-to-date"
 fi

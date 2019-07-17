@@ -74,9 +74,9 @@ If you would like to make an installation from a branch that is under developmen
   there is that you do not need to manually update those docs.
 -->
 
-#### `ci-studio-common-util`
+#### `ci-utils`
 
-<!-- stdout "./build/linux/ci-studio-common-util --help" -->
+<!-- stdout "./build/linux/ci-utils --help" -->
 ```
 Utility operations to manage the installation of ci-studio-common
 

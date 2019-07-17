@@ -15,3 +15,11 @@ linters:
     - stylecheck
     - unparam
     - lll
+
+issues:
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: _test\.go
+      linters:
+        # Don't enforce function length in test files (lots of t.Run)
+        - funlen

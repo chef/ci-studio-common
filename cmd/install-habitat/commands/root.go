@@ -10,8 +10,8 @@ import (
 	"github.com/juju/fslock"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"go.uber.org/multierr"
 
-	internalErrors "github.com/chef/ci-studio-common/internal/pkg/errors"
 	"github.com/chef/ci-studio-common/internal/pkg/paths"
 	"github.com/chef/ci-studio-common/internal/pkg/system"
 )
@@ -92,6 +92,12 @@ func maybeInstallHabitat(cmd *cobra.Command, args []string) error {
 }
 
 func releaseLock(lock *fslock.Lock, upstreamErr error, upstreamReason string) error {
+	wrappedUpstreamErr := errors.Wrap(upstreamErr, upstreamReason)
+
 	err := lock.Unlock()
-	return internalErrors.LayeredWrap(upstreamErr, upstreamReason, err, "failed to release install lock")
+	if err != nil {
+		return multierr.Append(wrappedUpstreamErr, errors.Wrap(err, "failed to release install lock"))
+	}
+
+	return wrappedUpstreamErr
 }

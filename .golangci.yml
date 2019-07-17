@@ -1,0 +1,17 @@
+linters:
+  enable-all: true
+  disable:
+    - dupl
+    - goconst
+    - maligned
+    - megacheck
+    - interfacer
+    - golint
+    - gas
+    - gochecknoglobals
+    - gochecknoinits
+    - gocritic
+    - scopelint
+    - stylecheck
+    - unparam
+    - lll

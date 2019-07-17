@@ -1,3 +1,2 @@
-# Disable auto-builds
 [ci-studio-common]
-paths = []
+plan_path = "studio-common"

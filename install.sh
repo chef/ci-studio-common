@@ -20,26 +20,65 @@
 #
 # Example: Install from the 'foo' branch
 # => curl https://raw.githubusercontent.com/chef/ci-studio-common/master/install.sh | bash -s -- foo
-branch=${1-master}
 install_dir="/opt/ci-studio-common"
 settings_dir="/var/opt/ci-studio-common"
 
-# Create the installation directory
-if [ -d "$install_dir" ]; then
+UNAME=$(uname -sm | awk '{print tolower($0)}')
+
+if [[ ($UNAME == *"mac os x"*) || ($UNAME == *darwin*) ]]; then
+  PLATFORM="darwin"
+elif [[ ($UNAME == *"freebsd"*) ]]; then
+  PLATFORM="freebsd"
+else
+  PLATFORM="linux"
+fi
+
+REMOTE_ASSET="https://chef-cd-artifacts.s3-us-west-2.amazonaws.com/ci-studio-common/ci-studio-common-2.0.0-$PLATFORM-rc.tar.gz"
+
+NEW_ETAG=$(curl -sI $REMOTE_ASSET | grep -Fi Etag | awk '{ print $2 }')
+
+ETAG_PATH="$settings_dir/etag"
+OLD_ETAG=""
+
+if [[ -f $ETAG_PATH ]]; then
+  OLD_ETAG=$(cat $ETAG_PATH)
+fi
+
+function make_directories() {
   rm -rf "$install_dir"
-fi
-
-if [[ ! -d "$settings_dir" ]]; then
+  mkdir -p /opt
   mkdir -p "$settings_dir"
+}
+
+function download_and_install_asset() {
+  echo "Downloading ci-studio-common for $PLATFORM"
+  curl -sL "$REMOTE_ASSET" -o /tmp/ci-studio-common.tar.gz
+  tar -xzvf /tmp/ci-studio-common.tar.gz -C /opt
+}
+
+function make_symlinks() {
+  if [[ -w /usr/bin ]]; then
+    ln -sf /opt/ci-studio-common/bin/* /usr/bin
+  else
+    echo "\
+
+=== WARNING ===
+
+ci-studio-common does not have permission to install binaries into /usr/bin.
+Please make sure to add /opt/ci-studio-common/bin to your PATH.
+
+export PATH=$PATH:/opt/ci-studio-common/bin
+
+"
+  fi
+}
+
+if [[ $NEW_ETAG != $OLD_ETAG ]]; then
+  make_directories
+  download_and_install_asset
+  make_symlinks
+
+  echo -n $NEW_ETAG > $ETAG_PATH
+else
+  echo "ci-studio-common is up-to-date"
 fi
-
-# Download and install ci-studio-common
-git clone https://github.com/chef/ci-studio-common.git "$install_dir"
-cd "$install_dir" || exit 1
-git checkout "$branch"
-
-# Save the branch that was used to install
-echo "$branch" > "$settings_dir/.install-branch"
-
-# Perform post-install operations
-/opt/ci-studio-common/bin/ci-studio-common-util update

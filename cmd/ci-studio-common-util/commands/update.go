@@ -11,8 +11,8 @@ import (
 	"github.com/mholt/archiver"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"go.uber.org/multierr"
 
-	internalErrors "github.com/chef/ci-studio-common/internal/pkg/errors"
 	"github.com/chef/ci-studio-common/internal/pkg/files"
 	"github.com/chef/ci-studio-common/internal/pkg/http"
 	"github.com/chef/ci-studio-common/internal/pkg/paths"
@@ -196,24 +196,27 @@ func performPhaseThree() error {
 	return releaseUpgradeState(nil, "")
 }
 
+// phasePrintln provides a consistent mechanism for printing upgrade state through the different phases
 func phasePrintln(phase int, message string) {
 	fmt.Printf("--> {%d} %s", phase, message)
 }
 
 func releaseUpgradeState(upstreamErr error, upstreamReason string) error {
+	wrappedUpstreamErr := errors.Wrap(upstreamErr, upstreamReason)
+
 	err := os.RemoveAll(paths.InstallBackupDir)
 	if err != nil {
-		return internalErrors.LayeredWrap(upstreamErr, upstreamReason, err, "failed to remove backup directory")
+		return multierr.Append(wrappedUpstreamErr, errors.Wrapf(err, "failed to remove %s", paths.InstallBackupDir))
 	}
 
 	err = os.RemoveAll(assetOnDisk)
 	if err != nil {
-		return internalErrors.LayeredWrap(upstreamErr, upstreamReason, err, "failed to remove asset tarball from disk")
+		return multierr.Append(wrappedUpstreamErr, errors.Wrapf(err, "failed to remove %s from disk", assetOnDisk))
 	}
 
 	err = os.RemoveAll(upgradeStatusFile)
 	if err != nil {
-		return internalErrors.LayeredWrap(upstreamErr, upstreamReason, err, "failed to remove upgrade status file")
+		return multierr.Append(wrappedUpstreamErr, errors.Wrapf(err, "failed to remove %s from disk", upgradeStatusFile))
 	}
 
 	return errors.Wrap(upstreamErr, upstreamReason)

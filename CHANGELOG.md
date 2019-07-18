@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.0 -->
+<!-- latest_release unreleased -->
+## Unreleased
+
+#### Merged Pull Requests
+- Use multierr instead of custom internal errors pkg [#197](https://github.com/chef/ci-studio-common/pull/197) ([tduffield](https://github.com/tduffield))
+<!-- latest_release -->
+
 ## [2.0.0](https://github.com/chef/ci-studio-common/tree/2.0.0) (2019-07-17)
 
 #### Merged Pull Requests
 - 2.0 Release -- Rewrite in Go [#196](https://github.com/chef/ci-studio-common/pull/196) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [1.1.64](https://github.com/chef/ci-studio-common/tree/1.1.64) (2019-06-11)
 

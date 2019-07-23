@@ -76,12 +76,12 @@ function install() {
 
   if [[ "x$1" == "x" ]]; then
     # Trying to use the last package built
-    cd /src || return
-    # If there are no packages available, build one for me
-    [[ ! -f results/last_build.env ]] && build .
-    source results/last_build.env
-    eval "hab pkg $install_cmd results/$pkg_artifact >/dev/null"
-    cd ../ || return
+    ( cd /src || exit
+      # If there are no packages available, build one for me
+      [[ ! -f results/last_build.env ]] && build .
+      source results/last_build.env
+      eval "hab pkg $install_cmd results/$pkg_artifact >/dev/null"
+    )
   else
     for pkg in "$@"
     do
@@ -98,27 +98,26 @@ document "export_docker_image" <<DOC
   If no last_build.env file is present, it will perform a build automatically.
 DOC
 function export_docker_image() {
-  cd /src || return
-  if [[ ! -f results/last_build.env ]]; then
-    log_line "No Habitat build found - building now. [please wait]"
-    build >/dev/null && return 1
-  fi
-  source results/last_build.env
-  log_line "Latest build: $pkg_artifact"
-  log_line "Exporting Habitat package into a Docker image. [please wait]"
-  if ! hab pkg export docker "results/${pkg_artifact}" >/dev/null; then
-    # If something went wrong here is because the pkg export cmd failed
-    error "Unable to export package as a Docker Image."
-    error "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose."
-    cd ../ || return
-    return 1
-  fi
-  export DOCKER_TAG="${pkg_version}-${pkg_release}"
-  export DOCKER_REPO="${pkg_origin}/${pkg_name}"
-  export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}"
-  log_line "Docker image successfully built: $DOCKER_IMAGE"
-  log_line "Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
-  cd ../ || return
+  ( cd /src || exit
+    if [[ ! -f results/last_build.env ]]; then
+      log_line "No Habitat build found - building now. [please wait]"
+      build >/dev/null && exit 1
+    fi
+    source results/last_build.env
+    log_line "Latest build: $pkg_artifact"
+    log_line "Exporting Habitat package into a Docker image. [please wait]"
+    if ! hab pkg export docker "results/${pkg_artifact}" >/dev/null; then
+      # If something went wrong here is because the pkg export cmd failed
+      error "Unable to export package as a Docker Image."
+      error "Run 'hab pkg export docker \"$pkg_artifact\"' and diagnose."
+      exit 1
+    fi
+    export DOCKER_TAG="${pkg_version}-${pkg_release}"
+    export DOCKER_REPO="${pkg_origin}/${pkg_name}"
+    export DOCKER_IMAGE="${DOCKER_REPO}:${DOCKER_TAG}"
+    log_line "Docker image successfully built: $DOCKER_IMAGE"
+    log_line "Now you can use the image '$DOCKER_REPO' on any 'docker-compose.yml'"
+  )
 }
 
 document "install_if_missing" <<DOC

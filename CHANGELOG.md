@@ -1,9 +1,10 @@
 # Changelog
 
-<!-- latest_release unreleased -->
-## Unreleased
+<!-- latest_release 2.0.1 -->
+## [2.0.1](https://github.com/chef/ci-studio-common/tree/2.0.1) (2019-07-23)
 
 #### Merged Pull Requests
+- Use correct sub-shell statement [#198](https://github.com/chef/ci-studio-common/pull/198) ([afiune](https://github.com/afiune))
 - Use multierr instead of custom internal errors pkg [#197](https://github.com/chef/ci-studio-common/pull/197) ([tduffield](https://github.com/tduffield))
 <!-- latest_release -->
 

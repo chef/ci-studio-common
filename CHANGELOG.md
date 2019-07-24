@@ -1,12 +1,17 @@
 # Changelog
 
-<!-- latest_release 2.0.1 -->
+<!-- latest_release 2.0.2 -->
+## [2.0.2](https://github.com/chef/ci-studio-common/tree/2.0.2) (2019-07-24)
+
+#### Merged Pull Requests
+- Moved the studio-common scripts out [#199](https://github.com/chef/ci-studio-common/pull/199) ([afiune](https://github.com/afiune))
+<!-- latest_release -->
+
 ## [2.0.1](https://github.com/chef/ci-studio-common/tree/2.0.1) (2019-07-23)
 
 #### Merged Pull Requests
 - Use correct sub-shell statement [#198](https://github.com/chef/ci-studio-common/pull/198) ([afiune](https://github.com/afiune))
 - Use multierr instead of custom internal errors pkg [#197](https://github.com/chef/ci-studio-common/pull/197) ([tduffield](https://github.com/tduffield))
-<!-- latest_release -->
 
 ## [2.0.0](https://github.com/chef/ci-studio-common/tree/2.0.0) (2019-07-17)
 

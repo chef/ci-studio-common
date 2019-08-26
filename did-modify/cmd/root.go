@@ -57,6 +57,7 @@ func detectModifiedFiles(cmd *cobra.Command, args []string) {
 		for _, globPattern := range globs {
 			if glob.Glob(globPattern, fileStat.Name) {
 				fmt.Print("true")
+                                return
 			}
 		}
 	}

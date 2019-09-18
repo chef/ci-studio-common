@@ -24,8 +24,7 @@ var (
 
 // InitGithubConfig is called through the chain to establish global defaults
 func InitGithubConfig() {
-	viper.SetDefault("github.static_mount_root", "account/static/github")
-	viper.SetDefault("github.token_name", "buildkite")
+	viper.SetDefault("github.dynamic_mount_root", "account/dynamic/github")
 }
 
 // NewGithubAccount creates new instance of GithubAccount
@@ -35,19 +34,12 @@ func NewGithubAccount(name string) (*GithubAccount, error) {
 		return nil, err
 	}
 
-	secret, err := vaultClient.Read(fmt.Sprintf("%s/%s", viper.GetString("github.static_mount_root"), name))
+	secret, err := vaultClient.Read(fmt.Sprintf("%s/%s/token", viper.GetString("github.dynamic_mount_root"), name))
 	if err != nil {
 		return nil, err
 	}
 
-	tokenName := viper.GetString("github.token_name")
-
-	// Check to make sure that the token name you specified exists
-	if token, ok := secret.Data[tokenName]; ok {
-		return &GithubAccount{Name: name, Token: token.(string)}, nil
-	}
-
-	return nil, fmt.Errorf("could not find a GitHub token in Vault named %s", tokenName)
+	return &GithubAccount{Name: name, Token: secret.Data["token"].(string)}, nil
 }
 
 func (c *Cache) fetchOrInitGithubAccount(name string) (*GithubAccount, error) {

@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -12,22 +11,24 @@ import (
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
+type rootCmdOptions struct {
+	gitref string
+	globs  []string
+}
+
 var (
 	rootCmd = &cobra.Command{
 		Use:   "did-modify",
 		Short: `Prints "true" to STDOUT if any files matching GLOBS were modified between HEAD and GITREF. Otherwise, prints "false".`,
-		RunE:  detectModifiedFiles,
+		RunE:  didModifyE,
 	}
 
-	rootOpts = struct {
-		gitref string
-		globs  []string
-	}{}
+	rootCmdOpts = &rootCmdOptions{}
 )
 
 func init() {
-	rootCmd.Flags().StringVar(&rootOpts.gitref, "git-ref", "HEAD~1", "A valid Git reference (e.g. HEAD, master, origin/master, etc).")
-	rootCmd.Flags().StringSliceVar(&rootOpts.globs, "globs", []string{"*"}, "Comma-separated list of glob patterns to inspect to determine if there are changes.")
+	rootCmd.Flags().StringVar(&rootCmdOpts.gitref, "git-ref", "HEAD~1", "A valid Git reference (e.g. HEAD, master, origin/master, etc).")
+	rootCmd.Flags().StringSliceVar(&rootCmdOpts.globs, "globs", []string{"*"}, "Comma-separated list of glob patterns to inspect to determine if there are changes.")
 }
 
 // Execute handles the execution of child commands and flags
@@ -37,7 +38,7 @@ func Execute() {
 	}
 }
 
-func detectModifiedFiles(cmd *cobra.Command, args []string) error {
+func didModifyE(cmd *cobra.Command, args []string) error {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return errors.Wrap(err, "failed to get current working directory")
@@ -58,9 +59,9 @@ func detectModifiedFiles(cmd *cobra.Command, args []string) error {
 		return errors.Wrap(err, "failed to fetch commit sha for HEAD of repository")
 	}
 
-	gitRefRev, err := repo.ResolveRevision(plumbing.Revision(rootOpts.gitref))
+	gitRefRev, err := repo.ResolveRevision(plumbing.Revision(rootCmdOpts.gitref))
 	if err != nil {
-		return errors.Wrapf(err, "failed to fetch the fully qualified revision for %s", rootOpts.gitref)
+		return errors.Wrapf(err, "failed to fetch the fully qualified revision for %s", rootCmdOpts.gitref)
 	}
 
 	gitRefCommit, err := repo.CommitObject(*gitRefRev)
@@ -74,14 +75,14 @@ func detectModifiedFiles(cmd *cobra.Command, args []string) error {
 	}
 
 	for _, fileStat := range patch.Stats() {
-		for _, globPattern := range rootOpts.globs {
+		for _, globPattern := range rootCmdOpts.globs {
 			if glob.Glob(globPattern, fileStat.Name) {
-				fmt.Print("true")
+				cmd.Print("true")
 				return nil
 			}
 		}
 	}
 
-	fmt.Print("false")
+	cmd.Print("false")
 	return nil
 }

@@ -1,17 +1,11 @@
 package commands
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
-	"strings"
-
+	"github.com/MakeNowJust/heredoc"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
 	"github.com/chef/ci-studio-common/internal/pkg/buildkite"
-	"github.com/chef/ci-studio-common/internal/pkg/datastructs"
-	"github.com/chef/ci-studio-common/internal/pkg/files"
 )
 
 var (
@@ -22,10 +16,10 @@ var (
   https://buildkite.com/docs/agent/v3/hooks#available-hooks
 
 SUPPORTED HOOKS:
-  ci-studio-common                Helper to run as an environment hook to load the ci-studio-common helpers.
-  short-checkout-path             Checkout code into shorter code to deal with file path limits.`,
+  ci-utils                Helper to run as an environment hook to load the ci-utils helpers.
+  short-checkout-path     Checkout code into shorter code to deal with file path limits.`,
 		Args: validHookArgs,
-		RunE: installHook,
+		RunE: hookE,
 	}
 
 	validHookTypes = []string{
@@ -37,7 +31,7 @@ SUPPORTED HOOKS:
 	}
 
 	validHookNames = []string{
-		"ci-studio-common",
+		"ci-utils",
 		"short-checkout-path",
 	}
 )
@@ -51,28 +45,33 @@ func validHookArgs(cmd *cobra.Command, args []string) error {
 		return errors.New("you must provide a hook type and a hook name")
 	}
 
-	if !datastructs.StringInSlice(args[0], validHookTypes) {
+	if !stringInSlice(args[0], validHookTypes) {
 		return errors.Errorf("%s is not a valid Buildkite hook type", args[0])
 	}
 
-	if !datastructs.StringInSlice(args[1], validHookNames) {
+	if !stringInSlice(args[1], validHookNames) {
 		return errors.Errorf("%s is not a supported hook", args[1])
 	}
 
 	return nil
 }
 
-func installHook(cmd *cobra.Command, args []string) error {
+func hookE(cmd *cobra.Command, args []string) error {
 	hookType := args[0]
 	hookName := args[1]
 
-	err := os.MkdirAll(buildkite.AgentHooksDir, 0755)
+	err := fs.MkdirAll(buildkite.AgentHooksDir, 0755)
 	if err != nil {
-		return errors.Wrap(err, "failed to create agent hooks directory")
+		return errors.Wrapf(err, "failed to create directory %s", buildkite.AgentHooksDir)
 	}
 
-	hookFile := buildkite.CIStudioCommonAgentHook(hookName)
-	if files.FileExists(hookFile) {
+	hookFile := ciutils.AgentHook(hookName)
+	hookFileExists, err := fs.Exists(hookFile)
+	if err != nil {
+		return errors.Wrapf(err, "failed to determine if file %s exists", hookFile)
+	}
+
+	if hookFileExists {
 		err = installShellHook(hookType, hookName)
 		if err != nil {
 			return errors.Wrapf(err, "failed to install the %s %s hook", hookName, hookType)
@@ -85,48 +84,45 @@ func installHook(cmd *cobra.Command, args []string) error {
 }
 
 func installShellHook(hookType string, hookName string) error {
-	sourceFile := buildkite.CIStudioCommonAgentHook(hookName)
-	footer := fmt.Sprintf("echo \"hook complete: %s\"", hookName)
-
-	hookFilePath := buildkite.AgentHook(hookType)
-	hookFile, err := os.OpenFile(hookFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	// Make sure the buildkite hook file exists
+	bkHookFilePath := buildkite.AgentHook(hookType)
+	bkHookFileExists, err := fs.Exists(bkHookFilePath)
 	if err != nil {
-		return errors.Wrapf(err, "failed to open the %s hook", hookFilePath)
-	}
-	defer hookFile.Close()
-
-	hookFileContents, err := ioutil.ReadFile(hookFilePath)
-	if err != nil {
-		return errors.Wrapf(err, "failed to read the contents of %s", hookFilePath)
+		return errors.Wrapf(err, "failed to determine if %s exists", bkHookFilePath)
 	}
 
-	fi, err := hookFile.Stat()
-	if err != nil {
-		return errors.Wrapf(err, "failed to get file stats for %s", hookFilePath)
-	}
-
-	if fi.Size() == 0 {
-		_, err := hookFile.WriteString("#!/bin/bash\n\nset -eou pipefail\n\n")
+	if !bkHookFileExists {
+		err := fs.WriteFile(bkHookFilePath, []byte("#!/bin/bash\n\nset -eou pipefail\n"), 0755)
 		if err != nil {
-			return errors.Wrapf(err, "failed to initialize contents of %s", hookFilePath)
+			return errors.Wrapf(err, "failed to initialize %s", bkHookFilePath)
 		}
 	}
 
-	if !strings.Contains(string(hookFileContents), footer) {
-		header := fmt.Sprintf("echo \"--- executing hook: %s\"", hookName)
-		content := fmt.Sprintf(". %q", sourceFile)
+	// Generate the content we're going to inject and inject it if necessary
+	hookContents := heredoc.Docf(`
 
-		fullContents := fmt.Sprintf("%s\n%s\n%s\n", header, content, footer)
-		_, err := hookFile.WriteString(fullContents)
-		if err != nil {
-			return errors.Wrapf(err, "failed to insert %s hook into %s", hookName, hookFilePath)
-		}
+		echo "--- executing hook: %s"
+		. %s
+		echo "hook complete: %s"`, hookName, ciutils.AgentHook(hookName), hookName)
+	hookContentsBytes := []byte(hookContents)
 
-		err = os.Chmod(hookFile.Name(), 0755)
-		if err != nil {
-			return errors.Wrapf(err, "failed to update %s file permissions", hookFilePath)
-		}
+	hookPresent, err := fs.FileContainsBytes(bkHookFilePath, hookContentsBytes)
+	if err != nil {
+		return errors.Wrapf(err, "failed to determine if hook %s is already present in %s", hookName, bkHookFilePath)
 	}
 
-	return nil
+	if hookPresent {
+		return nil
+	}
+
+	return fs.AppendIfMissing(bkHookFilePath, hookContentsBytes, 0755)
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }

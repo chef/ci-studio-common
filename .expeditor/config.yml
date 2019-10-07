@@ -1,5 +1,5 @@
 project:
-  alias: ci-studio-common
+  alias: ci-utils
 
 slack:
   notify_channel:
@@ -9,6 +9,12 @@ slack:
 pipelines:
   - verify:
       public: true
+  - build
+
+promote:
+  channels:
+    - unstable
+    - stable
 
 github:
   delete_branch_on_merge: true
@@ -19,13 +25,6 @@ github:
         version_constraint: 1.*
     - pre-1.0:
         version_constraint: 0.*
-
-promote:
-  channels:
-    - dev
-    - stable
-  actions:
-    - built_in:promote_habitat_packages
 
 merge_actions:
   - built_in:bump_version:
@@ -39,13 +38,15 @@ merge_actions:
   - bash:.expeditor/update_readme.sh:
       ignore_labels:
         - "Expeditor: Skip All"
-  # Do not build at the moment -- still working that out
-  # - bash:.expeditor/build.sh:
-  #     post_commit: true
-  #     ignore_labels:
-  #       - "Expeditor: Skip All"
+  - trigger_pipeline:build:
+      post_commit: true
+      ignore_labels:
+        - "Expeditor: Skip All"
 
 subscriptions:
+  - workload: project_promoted:{{agent_id}}:*
+    actions:
+      - bash:.expeditor/promote.sh
   - workload: artifact_published:stable:habitat:*
     actions:
       - bash:.expeditor/update_hab_version.sh

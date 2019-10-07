@@ -1,26 +1,44 @@
 package commands
 
 import (
-	"github.com/spf13/cobra"
+	"regexp"
 
-	"github.com/chef/ci-studio-common/internal/pkg/files"
+	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
 )
 
-var replaceCmd = &cobra.Command{
+var findAndReplaceCmd = &cobra.Command{
 	Use:   "find-and-replace REGEX_STR STRING FILE",
 	Short: "Replace REGEX_STR with STRING in FILE. Supports multiline replace.",
 	Args:  cobra.ExactArgs(3),
-	RunE:  findAndReplace,
+	RunE:  findAndReplaceE,
 }
 
 func init() {
-	rootCmd.AddCommand(replaceCmd)
+	rootCmd.AddCommand(findAndReplaceCmd)
 }
 
-func findAndReplace(cmd *cobra.Command, args []string) error {
+func findAndReplaceE(cmd *cobra.Command, args []string) error {
 	regexStr := args[0]
-	stringToWrite := args[1]
-	fileToModify := args[2]
+	newString := args[1]
+	filePath := args[2]
 
-	return files.FindAndReplace(fileToModify, regexStr, stringToWrite)
+	r, err := regexp.Compile(regexStr)
+	if err != nil {
+		return errors.Wrapf(err, "%s is not a valid regular expression", regexStr)
+	}
+
+	fileContents, err := fs.ReadFile(filePath)
+	if err != nil {
+		return errors.Wrapf(err, "failed to read contents of file %s", filePath)
+	}
+
+	newContents := r.ReplaceAll(fileContents, []byte(newString))
+
+	err = fs.WriteFile(filePath, newContents, 0644)
+	if err != nil {
+		return errors.Wrapf(err, "failed to write contents to file %s", filePath)
+	}
+
+	return nil
 }

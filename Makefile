@@ -1,5 +1,5 @@
 LD_FLAGS=-s -w
-UTILITIES = ci-studio-common-util file-mod install-buildkite-agent install-habitat did-modify vault-util
+UTILITIES = ci-utils file-mod install-buildkite-agent install-habitat did-modify vault-util
 
 .PHONE: studio
 studio:
@@ -46,3 +46,13 @@ build-windows: $(addsuffix .exe, $(addprefix build/windows/,$(UTILITIES)))
 build/windows/%.exe:
 	mkdir -p build/windows
 	GOOS=windows GOARCH=amd64 go build -o build/windows/$*.exe -ldflags="$(LD_FLAGS)" ./cmd/$*
+
+
+.PHONY: ci test lint
+ci: test lint
+
+test:
+	go test ./...
+
+lint:
+	golangci-lint run

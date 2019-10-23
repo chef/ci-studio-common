@@ -15,6 +15,7 @@ linters:
     - stylecheck
     - unparam
     - lll
+    - wsl
 
 issues:
   exclude-rules:

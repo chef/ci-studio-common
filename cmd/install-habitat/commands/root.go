@@ -33,7 +33,7 @@ var (
 	execCommand = exec.Command
 
 	// DO NOT MODIFY -- This value is automatically updated by Expeditor
-	globalHabValue = "0.83.0"
+	globalHabValue = "0.90.6"
 
 	rootCmd = &cobra.Command{
 		Use:   "install-habitat",

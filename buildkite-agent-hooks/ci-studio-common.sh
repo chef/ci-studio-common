@@ -13,21 +13,6 @@ run_cmd() {
   fi
 }
 
-echo "Updating 'ci-studio-common'"
-run_cmd "ci-studio-common-util update"
-
-update_status_file="/var/opt/ci-studio-common/upgrade-in-progress"
-if [[ $OSTYPE == "msys" ]]; then
-  update_status_file="C:\\ci-studio-settings\\upgrade-in-progress"
-fi
-
-while [[ -f $update_status_file ]]; do
-  sleep 1
-done
-
-echo "Updating 'hab'"
-run_cmd "install-habitat"
-
 if [[ -n "${VAULT_UTIL_ACCOUNTS:-}" ]]; then
   vault-util configure-accounts
 fi

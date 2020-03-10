@@ -4,17 +4,6 @@ $ErrorActionPreference = "Stop"
 $env:HAB_NONINTERACTIVE = "true"
 $env:HAB_NOCOLORING = "true"
 
-Write-Output "Updating 'ci-studio-common'"
-ci-studio-common-util.exe update
-
-$update_status_file = "C:\ci-studio-settings\upgrade-in-progress"
-while(Test-Path $update_status_file) {
-  Start-Sleep 1
-}
-
-Write-Output "Updating 'hab'"
-install-habitat
-
 if (Test-Path env:VAULT_UTIL_ACCOUNTS) {
   vault-util configure-accounts
 }

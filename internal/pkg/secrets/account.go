@@ -62,7 +62,7 @@ func (c *VaultClient) newAzureAccount(name string) (*Account, error) {
 }
 
 func (c *VaultClient) newGithubAccount(name string) (*Account, error) {
-	secret, err := c.GetSecret(fmt.Sprintf("%s/github/%s", viper.GetString("vault.dynamic_mount"), name))
+	secret, err := c.GetSecret(fmt.Sprintf("%s/github/%s/token", viper.GetString("vault.dynamic_mount"), name))
 	if err != nil {
 		return nil, err
 	}

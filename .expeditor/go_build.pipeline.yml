@@ -1,0 +1,47 @@
+steps:
+  - label: ":go: build"
+    command: 
+      - goreleaser build --rm-dist --skip-validate
+    artifact_paths:
+      - "workdir/dist/*"
+    expeditor:
+      executor:
+        docker:
+
+  - wait
+
+  - label: ":artifactory: upload did-modify"
+    command: 
+      - buildkite-agent artifact download "workdir/dist/did-modify_*" .
+      - .expeditor/artifact_upload.sh
+    expeditor:
+      secrets:
+        ARTIFACTORY_TOKEN:
+          path: account/static/artifactory/buildkite
+          field: token
+      executor:
+        docker:
+    
+  - label: ":artifactory: upload file-mod"
+    command: 
+      - buildkite-agent artifact download "workdir/dist/file-mod_*" .
+      - .expeditor/artifact_upload.sh
+    expeditor:
+      secrets:
+        ARTIFACTORY_TOKEN:
+          path: account/static/artifactory/buildkite
+          field: token
+      executor:
+        docker:
+
+  - label: ":artifactory: upload vault-util"
+    command: 
+      - buildkite-agent artifact download "workdir/dist/vault-util_*" .
+      - .expeditor/artifact_upload.sh
+    expeditor:
+      secrets:
+        ARTIFACTORY_TOKEN:
+          path: account/static/artifactory/buildkite
+          field: token
+      executor:
+        docker:

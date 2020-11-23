@@ -9,7 +9,7 @@ function download_artifacts {
   os=$1
   arch=$2
   
-  echo "--- Artifactory downloading ci-studio-common binaries for ${os} ${arch}"
+  echo "--- Artifactory download ci-studio-common binaries for ${os} ${arch}"
   jfrog rt dl \
   --apikey="${art_token}" \
   --url="https://artifactory.chef.co/artifactory" \
@@ -19,25 +19,28 @@ function download_artifacts {
   "go-binaries-local/*"
   "go-binaries/${os}/${arch}/"
 
-  zip -r "ci_stuido_common_${os}_${arch}.zip" go-binaries/${os}/${arch}/
-  files="${files} ci_stuido_common_${os}_${arch}.zip"
-
   for file in go-binaries/${os}/${arch}/*
   do
     if [[ ${os} == "windows" ]]; then
       IFS='.' read -r -a parts <<< "${file}"
-      mv ${file} "${parts[0]}_${os}_${arch}.${parts[1]}"
-      files="${files} ${parts[0]}_${os}_${arch}.${parts[1]}"
+      util_name=${parts[0]}
+
+      zip -r "ci_stuido_common_${os}_${arch}.zip" go-binaries/${os}/${arch}/
+      zip -r "${util_name}_${os}_${arch}.zip" ${file}
+
+      files="${files} ci_stuido_common_${os}_${arch}.zip ${util_name}_${os}_${arch}.zip"
     else
-      mv ${file} "${file}_${os}_${arch}"
-      files="${files} ${file}_${os}_${arch}"
+      tar -czf "ci_stuido_common_${os}_${arch}.tar.gz" go-binaries/${os}/${arch}/
+      tar -czf "${file}_${os}_${arch}.tar.gz" ${file}
+
+      files="${files} ci_stuido_common_${os}_${arch}.tar.gz ${file}_${os}_${arch}.tar.gz"
     fi
   done
 }
 
-download_artifacts linux amd64
-download_artifacts darwin amd64
-download_artifacts windows amd64
+download_artifacts linux x86_64
+download_artifacts darwin x86_64
+download_artifacts windows x86_64
 
 notes=$(sed -n -E '/<!-- latest_release (.+) -->|<!-- latest_release -->/,/<!-- latest_release -->/p' CHANGELOG.md)
 

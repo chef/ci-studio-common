@@ -4,18 +4,6 @@ before:
   hooks:
     - go get -v -d ./...
 builds:
-  - id: "ci-utils"
-    binary: ci-utils
-    main: cmd/ci-utils/main.go
-    env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-      - windows
-      - darwin
-    goarch:
-      - amd64
-
   - id: "did-modify"
     binary: did-modify
     main: cmd/did-modify/main.go
@@ -27,7 +15,19 @@ builds:
       - darwin
     goarch:
       - amd64
-      
+
+  - id: "file-mod"
+    binary: file-mod
+    main: cmd/file-mod/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+
   - id: "vault-util"
     binary: vault-util
     main: cmd/vault-util/main.go

@@ -25,15 +25,15 @@ function download_artifacts {
       IFS='.' read -r -a parts <<< "${file}"
       util_name=${parts[0]}
 
-      zip -r "ci_stuido_common_${os}_${arch}.zip" go-binaries/${os}/${arch}/
+      zip -r "ci_studio_common_${os}_${arch}.zip" go-binaries/${os}/${arch}/
       zip -r "${util_name}_${os}_${arch}.zip" ${file}
 
-      files="${files} ci_stuido_common_${os}_${arch}.zip ${util_name}_${os}_${arch}.zip"
+      files="${files} ci_studio_common_${os}_${arch}.zip ${util_name}_${os}_${arch}.zip"
     else
-      tar -czf "ci_stuido_common_${os}_${arch}.tar.gz" go-binaries/${os}/${arch}/
+      tar -czf "ci_studio_common_${os}_${arch}.tar.gz" go-binaries/${os}/${arch}/
       tar -czf "${file}_${os}_${arch}.tar.gz" ${file}
 
-      files="${files} ci_stuido_common_${os}_${arch}.tar.gz ${file}_${os}_${arch}.tar.gz"
+      files="${files} ci_studio_common_${os}_${arch}.tar.gz ${file}_${os}_${arch}.tar.gz"
     fi
   done
 }

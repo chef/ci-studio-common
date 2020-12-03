@@ -32,15 +32,17 @@ var (
 	secretsClient secrets.Client
 )
 
-// Execute handles the execution of child commands and flags
+// Execute handles the execution of child commands and flags.
 func Execute() {
 	var err error
+	var retryAttempts uint = 5
+	var retryDelay time.Duration = 100
 
 	fs = filesystem.NewOsFs()
 	ciutils = install.DefaultInstall()
 	fslock = &filesystem.OsLock{
-		RetryAttempts:  5,
-		RetryDelay:     100 * time.Millisecond,
+		RetryAttempts:  retryAttempts,
+		RetryDelay:     retryDelay * time.Millisecond,
 		RetryDelayType: retry.BackOffDelay,
 	}
 

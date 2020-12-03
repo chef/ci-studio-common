@@ -13,13 +13,11 @@ import (
 	"github.com/chef/ci-studio-common/internal/pkg/filesystem"
 )
 
-var (
-	configureAccountsCmd = &cobra.Command{
-		Use:   "configure-accounts",
-		Short: "Configure the accounts specified in the VAULT_UTIL_ACCOUNTS environment variable.",
-		RunE:  configureAccountsE,
-	}
-)
+var configureAccountsCmd = &cobra.Command{
+	Use:   "configure-accounts",
+	Short: "Configure the accounts specified in the VAULT_UTIL_ACCOUNTS environment variable.",
+	RunE:  configureAccountsE,
+}
 
 func init() {
 	rootCmd.AddCommand(configureAccountsCmd)
@@ -27,7 +25,7 @@ func init() {
 
 // Some utilities do not like it when you try and configure accounts at the same time.
 // If we're able to get the first lock on the instance, proceed.
-// Otherwise, we'll loop and wait for the update to finish (lock is released)
+// Otherwise, we'll loop and wait for the update to finish (lock is released).
 func configureAccountsE(cmd *cobra.Command, args []string) error {
 	var accountsJSON map[string][]string
 
@@ -70,13 +68,14 @@ func configureAccountsE(cmd *cobra.Command, args []string) error {
 		retry.Delay(fslock.GetRetryDelay()),
 		retry.DelayType(fslock.GetRetryDelayType()),
 		retry.RetryIf(func(err error) bool {
-			if err == filesystem.ErrLocked {
+			if errors.Cause(err) == filesystem.ErrLocked {
 				return true
 			}
+
 			return false
 		}),
 		retry.OnRetry(func(n uint, err error) {
-			if err == filesystem.ErrLocked {
+			if errors.Cause(err) == filesystem.ErrLocked {
 				cmd.Printf("another account configuration already in progress -- waiting (%d/%d)\n", n, fslock.GetRetryAttempts())
 			}
 		}),
@@ -94,7 +93,7 @@ func configureAccounts(accountsJSON map[string][]string) error {
 			case "github":
 				return configureGithub(accountVal)
 			default:
-				return errors.Errorf("unsupported account type: %s", accountType)
+				return errors.New("unsupported account type")
 			}
 		}
 	}

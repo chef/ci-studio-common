@@ -4,12 +4,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var appendCmd = &cobra.Command{
-	Use:   "append-if-missing STRING FILE",
-	Short: "Append STRING to FILE if not already there.",
-	Args:  cobra.ExactArgs(2),
-	RunE:  appendE,
-}
+var (
+	appendArgs = 2
+
+	appendCmd = &cobra.Command{
+		Use:   "append-if-missing STRING FILE",
+		Short: "Append STRING to FILE if not already there.",
+		Args:  cobra.ExactArgs(appendArgs),
+		RunE:  appendE,
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(appendCmd)

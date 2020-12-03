@@ -30,12 +30,12 @@ func TestConfigureAccountsE(t *testing.T) {
 	m := minify.New()
 	m.AddFunc("json", json.Minify)
 
-	vaultUtilJson := heredoc.Docf(`
+	vaultUtilJSON := heredoc.Docf(`
 		{
 			"aws": ["my-account"]
 		}
 	`)
-	defaultCondensedJson, err := m.String("json", vaultUtilJson)
+	defaultCondensedJSON, err := m.String("json", vaultUtilJSON)
 	assert.Nil(t, err)
 
 	fs = filesystem.NewMemFs()
@@ -55,7 +55,7 @@ func TestConfigureAccountsE(t *testing.T) {
 	})
 
 	t.Run("lock already exists", func(t *testing.T) {
-		err = os.Setenv("VAULT_UTIL_ACCOUNTS", defaultCondensedJson)
+		err = os.Setenv("VAULT_UTIL_ACCOUNTS", defaultCondensedJSON)
 		assert.Nil(t, err)
 
 		fslock = &filesystem.MemMapLock{
@@ -83,7 +83,7 @@ func TestConfigureAccountsE(t *testing.T) {
 	})
 
 	t.Run("failed to get lock", func(t *testing.T) {
-		err = os.Setenv("VAULT_UTIL_ACCOUNTS", defaultCondensedJson)
+		err = os.Setenv("VAULT_UTIL_ACCOUNTS", defaultCondensedJSON)
 		assert.Nil(t, err)
 
 		fslock = &filesystem.MemMapLock{
@@ -137,7 +137,7 @@ func TestConfigureAccountsE(t *testing.T) {
 
 		err = configureAccountsE(cmd, args)
 		assert.NotNil(t, err)
-		assert.Regexp(t, "unsupported account type: foobar", err.Error())
+		assert.Regexp(t, "unsupported account type", err.Error())
 
 		os.Unsetenv("VAULT_UTIL_ACCOUNTS")
 		output.Reset()
@@ -158,12 +158,12 @@ func TestConfigureAccountsE(t *testing.T) {
 		execCommand = fakeFailureConfigureCommand
 		defer func() { execCommand = exec.Command }()
 
-		accessKeyId := "fake-access-key-id"
+		accessKeyID := "fake-access-key-id"
 		secretAccessKey := "fake-secret-access-key+"
 		sessionToken := "fake-secret-token"
 
 		fakeAccountData := make(map[string]string)
-		fakeAccountData["access_key_id"] = accessKeyId
+		fakeAccountData["access_key_id"] = accessKeyID
 		fakeAccountData["secret_access_key"] = secretAccessKey
 		fakeAccountData["session_token"] = sessionToken
 
@@ -199,12 +199,12 @@ func TestConfigureAccountsE(t *testing.T) {
 		execCommand = fakeSuccessConfigureCommand
 		defer func() { execCommand = exec.Command }()
 
-		accessKeyId := "fake-access-key-id"
+		accessKeyID := "fake-access-key-id"
 		secretAccessKey := "fake-secret-access-key+"
 		sessionToken := "fake-secret-token"
 
 		fakeAccountData := make(map[string]string)
-		fakeAccountData["access_key_id"] = accessKeyId
+		fakeAccountData["access_key_id"] = accessKeyID
 		fakeAccountData["secret_access_key"] = secretAccessKey
 		fakeAccountData["session_token"] = sessionToken
 

@@ -18,7 +18,7 @@ var (
 	}
 )
 
-// Execute handles the execution of child commands and flags
+// Execute handles the execution of child commands and flags.
 func Execute() {
 	fs = filesystem.NewOsFs()
 

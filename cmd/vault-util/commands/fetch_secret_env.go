@@ -15,6 +15,7 @@ type (
 		format string
 	}
 
+	// Secret defines the fields available to the secret.
 	Secret struct {
 		Field   string `json:"field"`
 		Path    string `json:"path"`

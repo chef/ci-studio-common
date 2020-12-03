@@ -31,7 +31,7 @@ func init() {
 	rootCmd.Flags().StringSliceVar(&rootCmdOpts.globs, "globs", []string{"*"}, "Comma-separated list of glob patterns to inspect to determine if there are changes.")
 }
 
-// Execute handles the execution of child commands and flags
+// Execute handles the execution of child commands and flags.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
@@ -78,11 +78,13 @@ func didModifyE(cmd *cobra.Command, args []string) error {
 		for _, globPattern := range rootCmdOpts.globs {
 			if glob.Glob(globPattern, fileStat.Name) {
 				cmd.Print("true")
+
 				return nil
 			}
 		}
 	}
 
 	cmd.Print("false")
+
 	return nil
 }

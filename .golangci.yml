@@ -16,6 +16,12 @@ linters:
     - unparam
     - lll
     - wsl
+    - exhaustivestruct
+    - testpackage
+    - wrapcheck
+    - errorlint
+    - goerr113
+    - gci
 
 issues:
   exclude-rules:

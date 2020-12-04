@@ -7,13 +7,13 @@ steps:
           image: golangci/golangci-lint:latest
 
   - label: ":go: linux"
-    command: go test ./...
+    command: go test -p 1 ./...
     expeditor:
       executor:
         docker:
 
   - label: ":go: windows"
-    command: go test ./...
+    command: go test -p 1 ./...
     expeditor:
       executor:
         docker:

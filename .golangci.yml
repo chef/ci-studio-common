@@ -22,6 +22,7 @@ linters:
     - errorlint
     - goerr113
     - gci
+    - tparallel
 
 issues:
   exclude-rules:

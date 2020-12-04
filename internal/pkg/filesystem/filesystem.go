@@ -81,6 +81,7 @@ func (f *Fs) AppendIfMissing(filePath string, content []byte, mode os.FileMode) 
 		}
 
 		newContents := append(fileContents, contentToWrite...)
+
 		err = f.WriteFile(filePath, newContents, mode)
 		if err != nil {
 			return errors.Wrapf(err, "failed to append contents to file %s", filePath)
@@ -184,6 +185,7 @@ func (f *Fs) DownloadRemoteFile(url string, name string) error {
 	cli := &http.Client{}
 	ctx := context.Background()
 	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+
 	resp, err := cli.Do(req)
 	if err != nil {
 		return errors.Wrap(err, "remote file request")

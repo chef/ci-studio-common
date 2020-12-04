@@ -68,11 +68,7 @@ func configureAccountsE(cmd *cobra.Command, args []string) error {
 		retry.Delay(fslock.GetRetryDelay()),
 		retry.DelayType(fslock.GetRetryDelayType()),
 		retry.RetryIf(func(err error) bool {
-			if errors.Cause(err) == filesystem.ErrLocked {
-				return true
-			}
-
-			return false
+			return errors.Cause(err) == filesystem.ErrLocked
 		}),
 		retry.OnRetry(func(n uint, err error) {
 			if errors.Cause(err) == filesystem.ErrLocked {

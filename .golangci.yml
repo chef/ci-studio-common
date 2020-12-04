@@ -1,27 +1,73 @@
+linters-settings:
+  gci:
+    local-prefixes: github.com/chef/ci-studio-common
+
 linters:
-  enable-all: true
-  disable:
-    - dupl
-    - goconst
-    - maligned
-    - megacheck
-    - interfacer
-    - golint
-    - gas
-    - gochecknoglobals
-    - gochecknoinits
-    - gocritic
-    - scopelint
-    - stylecheck
-    - unparam
-    - lll
-    - wsl
-    - exhaustivestruct
-    - testpackage
-    - wrapcheck
-    - errorlint
-    - goerr113
+  # please, do not use `enable-all`: it's deprecated and will be removed soon.
+  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
+  disable-all: true
+  enable:
+    - asciicheck
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - errcheck
+    - exhaustive
+    - exportloopref
+    - funlen
     - gci
+    - gocognit
+    - gocyclo
+    - godot
+    - godox
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - gomnd
+    - gomodguard
+    - goprintffuncname
+    - govet
+    - ineffassign
+    - misspell
+    - nakedret
+    - nestif
+    - nlreturn
+    - noctx
+    - nolintlint
+    - prealloc
+    - rowserrcheck
+    - sqlclosecheck
+    - structcheck
+    - typecheck
+    - unconvert
+    - varcheck
+    - whitespace
+  # disable
+    # - dupl
+    # - errorlint
+    # - exhaustivestruct
+    # - gochecknoglobals
+    # - gochecknoinits
+    # - goconst
+    # - gocritic
+    # - goerr113
+    # - golint
+    # - gosec
+    # - gosimple
+    # - interfacer
+    # - lll
+    # - maligned
+    # - scopelint
+    # - staticcheck
+    # - stylecheck
+    # - testpackage
+    # - tparallel
+    # - unparam
+    # - unused
+    # - wrapcheck
+    # - wsl
 
 issues:
   exclude-rules:
@@ -30,3 +76,4 @@ issues:
       linters:
         # Don't enforce function length in test files (lots of t.Run)
         - funlen
+        - dupl

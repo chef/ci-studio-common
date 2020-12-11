@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.2 -->
+<!-- latest_release 2.0.3 -->
+## [2.0.3](https://github.com/chef/ci-studio-common/tree/2.0.3) (2020-12-11)
+
+#### Merged Pull Requests
+- Added go pipeline for binaries [#212](https://github.com/chef/ci-studio-common/pull/212) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.2](https://github.com/chef/ci-studio-common/tree/2.0.2) (2019-07-24)
 
 #### Merged Pull Requests
 - Moved the studio-common scripts out [#199](https://github.com/chef/ci-studio-common/pull/199) ([afiune](https://github.com/afiune))
-<!-- latest_release -->
 
 ## [2.0.1](https://github.com/chef/ci-studio-common/tree/2.0.1) (2019-07-23)
 

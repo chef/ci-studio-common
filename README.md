@@ -9,15 +9,9 @@ This repository houses some scripts / files that are used across various Chef pr
 - [Announcing the 2.0 release](#announcing-the-20-release)
 - [CI Services (Travis, Buildkite, etc)](#ci-services-travis-buildkite-etc)
   * [Installation](#installation)
-    + [Linux & macOS](#linux--macos)
-    + [Windows (Powershell)](#windows-powershell)
-    + [Windows (cmd.exe)](#windows-cmdexe)
   * [Commands](#commands)
-    + [`ci-studio-common-util`](#ci-studio-common-util)
     + [`did-modify`](#did-modify)
     + [`file-mod`](#file-mod)
-    + [`install-buildkite-agent`](#install-buildkite-agent)
-    + [`install-habitat`](#install-habitat)
     + [`vault-util`](#vault-util)
 - [FAQ](#faq)
   * [How do you determine a CI environment vs a non-CI environment?](#how-do-you-determine-a-ci-environment-vs-a-non-ci-environment)
@@ -102,11 +96,10 @@ Available Commands:
   configure-accounts    Configure the accounts specified in the VAULT_UTIL_ACCOUNTS environment variable.
   fetch-secret-env      Fetch the secrets specified in the VAULT_UTIL_SECRETS environment variable from Vault.
   help                  Help about any command
-  print-git-credentials Utility that will print credentials for a user from Vault in git-credential-helper format.
+  print-git-credentials Utility that will print credentials for a GitHub App from Vault in git-credential-helper format.
 
 Flags:
-      --config string   configuration file (default is /var/opt/ci-studio-common/vault-util.toml)
-  -h, --help            help for vault-util
+  -h, --help   help for vault-util
 
 Use "vault-util [command] --help" for more information about a command.
 ```

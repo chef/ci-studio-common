@@ -1,5 +1,3 @@
-archives:
-  - name_template: '{{.Os}}/{{.Arch}}/{{.Binary}}'
 before:
   hooks:
     - go get -v -d ./...

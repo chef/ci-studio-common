@@ -16,8 +16,7 @@ function download_artifacts {
   --flat \
   --detailed-summary \
   --props "project=ci-studio-common;version=${version};os=${os};arch=${arch}" \
-  "go-binaries-local/*"
-  "go-binaries/${os}/${arch}/"
+  "go-binaries-local/*" "go-binaries/${os}/${arch}/"
 
   for file in go-binaries/${os}/${arch}/*
   do

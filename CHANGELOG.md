@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.3 -->
+<!-- latest_release 2.0.4 -->
+## [2.0.4](https://github.com/chef/ci-studio-common/tree/2.0.4) (2020-12-11)
+
+#### Merged Pull Requests
+- Updates to how buildkite-artifact uploads content [#213](https://github.com/chef/ci-studio-common/pull/213) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.3](https://github.com/chef/ci-studio-common/tree/2.0.3) (2020-12-11)
 
 #### Merged Pull Requests
 - Added go pipeline for binaries [#212](https://github.com/chef/ci-studio-common/pull/212) ([nkierpiec](https://github.com/nkierpiec))
-<!-- latest_release -->
 
 ## [2.0.2](https://github.com/chef/ci-studio-common/tree/2.0.2) (2019-07-24)
 

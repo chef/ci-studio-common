@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.4 -->
+<!-- latest_release 2.0.5 -->
+## [2.0.5](https://github.com/chef/ci-studio-common/tree/2.0.5) (2020-12-11)
+
+#### Merged Pull Requests
+- Update release to use amd64 and not x86-64 [#214](https://github.com/chef/ci-studio-common/pull/214) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.4](https://github.com/chef/ci-studio-common/tree/2.0.4) (2020-12-11)
 
 #### Merged Pull Requests
 - Updates to how buildkite-artifact uploads content [#213](https://github.com/chef/ci-studio-common/pull/213) ([nkierpiec](https://github.com/nkierpiec))
-<!-- latest_release -->
 
 ## [2.0.3](https://github.com/chef/ci-studio-common/tree/2.0.3) (2020-12-11)
 

@@ -38,9 +38,9 @@ function download_artifacts {
   done
 }
 
-download_artifacts linux x86_64
-download_artifacts darwin x86_64
-download_artifacts windows x86_64
+download_artifacts linux amd64
+download_artifacts darwin amd64
+download_artifacts windows amd64
 
 notes=$(sed -n -E '/<!-- latest_release (.+) -->|<!-- latest_release -->/,/<!-- latest_release -->/p' CHANGELOG.md)
 

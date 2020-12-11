@@ -2,7 +2,8 @@ steps:
   - label: ":go: build"
     command: 
       - goreleaser build --rm-dist --skip-validate
-      - buildkite-agent artifact upload dist/*
+      - tar -czf ci-studio-common.tar.gz /workdir/dist
+      - buildkite-agent artifact upload "ci-studio-common.tar.gz"
     expeditor:
       executor:
         docker:
@@ -11,7 +12,8 @@ steps:
 
   - label: ":artifactory: upload"
     command: 
-      - buildkite-agent artifact download dist/* .
+      - buildkite-agent artifact download "ci-studio-common.tar.gz" .
+      - tar -xzf ci-studio-common.tar.gz
       - .expeditor/artifact_upload.sh
     expeditor:
       secrets:

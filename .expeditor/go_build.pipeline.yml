@@ -1,0 +1,22 @@
+steps:
+  - label: ":go: build"
+    command: 
+      - goreleaser build --rm-dist --skip-validate
+      - buildkite-agent artifact upload dist/*
+    expeditor:
+      executor:
+        docker:
+
+  - wait
+
+  - label: ":artifactory: upload"
+    command: 
+      - buildkite-agent artifact download dist/* .
+      - .expeditor/artifact_upload.sh
+    expeditor:
+      secrets:
+        ARTIFACTORY_TOKEN:
+          path: account/static/artifactory/buildkite
+          field: token
+      executor:
+        docker:

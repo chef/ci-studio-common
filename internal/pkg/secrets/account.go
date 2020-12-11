@@ -8,11 +8,13 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Account maps what each account can have.
 type Account struct {
 	ID   string
 	Data map[string]string
 }
 
+// Get returns the field within the specified account.
 func (a *Account) Get(field string) (string, error) {
 	if value, ok := a.Data[field]; ok {
 		return value, nil
@@ -24,7 +26,7 @@ func (a *Account) Get(field string) (string, error) {
 func (c *VaultClient) newAwsAccount(name string) (*Account, error) {
 	secret, err := c.GetSecret(fmt.Sprintf("%s/aws/%s/sts/default", viper.GetString("vault.dynamic_mount"), name))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get aws sts secret")
 	}
 
 	data := make(map[string]string)
@@ -41,12 +43,12 @@ func (c *VaultClient) newAwsAccount(name string) (*Account, error) {
 func (c *VaultClient) newAzureAccount(name string) (*Account, error) {
 	secret, err := c.GetSecret(fmt.Sprintf("%s/azure/%s/creds/default", viper.GetString("vault.dynamic_mount"), name))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get azure dynamic secret")
 	}
 
 	mappings, err := c.GetSecret(fmt.Sprintf("%s/azure/%s", viper.GetString("vault.static_mount"), name))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get azure static secret")
 	}
 
 	data := make(map[string]string)
@@ -64,7 +66,7 @@ func (c *VaultClient) newAzureAccount(name string) (*Account, error) {
 func (c *VaultClient) newGithubAccount(name string) (*Account, error) {
 	secret, err := c.GetSecret(fmt.Sprintf("%s/github/%s", viper.GetString("vault.dynamic_mount"), name))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get github dynamic secret")
 	}
 
 	data := make(map[string]string)
@@ -79,17 +81,17 @@ func (c *VaultClient) newGithubAccount(name string) (*Account, error) {
 func (c *VaultClient) newGoogleAccount(name string) (*Account, error) {
 	base64JSON, err := c.GetSecret(fmt.Sprintf("%s/gcp/%s/key/service-account", viper.GetString("vault.dynamic_mount"), name))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get google dynamic secret")
 	}
 
 	decodedJSON, err := base64.StdEncoding.DecodeString(base64JSON.Data["private_key_data"].(string))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "google account decode string")
 	}
 
 	token, err := c.GetSecret(fmt.Sprintf("%s/gcp/%s/token/access-token", viper.GetString("vault.dynamic_mount"), name))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "get google dynamic token")
 	}
 
 	data := make(map[string]string)

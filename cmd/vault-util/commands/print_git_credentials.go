@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -44,6 +45,7 @@ func printGitCredentialsE(cmd *cobra.Command, args []string) error {
 	}
 
 	cmd.Printf("username=x-access-token\npassword=%s", token)
+
 	return nil
 }
 
@@ -55,7 +57,7 @@ func tokenFromCache(filename string) (string, error) {
 
 	// Tokens technically live 60 minutes, but we use 55 for wiggle room
 	if time.Since(info.ModTime()) > 55*time.Minute {
-		return "", fmt.Errorf("github token has expired")
+		return "", errors.New("github token has expired")
 	}
 
 	tokenRaw, err := fs.ReadFile(filename)

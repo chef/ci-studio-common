@@ -51,9 +51,9 @@ func TestFetchSecretEnvE(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
 
 		// JSON has extra `,`
-		condensedJson := `{"VALUE_ONLY":{"value":"true",}}`
+		condensedJSON := `{"VALUE_ONLY":{"value":"true",}}`
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)
@@ -67,7 +67,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 	t.Run("value was specified", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
 
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"VALUE_ONLY": {
 					"value": "true"
@@ -75,10 +75,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			}
 		`)
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		expectedOutput := heredoc.Doc(`
@@ -95,7 +95,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 	t.Run("no field parameter was specified", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
 
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"NO_FIELD": {
 					"path": "account/secret/foo"
@@ -103,10 +103,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			}
 		`)
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)
@@ -120,7 +120,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 	t.Run("neither path, value, or account was specified", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
 
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"NO_PARAM": {
 					"field": "foo"
@@ -128,10 +128,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			}
 		`)
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)
@@ -145,7 +145,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 	t.Run("complex shell output", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
 
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"VALUE_ONLY": {
 					"value": "true"
@@ -166,7 +166,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 		`)
 
 		specialQuotedSecret := `{"foo":"bar"}`
-		accessKeyId := "fake-access-key-id"
+		accessKeyID := "fake-access-key-id"
 		secretAccessKey := "fake-secret-access-key+"
 
 		// Fake Secret
@@ -179,7 +179,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 		// Fake Account
 		fakeAccountData := make(map[string]string)
-		fakeAccountData["access_key_id"] = accessKeyId
+		fakeAccountData["access_key_id"] = accessKeyID
 		fakeAccountData["secret_access_key"] = secretAccessKey
 
 		fakeAccount := &secrets.Account{
@@ -193,17 +193,17 @@ func TestFetchSecretEnvE(t *testing.T) {
 			err:     nil,
 		}
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)
 		assert.Nil(t, err)
 		assert.Contains(t, output.String(), `export VALUE_ONLY="true"`)
 		assert.Contains(t, output.String(), fmt.Sprintf("export SECRET_PATH=%q", specialQuotedSecret))
-		assert.Contains(t, output.String(), fmt.Sprintf("export AWS_ACCESS_KEY_ID=%q", accessKeyId))
+		assert.Contains(t, output.String(), fmt.Sprintf("export AWS_ACCESS_KEY_ID=%q", accessKeyID))
 		assert.Contains(t, output.String(), fmt.Sprintf("export AWS_SECRET_ACCESS_KEY=%q", secretAccessKey))
 		assert.Equal(t, accountCache["aws/my-account"], fakeAccount)
 
@@ -213,7 +213,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 	})
 
 	t.Run("complex powershell output", func(t *testing.T) {
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"VALUE_ONLY": {
 					"value": "true"
@@ -234,7 +234,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 		`)
 
 		specialQuotedSecret := `{"foo":"bar"}`
-		accessKeyId := "fake-access-key-id"
+		accessKeyID := "fake-access-key-id"
 		secretAccessKey := "fake-secret-access-key+"
 
 		// Fake Secret
@@ -247,7 +247,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 		// Fake Account
 		fakeAccountData := make(map[string]string)
-		fakeAccountData["access_key_id"] = accessKeyId
+		fakeAccountData["access_key_id"] = accessKeyID
 		fakeAccountData["secret_access_key"] = secretAccessKey
 
 		fakeAccount := &secrets.Account{
@@ -261,10 +261,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			err:     nil,
 		}
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		fetchSecretEnvOpts = &fetchSecretEnvOptions{
@@ -275,7 +275,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Contains(t, output.String(), `$env:VALUE_ONLY="true"`)
 		assert.Contains(t, output.String(), fmt.Sprintf("$env:SECRET_PATH=%q", specialQuotedSecret))
-		assert.Contains(t, output.String(), fmt.Sprintf("$env:AWS_ACCESS_KEY_ID=%q", accessKeyId))
+		assert.Contains(t, output.String(), fmt.Sprintf("$env:AWS_ACCESS_KEY_ID=%q", accessKeyID))
 		assert.Contains(t, output.String(), fmt.Sprintf("$env:AWS_SECRET_ACCESS_KEY=%q", secretAccessKey))
 		assert.Equal(t, accountCache["aws/my-account"], fakeAccount)
 
@@ -285,7 +285,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 	})
 
 	t.Run("complex batch output", func(t *testing.T) {
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"VALUE_ONLY": {
 					"value": "true"
@@ -306,7 +306,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 		`)
 
 		specialQuotedSecret := `{"foo":"bar"}`
-		accessKeyId := "fake-access-key-id"
+		accessKeyID := "fake-access-key-id"
 		secretAccessKey := "fake-secret-access-key+"
 
 		// Fake Secret
@@ -319,7 +319,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 		// Fake Account
 		fakeAccountData := make(map[string]string)
-		fakeAccountData["access_key_id"] = accessKeyId
+		fakeAccountData["access_key_id"] = accessKeyID
 		fakeAccountData["secret_access_key"] = secretAccessKey
 
 		fakeAccount := &secrets.Account{
@@ -333,10 +333,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			err:     nil,
 		}
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		fetchSecretEnvOpts = &fetchSecretEnvOptions{
@@ -347,7 +347,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Contains(t, output.String(), `"VALUE_ONLY=true"`)
 		assert.Contains(t, output.String(), fmt.Sprintf(`"SECRET_PATH=%s"`, specialQuotedSecret))
-		assert.Contains(t, output.String(), fmt.Sprintf(`"AWS_ACCESS_KEY_ID=%s"`, accessKeyId))
+		assert.Contains(t, output.String(), fmt.Sprintf(`"AWS_ACCESS_KEY_ID=%s"`, accessKeyID))
 		assert.Contains(t, output.String(), fmt.Sprintf(`"AWS_SECRET_ACCESS_KEY=%s"`, secretAccessKey))
 		assert.Equal(t, accountCache["aws/my-account"], fakeAccount)
 
@@ -358,7 +358,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 	t.Run("path secret fetch error", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"PATH_ONLY": {
 					"path": "account/static/foobar",
@@ -373,10 +373,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			err:     errors.New("random error"),
 		}
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)
@@ -389,7 +389,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 	t.Run("adds account to cache if doesn't exist", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"UNCACHED_ACCOUNT": {
 					"account": "github/baxterthehacker",
@@ -414,10 +414,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 		assert.Empty(t, accountCache)
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		expectedOutput := heredoc.Doc(`
@@ -435,7 +435,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 	t.Run("does not fetch account if exists in cache", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"CACHED_ACCOUNT": {
 					"account": "github/baxterthehacker",
@@ -470,10 +470,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 			err:     nil,
 		}
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		expectedOutput := heredoc.Doc(`
@@ -491,7 +491,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 	t.Run("account fetch error", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"ACCOUNT_FETCH_ERROR": {
 					"account": "github/baxterthehacker",
@@ -508,10 +508,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 		assert.Empty(t, accountCache)
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)
@@ -525,7 +525,7 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 	t.Run("error fetching field from account", func(t *testing.T) {
 		fetchSecretEnvOpts = defaultFetchSecretEnvOpts
-		vaultUtilJson := heredoc.Docf(`
+		vaultUtilJSON := heredoc.Docf(`
 			{
 				"ACCOUNT_FIELD_FETCH_ERROR": {
 					"account": "github/baxterthehacker",
@@ -550,10 +550,10 @@ func TestFetchSecretEnvE(t *testing.T) {
 
 		assert.Empty(t, accountCache)
 
-		condensedJson, err := m.String("json", vaultUtilJson)
+		condensedJSON, err := m.String("json", vaultUtilJSON)
 		assert.Nil(t, err)
 
-		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJson)
+		err = os.Setenv("VAULT_UTIL_SECRETS", condensedJSON)
 		assert.Nil(t, err)
 
 		err = fetchSecretEnvE(cmd, args)

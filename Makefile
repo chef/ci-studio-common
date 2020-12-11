@@ -1,5 +1,5 @@
 LD_FLAGS=-s -w
-UTILITIES = ci-utils file-mod install-buildkite-agent install-habitat did-modify vault-util
+UTILITIES = file-mod did-modify vault-util
 
 .PHONE: studio
 studio:

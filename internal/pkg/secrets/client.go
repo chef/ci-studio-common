@@ -7,28 +7,33 @@ import (
 	"github.com/pkg/errors"
 )
 
+// VaultClient struct defines a new vault client.
 type VaultClient struct {
 	client *vault.Client
 }
 
+// Client struct defines what the client has access to.
 type Client interface {
 	GetAccount(id string) (*Account, error)
 	GetSecret(path string) (*vault.Secret, error)
 }
 
+// NewClient will attempt create a new secrets client.
 func NewClient() (*VaultClient, error) {
 	client, err := vault.NewClient(nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "create secrets client")
 	}
 
 	return &VaultClient{client: client}, nil
 }
 
+// GetAccount will determine which account to use from the specified id.
 func (c *VaultClient) GetAccount(id string) (*Account, error) {
+	length := 2
 	bits := strings.Split(id, "/")
 
-	if len(bits) < 2 {
+	if len(bits) < length {
 		return nil, errors.Errorf("%s is not a valid account specifier", id)
 	}
 
@@ -49,6 +54,7 @@ func (c *VaultClient) GetAccount(id string) (*Account, error) {
 	}
 }
 
+// GetSecret will read the secret from the given path.
 func (c *VaultClient) GetSecret(path string) (*vault.Secret, error) {
 	return c.client.Logical().Read(path)
 }

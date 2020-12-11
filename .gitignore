@@ -5,3 +5,6 @@ results/
 build/
 vault-util.*
 .vscode/
+
+# goreleaser 
+dist/

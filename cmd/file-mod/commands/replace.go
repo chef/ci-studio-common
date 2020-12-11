@@ -7,12 +7,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var findAndReplaceCmd = &cobra.Command{
-	Use:   "find-and-replace REGEX_STR STRING FILE",
-	Short: "Replace REGEX_STR with STRING in FILE. Supports multiline replace.",
-	Args:  cobra.ExactArgs(3),
-	RunE:  findAndReplaceE,
-}
+var (
+	findAndReplaceArgs = 3
+
+	findAndReplaceCmd = &cobra.Command{
+		Use:   "find-and-replace REGEX_STR STRING FILE",
+		Short: "Replace REGEX_STR with STRING in FILE. Supports multiline replace.",
+		Args:  cobra.ExactArgs(findAndReplaceArgs),
+		RunE:  findAndReplaceE,
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(findAndReplaceCmd)

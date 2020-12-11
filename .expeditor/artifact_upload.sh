@@ -5,7 +5,7 @@ set -eou pipefail
 version=$(cat VERSION)
 
 # this will ideally be a directory we export as an env var when processing the config
-cd /workdir/dist
+cd /workdir/workdir/dist
 workdir="."
 
 echo "--- Uploading binaries to Artifactory"

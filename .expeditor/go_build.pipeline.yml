@@ -2,7 +2,7 @@ steps:
   - label: ":go: build"
     command: 
       - goreleaser build --rm-dist --skip-validate
-      - buildkite-agent artifact upload dist/*
+      - buildkite-agent artifact upload "dist/*"
     expeditor:
       executor:
         docker:
@@ -11,7 +11,7 @@ steps:
 
   - label: ":artifactory: upload"
     command: 
-      - buildkite-agent artifact download dist/* .
+      - buildkite-agent artifact download "dist/*" .
       - .expeditor/artifact_upload.sh
     expeditor:
       secrets:

@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.6 -->
+<!-- latest_release 2.0.7 -->
+## [2.0.7](https://github.com/chef/ci-studio-common/tree/2.0.7) (2020-12-14)
+
+#### Merged Pull Requests
+- Updates to fix github release from adding the full zip/tar file multiple times [#216](https://github.com/chef/ci-studio-common/pull/216) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.6](https://github.com/chef/ci-studio-common/tree/2.0.6) (2020-12-14)
 
 #### Merged Pull Requests
 - Jfrog dl path had an error [#215](https://github.com/chef/ci-studio-common/pull/215) ([nkierpiec](https://github.com/nkierpiec))
-<!-- latest_release -->
 
 ## [2.0.5](https://github.com/chef/ci-studio-common/tree/2.0.5) (2020-12-11)
 

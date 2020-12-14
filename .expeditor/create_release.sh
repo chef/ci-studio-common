@@ -3,7 +3,7 @@ set -eou pipefail
 
 version=$(cat VERSION)
 art_token=$(vault kv get -field token account/static/artifactory/buildkite)
-files=""
+files=()
 
 function download_artifacts {
   os=$1
@@ -24,20 +24,20 @@ function download_artifacts {
       IFS='.' read -r -a parts <<< "${file}"
       util_name=${parts[0]}
 
-      zip -r "${util_name}_${os}_${arch}.zip" ${file}
-      files="${files} ${util_name}_${os}_${arch}.zip"
+      zip -r "${util_name}_${os}_${arch}.zip" "${file}"
+      files+=("${util_name}_${os}_${arch}.zip")
     else
-      tar -czf "${file}_${os}_${arch}.tar.gz" ${file}
-      files="${files} ${file}_${os}_${arch}.tar.gz"
+      tar -czf "${file}_${os}_${arch}.tar.gz" "${file}"
+      files+=("${file}_${os}_${arch}.tar.gz")
     fi
   done
 
   if [[ ${os} == "windows" ]]; then
-    zip -r "ci_studio_common_${os}_${arch}.zip" go-binaries/${os}/${arch}/
-    files="${files} ci_studio_common_${os}_${arch}.zip"
+    zip -r "ci_studio_common_${os}_${arch}.zip" "go-binaries/${os}/${arch}/"
+    files+=("ci_studio_common_${os}_${arch}.zip")
   else
-    tar -czf "ci_studio_common_${os}_${arch}.tar.gz" go-binaries/${os}/${arch}/
-    files="${files} ci_studio_common_${os}_${arch}.tar.gz"
+    tar -czf "ci_studio_common_${os}_${arch}.tar.gz" "go-binaries/${os}/${arch}/"
+    files+=("ci_studio_common_${os}_${arch}.tar.gz")
   fi
 }
 
@@ -48,4 +48,4 @@ download_artifacts windows amd64
 notes=$(sed -n -E '/<!-- latest_release (.+) -->|<!-- latest_release -->/,/<!-- latest_release -->/p' CHANGELOG.md)
 
 echo "--- GitHub publish release ${version}"
-gh release create ${version} ${files} README.md -n "${notes}" -t "${version}"
+gh release create "${version}" "${files[@]}" README.md -n "${notes}" -t "${version}"

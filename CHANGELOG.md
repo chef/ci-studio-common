@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.5 -->
+<!-- latest_release 2.0.6 -->
+## [2.0.6](https://github.com/chef/ci-studio-common/tree/2.0.6) (2020-12-14)
+
+#### Merged Pull Requests
+- Jfrog dl path had an error [#215](https://github.com/chef/ci-studio-common/pull/215) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.5](https://github.com/chef/ci-studio-common/tree/2.0.5) (2020-12-11)
 
 #### Merged Pull Requests
 - Update release to use amd64 and not x86-64 [#214](https://github.com/chef/ci-studio-common/pull/214) ([nkierpiec](https://github.com/nkierpiec))
-<!-- latest_release -->
 
 ## [2.0.4](https://github.com/chef/ci-studio-common/tree/2.0.4) (2020-12-11)
 

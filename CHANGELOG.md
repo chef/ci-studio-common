@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.7 -->
+<!-- latest_release 2.0.8 -->
+## [2.0.8](https://github.com/chef/ci-studio-common/tree/2.0.8) (2020-12-14)
+
+#### Merged Pull Requests
+- Config cleanup [#217](https://github.com/chef/ci-studio-common/pull/217) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.7](https://github.com/chef/ci-studio-common/tree/2.0.7) (2020-12-14)
 
 #### Merged Pull Requests
 - Updates to fix github release from adding the full zip/tar file multiple times [#216](https://github.com/chef/ci-studio-common/pull/216) ([nkierpiec](https://github.com/nkierpiec))
-<!-- latest_release -->
 
 ## [2.0.6](https://github.com/chef/ci-studio-common/tree/2.0.6) (2020-12-14)
 

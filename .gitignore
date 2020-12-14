@@ -8,3 +8,8 @@ vault-util.*
 
 # goreleaser 
 dist/
+
+# releases
+go-binaries/
+*.zip
+*.tar.gz

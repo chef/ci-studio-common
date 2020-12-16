@@ -24,21 +24,13 @@ function download_artifacts {
       IFS='.' read -r -a parts <<< "${file}"
       util_name=${parts[0]}
 
-      zip -j "${util_name}_${os}_${arch}.zip" "go-binaries/${os}/${arch}/"
+      zip -j "${util_name}_${os}_${arch}.zip" "${file}"
       files+=("${util_name}_${os}_${arch}.zip")
     else
       tar -czf "${file}_${os}_${arch}.tar.gz" -C "go-binaries/${os}/${arch}" .
       files+=("${file}_${os}_${arch}.tar.gz")
     fi
   done
-
-  if [[ ${os} == "windows" ]]; then
-    zip -j "ci_studio_common_${os}_${arch}.zip" "go-binaries/${os}/${arch}/"
-    files+=("ci_studio_common_${os}_${arch}.zip")
-  else
-    tar -czf "ci_studio_common_${os}_${arch}.tar.gz" -C "go-binaries/${os}/${arch}/" .
-    files+=("ci_studio_common_${os}_${arch}.tar.gz")
-  fi
 }
 
 download_artifacts linux amd64

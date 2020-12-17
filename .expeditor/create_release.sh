@@ -27,7 +27,7 @@ function download_artifacts {
       zip -j "${util_name}_${os}_${arch}.zip" "${file}"
       files+=("${util_name}_${os}_${arch}.zip")
     else
-      tar -czf "${file}_${os}_${arch}.tar.gz" -C "go-binaries/${os}/${arch}" .
+      tar -czf "${file}_${os}_${arch}.tar.gz" --exclude "${file}_${os}_${arch}.tar.gz" -C "go-binaries/${os}/${arch}" .
       files+=("${file}_${os}_${arch}.tar.gz")
     fi
   done

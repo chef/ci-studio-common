@@ -21,14 +21,12 @@ function download_artifacts {
   for file in go-binaries/${os}/${arch}/*
   do
     if [[ ${os} == "windows" ]]; then
-      IFS='.' read -r -a parts <<< "${file}"
-      util_name=${parts[0]}
+      util_name=$(basename -s ".exe" "${file}")
 
       zip -j "${util_name}_${os}_${arch}.zip" "${file}"
       files+=("${util_name}_${os}_${arch}.zip")
     else
-      IFS='/' read -r -a parts <<< "${file}"
-      util_name=${parts[${#parts[@]}-1]}
+      util_name=$(basename "${file}")
 
       tar -czf "${util_name}_${os}_${arch}.tar.gz" -C "go-binaries/${os}/${arch}" "${util_name}"
       files+=("${util_name}_${os}_${arch}.tar.gz")

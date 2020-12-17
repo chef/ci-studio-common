@@ -1,11 +1,16 @@
 # Changelog
 
-<!-- latest_release 2.0.11 -->
+<!-- latest_release 2.0.12 -->
+## [2.0.12](https://github.com/chef/ci-studio-common/tree/2.0.12) (2020-12-17)
+
+#### Merged Pull Requests
+- Use basename to extract name of util [#221](https://github.com/chef/ci-studio-common/pull/221) ([nkierpiec](https://github.com/nkierpiec))
+<!-- latest_release -->
+
 ## [2.0.11](https://github.com/chef/ci-studio-common/tree/2.0.11) (2020-12-17)
 
 #### Merged Pull Requests
 - Use the last index of array in bash to get util name [#220](https://github.com/chef/ci-studio-common/pull/220) ([nkierpiec](https://github.com/nkierpiec))
-<!-- latest_release -->
 
 ## [2.0.10](https://github.com/chef/ci-studio-common/tree/2.0.10) (2020-12-17)
 

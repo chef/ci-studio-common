@@ -11,20 +11,20 @@ pipelines:
       public: true
   - go/build
 
-promote:
-  channels:
-    - unstable
-    - stable
+artifact_channels:
+  - unstable
+  - stable
 
 github:
   delete_branch_on_merge: true
-  release_branch:
-    - master:
-        version_constraint: 2.*
-    - 1-stable:
-        version_constraint: 1.*
-    - pre-1.0:
-        version_constraint: 0.*
+
+release_branches:
+  - master:
+      version_constraint: 2.*
+  - 1-stable:
+      version_constraint: 1.*
+  - pre-1.0:
+      version_constraint: 0.*
 
 subscriptions:
   - workload: pull_request_merged:{{github_repo}}:{{release_branch}}:*

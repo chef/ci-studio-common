@@ -11,37 +11,41 @@ pipelines:
 
 github:
   delete_branch_on_merge: true
-  release_branch:
-    - master:
-        version_constraint: 2.*
-    - 1-stable:
-        version_constraint: 1.*
-    - pre-1.0:
-        version_constraint: 0.*
 
-promote:
-  channels:
-    - dev
-    - stable
-  actions:
-    - built_in:promote_habitat_packages
+release_branches:
+  - master:
+      version_constraint: 2.*
+  - 1-stable:
+      version_constraint: 1.*
+  - pre-1.0:
+      version_constraint: 0.*
 
-merge_actions:
-  - built_in:bump_version:
-      ignore_labels:
-        - "Expeditor: Skip Version Bump"
-        - "Expeditor: Skip All"
-  - built_in:update_changelog:
-      ignore_labels:
-        - "Expeditor: Skip Changelog"
-        - "Expeditor: Skip All"
-  - bash:.expeditor/update_readme.sh:
-      ignore_labels:
-        - "Expeditor: Skip All"
-      only_if_modified:
-        - README.md
-        - bin/*
-  - trigger_pipeline:habitat/build:
-      ignore_labels:
-        - "Expeditor: Skip Habitat"
-        - "Expeditor: Skip All"
+artifact_channels:
+  - dev
+  - stable
+
+subscriptions:
+  - workload: project_promoted:{{agent_id}}:*
+    actions:
+      - built_in:promote_habitat_packages
+
+  - workload: pull_request_merged:{{github_repo}}:{{release_branch}}:*  
+    actions:
+      - built_in:bump_version:
+          ignore_labels:
+            - "Expeditor: Skip Version Bump"
+            - "Expeditor: Skip All"
+      - built_in:update_changelog:
+          ignore_labels:
+            - "Expeditor: Skip Changelog"
+            - "Expeditor: Skip All"
+      - bash:.expeditor/update_readme.sh:
+          ignore_labels:
+            - "Expeditor: Skip All"
+          only_if_modified:
+            - README.md
+            - bin/*
+      - trigger_pipeline:habitat/build:
+          ignore_labels:
+            - "Expeditor: Skip Habitat"
+            - "Expeditor: Skip All"

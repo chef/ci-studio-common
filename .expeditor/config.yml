@@ -19,7 +19,7 @@ github:
   delete_branch_on_merge: true
 
 release_branches:
-  - master:
+  - main:
       version_constraint: 2.*
   - 1-stable:
       version_constraint: 1.*
